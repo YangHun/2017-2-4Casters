@@ -16,7 +16,12 @@ public class GameManager : MonoBehaviour {
     //Handling Player
     [SerializeField]
     List<Player> _players;
-    
+
+    //Handling Monster
+    [SerializeField]
+    MonsterSpawner _spawner;
+    int spawnCount = 10;
+
     public List<Player> Players
     {
         get
@@ -46,7 +51,7 @@ public class GameManager : MonoBehaviour {
         switch (currentState)
         {
             case State.MonsterPhase:
-
+                OnStateMonsterPhase();
                 break;
             case State.CastPhase:
 
@@ -78,7 +83,10 @@ public class GameManager : MonoBehaviour {
 
     void OnStateMonsterPhase()
     {
-
+        if (isFirstFrame)
+        {
+            _spawner.Spawn(spawnCount);
+        }
     }
 
     void OnStateCastPhase()

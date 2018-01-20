@@ -263,7 +263,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 3e28b8a485c8adf40bd72064b64034bb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -329,6 +329,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Keyword: []
+  type: 0
   dir: {x: 0, y: 0, z: 0}
 --- !u!1 &195273249
 GameObject:
@@ -1354,6 +1355,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1018125025}
+  - component: {fileID: 1018125026}
   m_Layer: 0
   m_Name: Monsters
   m_TagString: Untagged
@@ -1375,6 +1377,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1018125026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1018125024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95cbd8158208c2249801edea351b8881, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Base: {fileID: 0}
 --- !u!1 &1095795502
 GameObject:
   m_ObjectHideFlags: 0
@@ -1415,6 +1429,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _players: []
+  _spawner: {fileID: 1018125026}
 --- !u!4 &1095795505
 Transform:
   m_ObjectHideFlags: 0
