@@ -7,9 +7,14 @@ public enum SkillType { holy, evil, lightness, darkness }
 public class Monster : MonoBehaviour {
 
     [SerializeField]
-    List<string> Keyword;
+    string Keyword = "";
     [SerializeField]
     SkillType type;
+    public SkillType Type
+    {
+        get { return type; }
+    }
+
 
     float timer = 0.0f;
     float resetTime;
@@ -18,7 +23,8 @@ public class Monster : MonoBehaviour {
     Vector3 dir = Vector3.zero;
     float walkspeed = 2.0f;
 
-
+    [SerializeField]
+    int HP = 10;
 
 	// Use this for initialization
 	void Start () {
@@ -64,5 +70,28 @@ public class Monster : MonoBehaviour {
                 r.material = Resources.Load("Material/Monster-lightness", typeof(Material)) as Material; 
                 break;
         }
+    }
+
+    public void Damaged (int damage, Player p)
+    {
+        HP -= damage;
+
+        if (HP <= 0)
+        {
+            HP = 0;
+            Dead(p);
+        }
+    }
+
+    public void Dead(Player p)
+    {
+        Debug.Log(gameObject.name + " is dead! (type,key) = (" + type + ", " + Keyword + ")");
+        Debug.Log(p.gameObject.name + " killed "+gameObject.name);
+    }
+
+    public void SetKeyword(string key)
+    {
+        if (Keyword == "")
+            Keyword = key;
     }
 }
