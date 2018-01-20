@@ -53,7 +53,7 @@ public class JoystickManager : MonoBehaviour {
 		theta = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
 		foreach(Player player in players)
 			player.UpdateArrow(theta - 90);
-		Debug.Log("Theta : " + theta);
+		//Debug.Log("Theta : " + theta);
 	}
 	/*
 	public void OnEndDrag(Selectable s)

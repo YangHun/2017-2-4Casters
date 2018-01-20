@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour {
     State nextState = State.Null;
     bool isFirstFrame = true;
 
+    float timer = 0.0f;
+
     //Handling Player
     [SerializeField]
     List<Player> _players;
@@ -47,6 +49,8 @@ public class GameManager : MonoBehaviour {
 	
 	void Update () {
 
+        timer += Time.deltaTime;
+
         //OnState function is called on each frame
         switch (currentState)
         {
@@ -54,7 +58,7 @@ public class GameManager : MonoBehaviour {
                 OnStateMonsterPhase();
                 break;
             case State.CastPhase:
-
+                OnStateCastPhase();
                 break;
 
             case State.Null:
@@ -86,11 +90,25 @@ public class GameManager : MonoBehaviour {
         if (isFirstFrame)
         {
             _spawner.Spawn(spawnCount);
+            timer = 0.0f;
+        }
+
+        if (timer >= 10.0f)
+        {
+            nextState = State.CastPhase;
         }
     }
 
     void OnStateCastPhase()
     {
+        if (isFirstFrame)
+        {
+            timer = 0.0f;
+        }
 
+        if (timer >= 30.0f)
+        {
+            nextState = State.MonsterPhase;
+        }
     }
 }
