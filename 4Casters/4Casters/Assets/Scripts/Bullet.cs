@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour {
 
     float timer = 0.0f;
-    const float lifetime = 2.0f;
+    const float lifetime = 4.0f;
 	// Use this for initialization
 	void Start () {
 		

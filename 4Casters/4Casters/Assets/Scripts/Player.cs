@@ -10,19 +10,30 @@ public class Player : MonoBehaviour {
     Transform Arrow;
     [SerializeField]
     GameObject Bullet;
-    const float bulletspeed = 150.0f;
+	JoystickManager Joystick;
+    const float bulletspeed = 300.0f;
 
+	public void UpdateArrow(float theta)
+	{
+		Arrow.transform.rotation = Quaternion.Euler(90, 0, theta);
+	}
+	/*
+	public void EndUpdateArrow()
+	{
+		Arrow.transform.rotation = Quaternion.Euler(90, 0, 0);
+	}
+	*/
 	// Use this for initialization
 	void Start () {
         Arrow = transform.Find("Arrow");
         Bullet = transform.Find("Bullet").gameObject;
         Bullet.SetActive(false);
+		Joystick = GameObject.Find("JoystickSystem").GetComponent<JoystickManager>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
-        
+		//transform.Rotate(new Vector3(0, 0, Joystick.theta));
 
 	}
 
