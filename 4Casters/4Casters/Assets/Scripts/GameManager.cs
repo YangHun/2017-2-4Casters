@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
+    UIManager _ui;
 
     //Handling Game Flow FSM 
     public enum State { MonsterPhase, CastPhase, Null }
@@ -22,8 +23,7 @@ public class GameManager : MonoBehaviour {
     //Handling Monster
     [SerializeField]
     MonsterSpawner _spawner;
-    int spawnCount = 10;
-
+    
     public List<Player> Players
     {
         get
@@ -32,6 +32,13 @@ public class GameManager : MonoBehaviour {
         }
     }
     
+    public State CurrentState
+    {
+        get
+        {
+            return currentState;
+        }
+    }
 
 
 	void Start () {
@@ -43,7 +50,7 @@ public class GameManager : MonoBehaviour {
             _players.Add(obj.GetComponent<Player>());
         }
 
-
+        _ui = GetComponent<UIManager>();
         currentState = startState;
 	}
 	
@@ -89,12 +96,15 @@ public class GameManager : MonoBehaviour {
     {
         if (isFirstFrame)
         {
-            _spawner.Spawn(spawnCount);
+            _ui.ChangeRightButtonText("Attack");
+            _ui.ResetPlayerKeywordText();
+            _spawner.Spawn();
             timer = 0.0f;
         }
 
-        if (timer >= 10.0f)
+        if (timer >= 30.0f || Input.GetKeyDown(KeyCode.Alpha1))
         {
+            Debug.Log("State changed (-->Cast)");
             nextState = State.CastPhase;
         }
     }
@@ -103,11 +113,15 @@ public class GameManager : MonoBehaviour {
     {
         if (isFirstFrame)
         {
+            _ui.ChangeRightButtonText("Cast");
+            _spawner.Release();
             timer = 0.0f;
+            
         }
 
-        if (timer >= 30.0f)
+        if (timer >= 30.0f || Input.GetKeyDown(KeyCode.Alpha2))
         {
+            Debug.Log("State changed (-->Monster)");
             nextState = State.MonsterPhase;
         }
     }
