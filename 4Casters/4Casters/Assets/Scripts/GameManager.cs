@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
+    UIManager _ui;
 
     //Handling Game Flow FSM 
     public enum State { MonsterPhase, CastPhase, Null }
@@ -13,6 +14,8 @@ public class GameManager : MonoBehaviour {
     State nextState = State.Null;
     bool isFirstFrame = true;
 
+    float timer = 0.0f;
+
     //Handling Player
     [SerializeField]
     List<Player> _players;
@@ -20,8 +23,7 @@ public class GameManager : MonoBehaviour {
     //Handling Monster
     [SerializeField]
     MonsterSpawner _spawner;
-    int spawnCount = 10;
-
+    
     public List<Player> Players
     {
         get
@@ -30,6 +32,13 @@ public class GameManager : MonoBehaviour {
         }
     }
     
+    public State CurrentState
+    {
+        get
+        {
+            return currentState;
+        }
+    }
 
 
 	void Start () {
@@ -41,11 +50,13 @@ public class GameManager : MonoBehaviour {
             _players.Add(obj.GetComponent<Player>());
         }
 
-
+        _ui = GetComponent<UIManager>();
         currentState = startState;
 	}
 	
 	void Update () {
+
+        timer += Time.deltaTime;
 
         //OnState function is called on each frame
         switch (currentState)
@@ -54,7 +65,7 @@ public class GameManager : MonoBehaviour {
                 OnStateMonsterPhase();
                 break;
             case State.CastPhase:
-
+                OnStateCastPhase();
                 break;
 
             case State.Null:
@@ -85,12 +96,33 @@ public class GameManager : MonoBehaviour {
     {
         if (isFirstFrame)
         {
-            _spawner.Spawn(spawnCount);
+            _ui.ChangeRightButtonText("Attack");
+            _ui.ResetPlayerKeywordText();
+            _spawner.Spawn();
+            timer = 0.0f;
+        }
+
+        if (timer >= 30.0f || Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            Debug.Log("State changed (-->Cast)");
+            nextState = State.CastPhase;
         }
     }
 
     void OnStateCastPhase()
     {
+        if (isFirstFrame)
+        {
+            _ui.ChangeRightButtonText("Cast");
+            _spawner.Release();
+            timer = 0.0f;
+            
+        }
 
+        if (timer >= 30.0f || Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            Debug.Log("State changed (-->Monster)");
+            nextState = State.MonsterPhase;
+        }
     }
 }

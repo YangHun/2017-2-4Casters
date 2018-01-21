@@ -5,8 +5,21 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 
     [SerializeField]
+    int id;
+
+    [SerializeField]
     int HP;
+    [SerializeField]
     List<string> KeywordsInventory = new List<string>();
+    Dictionary<SkillType, int> SkillTypeInventory = new Dictionary<SkillType, int>()
+    {
+        { SkillType.neutral, 0 },
+        { SkillType.holy, 0 },
+        { SkillType.evil, 0 },
+        { SkillType.lightness, 0 },
+        { SkillType.darkness, 0 },
+    };
+
     Transform Arrow;
     [SerializeField]
     GameObject Bullet;
@@ -50,5 +63,23 @@ public class Player : MonoBehaviour {
         b.GetComponent<Rigidbody>().AddForce(dir * bulletspeed);
 
     }
-    
+
+    //called when this player kills a monster on Dead() in Monster component
+    public void Loot(string keyword, SkillType type)
+    {
+        KeywordsInventory.Add(keyword);
+        SkillTypeInventory[type] += 1;
+        GameObject.Find("Manager").GetComponent<UIManager>().UpdatePlayerKeywordText(id, type, SkillTypeInventory[type]);
+    }
+
+    //called when phase is changed (cast --> monster)
+    public void ResetPlayers()
+    {
+        //reset inventories
+        KeywordsInventory.Clear();
+        SkillTypeInventory[SkillType.holy] = 0;
+        SkillTypeInventory[SkillType.evil] = 0;
+        SkillTypeInventory[SkillType.lightness] = 0;
+        SkillTypeInventory[SkillType.darkness] = 0;
+    }
 }
