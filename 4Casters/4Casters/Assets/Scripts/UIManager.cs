@@ -10,8 +10,14 @@ public class UIManager : MonoBehaviour {
 
     [SerializeField]
     Button Right;
+
+    [SerializeField]
+    GameObject CastingWindow;
+
     [SerializeField]
     ScrollRect CastingSentence;
+    [SerializeField]
+    ScrollRect CastingKeywords;
 
     [SerializeField]
     Text[] Players;
@@ -87,6 +93,26 @@ public class UIManager : MonoBehaviour {
             //TODO
 
         }
+    }
+
+    public void OnClickCastingWindowButtonExit()
+    {
+        CastingWindow.SetActive(false);
+    }
+
+    public void OnClickCastingWindowButtonOpen()
+    {
+        CastingWindow.SetActive(true);
+
+        //TODO : Update keywords scroll contents
+
+    }
+
+    //For debugging
+    public void OnClickCastingWindowFilter(int id)
+    {
+        Text targetPlayer = Players[id];
+
     }
 
 }
