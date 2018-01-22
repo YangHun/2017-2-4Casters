@@ -44,12 +44,14 @@ public class GameManager : MonoBehaviour {
 	void Start () {
 
         //initialization
-        GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject obj in objs)
+        if (Players.Count == 0)
         {
-            _players.Add(obj.GetComponent<Player>());
+            GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject obj in objs)
+            {
+                _players.Add(obj.GetComponent<Player>());
+            }
         }
-
         _ui = GetComponent<UIManager>();
         currentState = startState;
 	}
@@ -96,6 +98,8 @@ public class GameManager : MonoBehaviour {
     {
         if (isFirstFrame)
         {
+            foreach (Player p in Players)
+                p.ResetPlayers();
             _ui.ChangeRightButtonText("Attack");
             _ui.ResetPlayerKeywordText();
             _spawner.Spawn();
