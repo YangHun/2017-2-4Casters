@@ -10,7 +10,7 @@ public class Player : MonoBehaviour {
     [SerializeField]
     int HP;
     [SerializeField]
-    List<string> KeywordsInventory = new List<string>();
+    public List<string> KeywordsInventory = new List<string>();
     Dictionary<SkillType, int> SkillTypeInventory = new Dictionary<SkillType, int>()
     {
         { SkillType.neutral, 0 },
@@ -30,12 +30,7 @@ public class Player : MonoBehaviour {
 	{
 		Arrow.transform.rotation = Quaternion.Euler(90, 0, theta);
 	}
-	/*
-	public void EndUpdateArrow()
-	{
-		Arrow.transform.rotation = Quaternion.Euler(90, 0, 0);
-	}
-	*/
+	
 	// Use this for initialization
 	void Start () {
         Arrow = transform.Find("Arrow");
@@ -46,8 +41,7 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//transform.Rotate(new Vector3(0, 0, Joystick.theta));
-
+		
 	}
 
     public void BasicAttack()

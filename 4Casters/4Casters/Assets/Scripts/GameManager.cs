@@ -44,12 +44,14 @@ public class GameManager : MonoBehaviour {
 	void Start () {
 
         //initialization
-        GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject obj in objs)
+        if (Players.Count == 0)
         {
-            _players.Add(obj.GetComponent<Player>());
+            GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject obj in objs)
+            {
+                _players.Add(obj.GetComponent<Player>());
+            }
         }
-
         _ui = GetComponent<UIManager>();
         currentState = startState;
 	}
