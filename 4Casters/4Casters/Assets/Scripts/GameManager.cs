@@ -98,6 +98,8 @@ public class GameManager : MonoBehaviour {
     {
         if (isFirstFrame)
         {
+            foreach (Player p in Players)
+                p.ResetPlayers();
             _ui.ChangeRightButtonText("Attack");
             _ui.ResetPlayerKeywordText();
             _spawner.Spawn();

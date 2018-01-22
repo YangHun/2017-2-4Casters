@@ -9,8 +9,11 @@ public class Player : MonoBehaviour {
 
     [SerializeField]
     int HP;
-    [SerializeField]
+    
+
     public List<string> KeywordsInventory = new List<string>();
+    public List<string> SentenceInventory = new List<string>();
+
     Dictionary<SkillType, int> SkillTypeInventory = new Dictionary<SkillType, int>()
     {
         { SkillType.neutral, 0 },
@@ -64,6 +67,7 @@ public class Player : MonoBehaviour {
         KeywordsInventory.Add(keyword);
         SkillTypeInventory[type] += 1;
         GameObject.Find("Manager").GetComponent<UIManager>().UpdatePlayerKeywordText(id, type, SkillTypeInventory[type]);
+        GameObject.Find("Manager").GetComponent<UIManager>().OnClickCastingWindowFilter(id);
     }
 
     //called when phase is changed (cast --> monster)
@@ -71,6 +75,7 @@ public class Player : MonoBehaviour {
     {
         //reset inventories
         KeywordsInventory.Clear();
+        SentenceInventory.Clear();
         SkillTypeInventory[SkillType.holy] = 0;
         SkillTypeInventory[SkillType.evil] = 0;
         SkillTypeInventory[SkillType.lightness] = 0;

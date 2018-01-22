@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour {
 
     [SerializeField]
     GameObject CastingWindow;
+    int CastingWindowFilterId = 0;
 
     [SerializeField]
     ScrollRect CastingSentence;
@@ -113,9 +114,67 @@ public class UIManager : MonoBehaviour {
         OnClickCastingWindowFilter(0);
     }
 
+    void UpdateCastingWindowSentence()
+    {
+        List<string> sentence = _manager.Players[CastingWindowFilterId].SentenceInventory;
+
+        Button[] buttons = CastingSentence.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
+
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (i >= sentence.Count)
+            {
+                buttons[i].GetComponentInChildren<Text>().text = "";
+                buttons[i].GetComponent<Image>().color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
+            }
+            else
+            {
+                buttons[i].GetComponentInChildren<Text>().text = sentence[i];
+
+                Image img = buttons[i].GetComponent<Image>();
+                Text txt = buttons[i].GetComponentInChildren<Text>();
+
+                switch (_spell.KeywordDictionary[sentence[i]])
+                {
+                    case SkillType.neutral:
+                        img.color = new Color(144 / 255.0f, 207 / 255.0f, 238 / 255.0f);
+                        txt.color = Color.black;
+                        break;
+                    case SkillType.holy:
+                        img.color = new Color(255 / 255.0f, 255 / 255.0f, 255 / 255.0f);
+                        txt.color = Color.black;
+                        break;
+                    case SkillType.evil:
+                        img.color = new Color(0 / 255.0f, 0 / 255.0f, 0 / 255.0f);
+                        txt.color = Color.white;
+                        break;
+                    case SkillType.lightness:
+                        img.color = new Color(248 / 255.0f, 220 / 255.0f, 33 / 255.0f);
+                        txt.color = Color.black;
+                        break;
+                    case SkillType.darkness:
+                        img.color = new Color(47 / 255.0f, 18 / 255.0f, 49 / 255.0f);
+                        txt.color = Color.white;
+                        break;
+                }
+            }
+        }
+
+    }
+
+    public void OnClickCastingWindowKeywordButton(Button b)
+    {
+        string text = b.GetComponentInChildren<Text>().text;
+        _manager.Players[CastingWindowFilterId].SentenceInventory.Add(text);
+        b.enabled = false;
+        UpdateCastingWindowSentence();
+    }
+
     //For debugging
     public void OnClickCastingWindowFilter(int id)
     {
+        UpdateCastingWindowSentence();
+
         for (int i = 0; i < PlayerFilter.Length; i++)
         {
             if (i == id)
@@ -126,7 +185,9 @@ public class UIManager : MonoBehaviour {
         List<string> keys = _manager.Players[id].KeywordsInventory;
        
         Button[] buttons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
-       
+
+        Debug.Log(keys.Count);
+
         if (buttons == null)
         {
             Debug.Log("null..");
@@ -177,5 +238,7 @@ public class UIManager : MonoBehaviour {
             }
         }
     }
+
+   
 
 }
