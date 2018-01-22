@@ -111,22 +111,35 @@ public class UIManager : MonoBehaviour {
         CastingWindow.SetActive(true);
 
         //TODO : Update keywords scroll contents
-        OnClickCastingWindowFilter(0);
+        CastingWindowFilterId = 0;
+        OnClickCastingWindowFilter(CastingWindowFilterId);
     }
 
     void UpdateCastingWindowSentence()
     {
         List<string> sentence = _manager.Players[CastingWindowFilterId].SentenceInventory;
+        List<string> keyword = _manager.Players[CastingWindowFilterId].KeywordsInventory;
+
 
         Button[] buttons = CastingSentence.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
+        Button[] keywordButtons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
+
+        foreach (string key in sentence)
+        {
+            int index = keyword.IndexOf(key);
+            keywordButtons[index].enabled = false;
+        }
 
         for (int i = 0; i < buttons.Length; i++)
         {
             if (i >= sentence.Count)
             {
+                buttons[i].enabled = false;
+
                 buttons[i].GetComponentInChildren<Text>().text = "";
                 buttons[i].GetComponent<Image>().color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
             }
+
             else
             {
                 buttons[i].GetComponentInChildren<Text>().text = sentence[i];
@@ -173,16 +186,16 @@ public class UIManager : MonoBehaviour {
     //For debugging
     public void OnClickCastingWindowFilter(int id)
     {
-        UpdateCastingWindowSentence();
-
+        CastingWindowFilterId = id;
+        
         for (int i = 0; i < PlayerFilter.Length; i++)
         {
-            if (i == id)
+            if (i == CastingWindowFilterId)
                 PlayerFilter[i].GetComponent<Image>().color = Color.yellow;
             else
                 PlayerFilter[i].GetComponent<Image>().color = Color.white;
         }
-        List<string> keys = _manager.Players[id].KeywordsInventory;
+        List<string> keys = _manager.Players[CastingWindowFilterId].KeywordsInventory;
        
         Button[] buttons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
 
@@ -196,14 +209,21 @@ public class UIManager : MonoBehaviour {
         {
             for (int i = 0; i < buttons.Length; i++)
             {
+                
+
                 if (i >= keys.Count)
                 {
+                    buttons[i].enabled = false;
+
                     buttons[i].GetComponentInChildren<Text>().text = "";
 
                     buttons[i].GetComponent<Image>().color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
 
                 }
                 else {
+
+                    buttons[i].enabled = true;
+
                     buttons[i].GetComponentInChildren<Text>().text = keys[i];
 
                     Image img = buttons[i].GetComponent<Image>();
@@ -232,11 +252,11 @@ public class UIManager : MonoBehaviour {
                             break;                        
                     }
                 }
-
-                
-
             }
         }
+
+        UpdateCastingWindowSentence();
+
     }
 
    
