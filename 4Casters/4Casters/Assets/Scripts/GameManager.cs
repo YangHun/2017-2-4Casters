@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour {
             {
                 _players.Add(obj.GetComponent<Player>());
             }
+			_ui.RefreshInMonsterPhase();
         }
         _ui = GetComponent<UIManager>();
         currentState = startState;
@@ -65,11 +66,12 @@ public class GameManager : MonoBehaviour {
         {
             case State.MonsterPhase:
                 OnStateMonsterPhase();
+				_ui.RefreshInMonsterPhase();
                 break;
             case State.CastPhase:
                 OnStateCastPhase();
-                break;
-
+				_ui.RefreshInCastPhase();
+				break;
             case State.Null:
 
                 break;

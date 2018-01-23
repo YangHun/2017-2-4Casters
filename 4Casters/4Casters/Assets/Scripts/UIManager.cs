@@ -31,7 +31,8 @@ public class UIManager : MonoBehaviour {
     {
         _manager = GetComponent<GameManager>();
         _spell = GetComponent<SpellManager>();
-    }
+		OnClickCastingWindowFilter(CastingWindowFilterId);
+	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -96,9 +97,24 @@ public class UIManager : MonoBehaviour {
 
         else if (_manager.CurrentState == GameManager.State.CastPhase)
         {
-            //TODO
+			List<string> sentence = _manager.Players[CastingWindowFilterId].SentenceInventory;
+			List<string> keyword = _manager.Players[CastingWindowFilterId].KeywordsInventory;
+			Button[] keywordButtons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
 
-        }
+			string str = "";
+			foreach (string s in sentence)
+			{
+				str += s;
+				keyword.Remove(s);
+				//keywordButtons[keyword.IndexOf(s)].enabled = false;		//to be fixed; it does not hide keyword used.s
+			}
+			//_manager.cast(str) : TODO
+			Debug.Log(str + "attack has been casted");
+
+			sentence.Clear();
+
+			OnClickCastingWindowFilter(CastingWindowFilterId);
+		}
     }
 
     public void OnClickCastingWindowButtonExit()
@@ -119,17 +135,16 @@ public class UIManager : MonoBehaviour {
     {
         List<string> sentence = _manager.Players[CastingWindowFilterId].SentenceInventory;
         List<string> keyword = _manager.Players[CastingWindowFilterId].KeywordsInventory;
-
-
+		
         Button[] buttons = CastingSentence.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
         Button[] keywordButtons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
-
+		/*
         foreach (string key in sentence)
         {
             int index = keyword.IndexOf(key);
             keywordButtons[index].enabled = false;
         }
-
+		*/
         for (int i = 0; i < buttons.Length; i++)
         {
             if (i >= sentence.Count)
@@ -139,7 +154,6 @@ public class UIManager : MonoBehaviour {
                 buttons[i].GetComponentInChildren<Text>().text = "";
                 buttons[i].GetComponent<Image>().color = new Color(0.0f, 0.0f, 0.0f, 0.0f);
             }
-
             else
             {
                 buttons[i].GetComponentInChildren<Text>().text = sentence[i];
@@ -178,8 +192,10 @@ public class UIManager : MonoBehaviour {
     public void OnClickCastingWindowKeywordButton(Button b)
     {
         string text = b.GetComponentInChildren<Text>().text;
-        _manager.Players[CastingWindowFilterId].SentenceInventory.Add(text);
-        b.enabled = false;
+		if (_manager.Players[CastingWindowFilterId].SentenceInventory.Contains(text))
+			_manager.Players[CastingWindowFilterId].SentenceInventory.Remove(text);
+		else
+			_manager.Players[CastingWindowFilterId].SentenceInventory.Add(text);
         UpdateCastingWindowSentence();
     }
 
@@ -259,6 +275,22 @@ public class UIManager : MonoBehaviour {
 
     }
 
-   
+	//make 'public' to be able to be called in the phase manager
+	//refresh UI when the phase is changed
+	public void RefreshInMonsterPhase()
+	{
+		foreach (Button b in CastingSentence.transform.Find("Viewport/Content").GetComponentsInChildren<Button>())
+			b.enabled = false;
+		foreach (Button b in CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>())
+			b.enabled = false;
+	}
+
+	public void RefreshInCastPhase()
+	{
+		foreach (Button b in CastingSentence.transform.Find("Viewport/Content").GetComponentsInChildren<Button>())
+			b.enabled = true;
+		foreach (Button b in CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>())
+			b.enabled = true;
+	}
 
 }
