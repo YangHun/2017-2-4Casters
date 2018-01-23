@@ -66,11 +66,9 @@ public class GameManager : MonoBehaviour {
         {
             case State.MonsterPhase:
                 OnStateMonsterPhase();
-				_ui.RefreshInMonsterPhase();
                 break;
             case State.CastPhase:
                 OnStateCastPhase();
-				_ui.RefreshInCastPhase();
 				break;
             case State.Null:
 
@@ -104,6 +102,7 @@ public class GameManager : MonoBehaviour {
                 p.ResetPlayers();
             _ui.ChangeRightButtonText("Attack");
             _ui.ResetPlayerKeywordText();
+			_ui.RefreshInMonsterPhase();
             _spawner.Spawn();
             timer = 0.0f;
         }
@@ -120,7 +119,8 @@ public class GameManager : MonoBehaviour {
         if (isFirstFrame)
         {
             _ui.ChangeRightButtonText("Cast");
-            _spawner.Release();
+			_ui.RefreshInCastPhase ();
+			_spawner.Release();
             timer = 0.0f;
             
         }
