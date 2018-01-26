@@ -98,8 +98,10 @@ public class GameManager : MonoBehaviour {
     {
         if (isFirstFrame)
         {
+		/*		------disable since exception raised
             foreach (Player p in Players)
                 p.ResetPlayers();
+				*/
             _ui.ChangeRightButtonText("Attack");
             _ui.ResetPlayerKeywordText();
 			_ui.RefreshInMonsterPhase();
