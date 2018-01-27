@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -5661,7 +5661,7 @@ GameObject:
   - component: {fileID: 421698043}
   - component: {fileID: 421698042}
   m_Layer: 0
-  m_Name: Monsters
+  m_Name: Monster Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7909,6 +7909,34 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 648970365}
+--- !u!1 &651221757
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 651221758}
+  m_Layer: 0
+  m_Name: Monster
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &651221758
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 651221757}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.2912216, y: 0.51953125, z: -0.008300781}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &666154992
 GameObject:
   m_ObjectHideFlags: 0
@@ -11747,6 +11775,7 @@ GameObject:
   - component: {fileID: 1095795506}
   - component: {fileID: 1095795504}
   - component: {fileID: 1095795503}
+  - component: {fileID: 1095795507}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -11818,6 +11847,38 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   _spawner: {fileID: 421698043}
+--- !u!114 &1095795507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1095795502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
 --- !u!1 &1096766823
 GameObject:
   m_ObjectHideFlags: 0
@@ -13011,7 +13072,7 @@ Prefab:
     - target: {fileID: 224633557404541884, guid: c4780f7398ae0c94682b0d3148ca575c,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000027315384
+      value: 0.00000585169
       objectReference: {fileID: 0}
     - target: {fileID: 114880713707308164, guid: c4780f7398ae0c94682b0d3148ca575c,
         type: 2}

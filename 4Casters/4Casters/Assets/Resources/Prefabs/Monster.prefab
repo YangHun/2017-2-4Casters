@@ -340,8 +340,8 @@ MonoBehaviour:
     i13: 24
     i14: 56
     i15: 42
-  m_ServerOnly: 1
-  m_LocalPlayerAuthority: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
 --- !u!136 &136504036117337252
 CapsuleCollider:
   m_ObjectHideFlags: 1

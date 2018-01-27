@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class IVGameManager : MonoBehaviour {
+public class IVGameManager : NetworkBehaviour {
     IVUIManager _ui;
 
     //Handling Game Flow FSM 
@@ -39,9 +40,9 @@ public class IVGameManager : MonoBehaviour {
         }
     }
 
-
-    void Start()
+    public override void OnStartClient()
     {
+        base.OnStartClient();
         IVPlayer[] players = FindObjectsOfType<IVPlayer>();
         _ui = GetComponent<IVUIManager>();
         _players.Clear();               //stash given arguments to make the array with network behaviour
@@ -49,10 +50,9 @@ public class IVGameManager : MonoBehaviour {
             _players.Add(player);
         currentState = startState;
     }
-
     void Update()
     {
-
+        
         timer += Time.deltaTime;
 
         //OnState function is called on each frame
@@ -92,7 +92,6 @@ public class IVGameManager : MonoBehaviour {
     {
         if (isFirstFrame)
         {
-
             foreach (IVPlayer p in Players)
                 p.ResetPlayers();
             _ui.ChangeRightButtonText("Attack");
