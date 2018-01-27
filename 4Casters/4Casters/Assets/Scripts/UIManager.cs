@@ -109,6 +109,11 @@ public class UIManager : MonoBehaviour {
 				//keywordButtons[keyword.IndexOf(s)].enabled = false;		//to be fixed; it does not hide keyword used.s
 			}
 			//_manager.cast(str) : TODO
+			if(str.Length == 0)
+			{
+				Debug.Log("Pattern does not match.");
+				return;
+			}
 			Debug.Log(str + "attack has been casted");
 
 			sentence.Clear();
@@ -215,7 +220,7 @@ public class UIManager : MonoBehaviour {
        
         Button[] buttons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
 
-        Debug.Log(keys.Count);
+        //Debug.Log(keys.Count);
 
         if (buttons == null)
         {

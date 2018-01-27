@@ -42,19 +42,13 @@ public class GameManager : MonoBehaviour {
 
 
 	void Start () {
-
-        //initialization
-        if (Players.Count == 0)
-        {
-            GameObject[] objs = GameObject.FindGameObjectsWithTag("Player");
-            foreach (GameObject obj in objs)
-            {
-                _players.Add(obj.GetComponent<Player>());
-            }
-			_ui.RefreshInMonsterPhase();
-        }
-        _ui = GetComponent<UIManager>();
-        currentState = startState;
+		Player[] players = FindObjectsOfType<Player>();
+		_ui = GetComponent<UIManager>();
+		_players.Clear();				//stash given arguments to make the array with network behaviour
+		foreach (Player player in players)
+			_players.Add(player);
+		currentState = startState;
+		OnStateMonsterPhase();
 	}
 	
 	void Update () {

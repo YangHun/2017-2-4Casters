@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Networking;
 
-public class JoystickManager : MonoBehaviour {
+public class JoystickManager : NetworkBehaviour {
 
 	[SerializeField]
 	int stickSize = 40;

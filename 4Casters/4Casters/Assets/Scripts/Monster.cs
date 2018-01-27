@@ -66,7 +66,7 @@ public class Monster : MonoBehaviour {
 
     public void Dead(Player p)
     {
-        Debug.Log(gameObject.name + " is dead! (type,key) = (" + type + ", " + Keyword + ")");
+        //Debug.Log(gameObject.name + " is dead! (type,key) = (" + type + ", " + Keyword + ")");
         Debug.Log(p.gameObject.name + " killed "+gameObject.name);
         p.Loot(Keyword, type);
         gameObject.SetActive(false);
