@@ -48,7 +48,6 @@ public class IVGameManager : MonoBehaviour {
         foreach (IVPlayer player in players)
             _players.Add(player);
         currentState = startState;
-        OnStateMonsterPhase();
     }
 
     void Update()
@@ -93,6 +92,7 @@ public class IVGameManager : MonoBehaviour {
     {
         if (isFirstFrame)
         {
+
             foreach (IVPlayer p in Players)
                 p.ResetPlayers();
             _ui.ChangeRightButtonText("Attack");
