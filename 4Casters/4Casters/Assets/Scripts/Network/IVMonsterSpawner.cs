@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterSpawner : MonoBehaviour {
+public class IVMonsterSpawner : MonoBehaviour {
 
     [SerializeField]
-    Monster Base;
+    IVMonster Base;
 
     [SerializeField]
     List<int> spawnCount = new List<int>();
@@ -16,21 +16,23 @@ public class MonsterSpawner : MonoBehaviour {
     Dictionary<SkillType, List<string>> SkillTypeDictionary;
 
     // Use this for initialization
-    void Start () {
-        Base = transform.Find("Monster").GetComponent<Monster>();
+    void Start()
+    {
+        Base = transform.Find("Monster").GetComponent<IVMonster>();
         Base.gameObject.SetActive(false);
 
-        SpellManager _spell = GameObject.Find("Manager").GetComponent<SpellManager>();
+        IVSpellManager _spell = GameObject.Find("Manager").GetComponent<IVSpellManager>();
         KeywordDictionary = _spell.KeywordDictionary;
         SkillTypeDictionary = _spell.SkillTypeDictionary;
 
 
     }
 
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     public void Spawn()
     {
@@ -53,7 +55,7 @@ public class MonsterSpawner : MonoBehaviour {
                 List<string> keys = SkillTypeDictionary[type];
                 string keyword = keys[Random.Range(1, keys.Count) - 1];
 
-                obj.GetComponent<Monster>().Initialization(keyword, type);
+                obj.GetComponent<IVMonster>().Initialization(keyword, type);
 
             }
         }
@@ -61,9 +63,9 @@ public class MonsterSpawner : MonoBehaviour {
 
     public void Release()
     {
-        Monster[] monsters = transform.GetComponentsInChildren<Monster>();
+        IVMonster[] monsters = transform.GetComponentsInChildren<IVMonster>();
 
-        foreach ( Monster m in monsters)
+        foreach (IVMonster m in monsters)
         {
             Destroy(m.gameObject);
         }

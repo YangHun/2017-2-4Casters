@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 33100382294138382}
   - component: {fileID: 23746039501654954}
   - component: {fileID: 135491744774278718}
-  - component: {fileID: 114085948028718680}
+  - component: {fileID: 114746974380442716}
   m_Layer: 8
   m_Name: Bullet
   m_TagString: Untagged
@@ -73,8 +73,8 @@ GameObject:
   - component: {fileID: 4773513342189528}
   - component: {fileID: 114006111529205316}
   - component: {fileID: 212629110178573706}
-  - component: {fileID: 114758137156502952}
   - component: {fileID: 114616700581071538}
+  - component: {fileID: 114428792211535938}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -214,17 +214,22 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
---- !u!114 &114085948028718680
+--- !u!114 &114428792211535938
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1158771823693392}
+  m_GameObject: {fileID: 1842498343416686}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50603ec34314bca43bfed93d8c6c6eb5, type: 3}
+  m_Script: {fileID: 11500000, guid: ac1654f042207644b887d0f6a853572e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 0
+  HP: 100
+  KeywordsInventory: []
+  SentenceInventory: []
+  Bullet: {fileID: 1158771823693392}
 --- !u!114 &114616700581071538
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -257,22 +262,17 @@ MonoBehaviour:
     i15: 145
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
---- !u!114 &114758137156502952
+--- !u!114 &114746974380442716
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1842498343416686}
+  m_GameObject: {fileID: 1158771823693392}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 114aabdc4594a9a4586b756340d76cae, type: 3}
+  m_Script: {fileID: 11500000, guid: c9ebbe32dbdda9a408b9b6769aef6f77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
-  HP: 100
-  KeywordsInventory: []
-  SentenceInventory: []
-  Bullet: {fileID: 0}
 --- !u!135 &135491744774278718
 SphereCollider:
   m_ObjectHideFlags: 1

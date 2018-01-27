@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -965,7 +965,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -1087,7 +1087,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -1209,7 +1209,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -1881,6 +1881,128 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: -20}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &109312615
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4497050065667016, guid: 100f8f1f6fed2004588b0fccf299b505, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497050065667016, guid: 100f8f1f6fed2004588b0fccf299b505, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497050065667016, guid: 100f8f1f6fed2004588b0fccf299b505, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497050065667016, guid: 100f8f1f6fed2004588b0fccf299b505, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497050065667016, guid: 100f8f1f6fed2004588b0fccf299b505, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497050065667016, guid: 100f8f1f6fed2004588b0fccf299b505, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497050065667016, guid: 100f8f1f6fed2004588b0fccf299b505, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4497050065667016, guid: 100f8f1f6fed2004588b0fccf299b505, type: 2}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i0
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i1
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i2
+      value: 143
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i3
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i4
+      value: 111
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i5
+      value: 237
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i6
+      value: 32
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i7
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i8
+      value: 88
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i9
+      value: 139
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i10
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i11
+      value: 204
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i12
+      value: 242
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i13
+      value: 153
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i14
+      value: 181
+      objectReference: {fileID: 0}
+    - target: {fileID: 114011584321720826, guid: 100f8f1f6fed2004588b0fccf299b505,
+        type: 2}
+      propertyPath: m_AssetId.i15
+      value: 5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 100f8f1f6fed2004588b0fccf299b505, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &120961789
 GameObject:
   m_ObjectHideFlags: 0
@@ -2184,11 +2306,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!4 &137828471 stripped
-Transform:
-  m_PrefabParentObject: {fileID: 4680887937404126, guid: 2cde60849874e8445b17b54ddc18382a,
-    type: 2}
-  m_PrefabInternal: {fileID: 1486508507}
 --- !u!1 &147952086
 GameObject:
   m_ObjectHideFlags: 0
@@ -2413,7 +2530,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -3319,7 +3436,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowFilter
         m_Mode: 3
         m_Arguments:
@@ -3441,7 +3558,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowFilter
         m_Mode: 3
         m_Arguments:
@@ -3816,7 +3933,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -4086,7 +4203,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -4350,7 +4467,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -4472,7 +4589,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -4594,7 +4711,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickButtonRight
         m_Mode: 1
         m_Arguments:
@@ -4790,7 +4907,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -5498,7 +5615,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -5726,7 +5843,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 444701147}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed897e0888ecf7941a773f9c3c995e51, type: 3}
+  m_Script: {fileID: 11500000, guid: b31cead8217cacd499c2bd977e852ed9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   stickSize: 80
@@ -5990,7 +6107,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -6112,7 +6229,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowButtonExit
         m_Mode: 1
         m_Arguments:
@@ -6234,7 +6351,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -6356,7 +6473,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -6478,7 +6595,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -6748,7 +6865,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -6870,7 +6987,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -6992,7 +7109,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -7188,7 +7305,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -7523,7 +7640,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -7719,7 +7836,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowButtonOpen
         m_Mode: 1
         m_Arguments:
@@ -7915,7 +8032,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -8708,7 +8825,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -8830,7 +8947,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowFilter
         m_Mode: 3
         m_Arguments:
@@ -8952,7 +9069,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -9296,7 +9413,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -9573,7 +9690,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -9769,7 +9886,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -10187,7 +10304,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -10383,7 +10500,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -10910,49 +11027,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 956627343}
---- !u!1 &1018125024
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 1018125025}
-  - component: {fileID: 1018125026}
-  m_Layer: 0
-  m_Name: Monsters
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1018125025
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1018125024}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 137828471}
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1018125026
+--- !u!114 &1018125026 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1018125024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95cbd8158208c2249801edea351b8881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Base: {fileID: 114724738186343128, guid: 2cde60849874e8445b17b54ddc18382a, type: 2}
-  spawnCount: 0500000005000000050000000500000005000000
+  m_PrefabParentObject: {fileID: 114423226474731638, guid: 100f8f1f6fed2004588b0fccf299b505,
+    type: 2}
+  m_PrefabInternal: {fileID: 109312615}
+  m_Script: {fileID: 11500000, guid: c451bb132ac2cc9498422f6297cca17d, type: 3}
 --- !u!1 &1031800316
 GameObject:
   m_ObjectHideFlags: 0
@@ -11663,7 +11743,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -11717,9 +11797,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1095795505}
+  - component: {fileID: 1095795506}
   - component: {fileID: 1095795504}
   - component: {fileID: 1095795503}
-  - component: {fileID: 1095795506}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -11735,7 +11815,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1095795502}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e759daaa712afd44811a535b9a772b2, type: 3}
+  m_Script: {fileID: 11500000, guid: 7af18cfe5cd079a43af8a7d0e9076012, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1095795504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1095795502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 019c4155eeb909b429175aa3bef088a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Right: {fileID: 324709609}
@@ -11752,21 +11843,6 @@ MonoBehaviour:
   - {fileID: 181865738}
   - {fileID: 771472142}
   - {fileID: 1322959848}
---- !u!114 &1095795504
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1095795502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddd91362e4f2e85429c8b982619d64f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _players:
-  - {fileID: 0}
-  - {fileID: 0}
-  _spawner: {fileID: 1018125026}
 --- !u!4 &1095795505
 Transform:
   m_ObjectHideFlags: 0
@@ -11788,9 +11864,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1095795502}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f1ef9f2936a1d74497f16d7e14eb7c1, type: 3}
+  m_Script: {fileID: 11500000, guid: c8036870e572dc9488448fd194d1f3c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _players:
+  - {fileID: 0}
+  - {fileID: 0}
+  _spawner: {fileID: 1018125026}
 --- !u!1 &1096766823
 GameObject:
   m_ObjectHideFlags: 0
@@ -11941,7 +12021,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -12734,7 +12814,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -12861,6 +12941,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1608419476}
     m_Modifications:
+    - target: {fileID: 114880713707308164, guid: c4780f7398ae0c94682b0d3148ca575c,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[3].callback.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 224301341019602636, guid: c4780f7398ae0c94682b0d3148ca575c,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -12970,20 +13055,66 @@ Prefab:
         type: 2}
       propertyPath: m_Delegates.Array.data[3].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 444701151}
+      objectReference: {fileID: 444701147}
     - target: {fileID: 224633557404541884, guid: c4780f7398ae0c94682b0d3148ca575c,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000036786696
+      value: -0.000003874853
       objectReference: {fileID: 0}
     - target: {fileID: 224633557404541884, guid: c4780f7398ae0c94682b0d3148ca575c,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0.000038764465
+      value: 0.000005959148
+      objectReference: {fileID: 0}
+    - target: {fileID: 114880713707308164, guid: c4780f7398ae0c94682b0d3148ca575c,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnPointerDown
+      objectReference: {fileID: 0}
+    - target: {fileID: 114880713707308164, guid: c4780f7398ae0c94682b0d3148ca575c,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnPointerUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 114880713707308164, guid: c4780f7398ae0c94682b0d3148ca575c,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[2].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnDrag
+      objectReference: {fileID: 0}
+    - target: {fileID: 114880713707308164, guid: c4780f7398ae0c94682b0d3148ca575c,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[3].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114880713707308164, guid: c4780f7398ae0c94682b0d3148ca575c,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[3].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114880713707308164, guid: c4780f7398ae0c94682b0d3148ca575c,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[3].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1165968945}
+    - target: {fileID: 114880713707308164, guid: c4780f7398ae0c94682b0d3148ca575c,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[3].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.UI.Selectable, UnityEngine.UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 114880713707308164, guid: c4780f7398ae0c94682b0d3148ca575c,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[3].callback.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c4780f7398ae0c94682b0d3148ca575c, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1165968945 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114641038927116216, guid: c4780f7398ae0c94682b0d3148ca575c,
+    type: 2}
+  m_PrefabInternal: {fileID: 1165968944}
+  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1 &1170179309
 GameObject:
   m_ObjectHideFlags: 0
@@ -13060,7 +13191,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -13256,7 +13387,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -14266,7 +14397,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -14824,7 +14955,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -15251,7 +15382,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1340606513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e7bae15adbdffb4383012461226bcd6, type: 3}
+  m_Script: {fileID: 11500000, guid: 3b9280c3b6cc4af4b8eecf4b40907992, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 1842498343416686, guid: 6830cdd3305ed2746862521f157f7891,
@@ -15438,7 +15569,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -16257,7 +16388,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -16414,128 +16545,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1486125332}
---- !u!1001 &1486508507
-Prefab:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1018125025}
-    m_Modifications:
-    - target: {fileID: 4680887937404126, guid: 2cde60849874e8445b17b54ddc18382a, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4680887937404126, guid: 2cde60849874e8445b17b54ddc18382a, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4680887937404126, guid: 2cde60849874e8445b17b54ddc18382a, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4680887937404126, guid: 2cde60849874e8445b17b54ddc18382a, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4680887937404126, guid: 2cde60849874e8445b17b54ddc18382a, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4680887937404126, guid: 2cde60849874e8445b17b54ddc18382a, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4680887937404126, guid: 2cde60849874e8445b17b54ddc18382a, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4680887937404126, guid: 2cde60849874e8445b17b54ddc18382a, type: 2}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i0
-      value: 44
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i1
-      value: 222
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i2
-      value: 96
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i3
-      value: 132
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i4
-      value: 152
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i5
-      value: 116
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i6
-      value: 232
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i7
-      value: 68
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i8
-      value: 91
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i9
-      value: 23
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i10
-      value: 181
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i11
-      value: 77
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i12
-      value: 220
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i13
-      value: 24
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i14
-      value: 56
-      objectReference: {fileID: 0}
-    - target: {fileID: 114441986268098504, guid: 2cde60849874e8445b17b54ddc18382a,
-        type: 2}
-      propertyPath: m_AssetId.i15
-      value: 42
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 2cde60849874e8445b17b54ddc18382a, type: 2}
-  m_IsPrefabParent: 0
 --- !u!1 &1491031189
 GameObject:
   m_ObjectHideFlags: 0
@@ -18121,7 +18130,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -18391,7 +18400,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -18547,7 +18556,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -20183,7 +20192,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -20305,7 +20314,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -21093,7 +21102,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -21215,7 +21224,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -21337,7 +21346,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -22088,7 +22097,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -22210,7 +22219,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -22332,7 +22341,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowFilter
         m_Mode: 3
         m_Arguments:
@@ -22713,7 +22722,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
@@ -22946,7 +22955,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1095795503}
+      - m_Target: {fileID: 1095795504}
         m_MethodName: OnClickCastingWindowKeywordButton
         m_Mode: 2
         m_Arguments:
