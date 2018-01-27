@@ -55,7 +55,7 @@ public class IVJoystickManager : NetworkBehaviour
         dist = Mathf.Sqrt(delta.x * delta.x + delta.y * delta.y);
         theta = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
         foreach (IVPlayer player in players)
-            player.UpdateArrow(theta - 90);
+            player.CmdUpdateArrow(theta - 90);
         //Debug.Log("Theta : " + theta);
     }
     /*

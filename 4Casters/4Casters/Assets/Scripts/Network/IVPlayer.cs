@@ -28,7 +28,7 @@ public class IVPlayer : NetworkBehaviour
 	GameObject Bullet;
 	const float bulletspeed = 300.0f;
 
-	//called on PlayerSpawner
+	//called on PlayerSpawner		//Abondoned.
 	public void InitializeTransform(Transform Parent, Vector3 pos)		//called at start frame to initialize player's position and parent
 	{
 		transform.SetParent(Parent);
@@ -38,7 +38,7 @@ public class IVPlayer : NetworkBehaviour
 	}
 
 	//called on JoystickManager
-	public void UpdateArrow(float theta)
+	public void CmdUpdateArrow(float theta)
 	{
 		if (!isLocalPlayer) return;             //If not a local player, it halts
 		else
@@ -51,6 +51,7 @@ public class IVPlayer : NetworkBehaviour
 		Arrow = transform.Find("Arrow");
 		Bullet = transform.Find("Bullet").gameObject;
 		Bullet.SetActive(false);
+		GameObject.Find("Manager").GetComponent<IVGameManager>().registerPlayer(this);
 	}
 
 	// Use this for initialization; local player only

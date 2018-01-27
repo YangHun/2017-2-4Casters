@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+
+/// Abondoned. Do not use this.
+
 ///////Player Position System/////////
 //		0 - West	1 - North		//
 //		2 - East	3 - South		//

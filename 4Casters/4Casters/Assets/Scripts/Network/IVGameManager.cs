@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +17,6 @@ public class IVGameManager : MonoBehaviour {
     float timer = 0.0f;
 
     //Handling Player
-    [SerializeField]
     List<IVPlayer> _players;
 
     //Handling Monster
@@ -42,11 +42,8 @@ public class IVGameManager : MonoBehaviour {
 
     void Start()
     {
-        IVPlayer[] players = FindObjectsOfType<IVPlayer>();
+		_players = new List<IVPlayer>();
         _ui = GetComponent<IVUIManager>();
-        _players.Clear();               //stash given arguments to make the array with network behaviour
-        foreach (IVPlayer player in players)
-            _players.Add(player);
         currentState = startState;
         OnStateMonsterPhase();
     }
@@ -87,14 +84,22 @@ public class IVGameManager : MonoBehaviour {
         }
     }
 
+	public void registerPlayer(IVPlayer player)
+	{
+		if (_players.Contains(player))
+			Debug.Log(player.name + " is already exists.");
+		else
+			_players.Add(player);
+	}
+
     //OnState functions definition
 
     void OnStateMonsterPhase()
     {
         if (isFirstFrame)
         {
-            foreach (IVPlayer p in Players)
-                p.ResetPlayers();
+			foreach (IVPlayer p in Players)
+				p.ResetPlayers();
             _ui.ChangeRightButtonText("Attack");
             _ui.ResetPlayerKeywordText();
             _ui.RefreshInMonsterPhase();
