@@ -29,11 +29,12 @@ public class IVPlayer : NetworkBehaviour
 	const float bulletspeed = 300.0f;
 
 	//called on PlayerSpawner
-	public void initializeTransform(Transform Parent, Vector3 pos)		//called at start frame to initialize player's position and parent
+	public void InitializeTransform(Transform Parent, Vector3 pos)		//called at start frame to initialize player's position and parent
 	{
 		transform.SetParent(Parent);
 		transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
 		transform.position = pos;
+		Debug.Log(this.name + "is initialized.");
 	}
 
 	//called on JoystickManager
