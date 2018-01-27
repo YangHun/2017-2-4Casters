@@ -5,7 +5,7 @@ using UnityEngine;
 public class IVMonsterSpawner : MonoBehaviour {
 
     [SerializeField]
-    IVMonster Base;
+    Object Base;
 
     [SerializeField]
     List<int> spawnCount = new List<int>();
@@ -18,8 +18,9 @@ public class IVMonsterSpawner : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        Base = transform.Find("Monster").GetComponent<IVMonster>();
-        Base.gameObject.SetActive(false);
+		Base = Resources.Load ("Prefabs/Monster");
+//			transform.Find("Monster").GetComponent<IVMonster>();
+//        Base.gameObject.SetActive(false);
 
         IVSpellManager _spell = GameObject.Find("Manager").GetComponent<IVSpellManager>();
         KeywordDictionary = _spell.KeywordDictionary;
@@ -46,7 +47,7 @@ public class IVMonsterSpawner : MonoBehaviour {
                 pos *= Random.Range(0.1f, 6.0f);
                 pos.y = 0.5f;
 
-                GameObject obj = Instantiate((Object)Base.gameObject, pos, Quaternion.identity) as GameObject;
+                GameObject obj = Instantiate(Base, pos, Quaternion.identity) as GameObject;
                 obj.transform.SetParent(transform);
                 obj.SetActive(true);
 
@@ -63,7 +64,7 @@ public class IVMonsterSpawner : MonoBehaviour {
 
     public void Release()
     {
-        IVMonster[] monsters = transform.GetComponentsInChildren<IVMonster>();
+		IVMonster[] monsters = transform.GetComponentsInChildren<IVMonster>();
 
         foreach (IVMonster m in monsters)
         {

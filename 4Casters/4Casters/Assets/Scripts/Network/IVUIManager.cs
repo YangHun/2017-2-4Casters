@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
+using Prototype.NetworkLobby;
 
 public class IVUIManager : MonoBehaviour {
 
+	LobbyManager _lobby;
+	int playerCount;
+
     IVGameManager _manager;
     IVSpellManager _spell;
+
 
     [SerializeField]
     Button Right;
@@ -30,14 +36,24 @@ public class IVUIManager : MonoBehaviour {
     {
         _manager = GetComponent<IVGameManager>();
         _spell = GetComponent<IVSpellManager>();
-        OnClickCastingWindowFilter(CastingWindowFilterId);
+        _lobby = GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ();
+		playerCount = _lobby.numPlayers;
+		UpdatePlayerUI ();
     }
 
     // Update is called once per frame
     void Update()
     {
 
-    }
+	}
+
+	void UpdatePlayerUI(){
+		for (int i = playerCount; i < 4; i++) {
+			Players [i].gameObject.SetActive (false);
+			PlayerFilter [i].gameObject.SetActive (false);
+
+		}
+	}
 
     public void ChangeRightButtonText(string t)
     {
