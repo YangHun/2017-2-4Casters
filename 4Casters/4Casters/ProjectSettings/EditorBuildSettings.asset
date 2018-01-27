@@ -9,5 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/Lobby.unity
     guid: 4d1b5221d6f31dd469f0dda81e9dc83c
   - enabled: 1
+    path: Assets/Scenes/Multiplay.unity
+    guid: 5771e137d416b034a93c248860af2c01
+  - enabled: 0
     path: Assets/Scenes/singleplay.unity
     guid: f91f154b58f9c384e9fc52351b23261c

@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Player : MonoBehaviour {
+public class Player : NetworkBehaviour {
 
     [SerializeField]
     int id;
@@ -26,12 +27,14 @@ public class Player : MonoBehaviour {
     Transform Arrow;
     [SerializeField]
     GameObject Bullet;
-	JoystickManager Joystick;
+//	JoystickManager Joystick;
     const float bulletspeed = 300.0f;
 
 	public void UpdateArrow(float theta)
 	{
-		Arrow.transform.rotation = Quaternion.Euler(90, 0, theta);
+		if (!isLocalPlayer) return;				//If not a local player, it halts
+		else
+			Arrow.transform.rotation = Quaternion.Euler(90, 0, theta);
 	}
 	
 	// Use this for initialization
@@ -39,7 +42,14 @@ public class Player : MonoBehaviour {
         Arrow = transform.Find("Arrow");
         Bullet = transform.Find("Bullet").gameObject;
         Bullet.SetActive(false);
-		Joystick = GameObject.Find("JoystickSystem").GetComponent<JoystickManager>();
+	}
+	
+	// Use this for initialization; local player only
+	public override void OnStartLocalPlayer()
+	{
+		base.OnStartLocalPlayer();
+//		Joystick = GameObject.Find("JoystickSystem").GetComponent<JoystickManager>();
+		GetComponent<SpriteRenderer>().material.color = Color.blue;
 	}
 	
 	// Update is called once per frame
@@ -52,7 +62,9 @@ public class Player : MonoBehaviour {
         Vector3 dir = Arrow.up;
         Vector3 pos = Arrow.position;
 
-        GameObject b = Instantiate((Object)Bullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
+		if (!isLocalPlayer) return;
+
+		GameObject b = Instantiate((Object)Bullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
         b.transform.parent = transform;
         b.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
         b.SetActive(true);
@@ -81,4 +93,5 @@ public class Player : MonoBehaviour {
         SkillTypeInventory[SkillType.lightness] = 0;
         SkillTypeInventory[SkillType.darkness] = 0;
     }
+
 }
