@@ -12033,9 +12033,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8036870e572dc9488448fd194d1f3c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _players:
-  - {fileID: 0}
-  - {fileID: 0}
   _spawner: {fileID: 1018125026}
 --- !u!1 &1096766823
 GameObject:
@@ -13225,12 +13222,12 @@ Prefab:
     - target: {fileID: 224633557404541884, guid: c4780f7398ae0c94682b0d3148ca575c,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0.00011039312
+      value: -0.0000049550586
       objectReference: {fileID: 0}
     - target: {fileID: 224633557404541884, guid: c4780f7398ae0c94682b0d3148ca575c,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0.0000066636685
+      value: 0.00003607962
       objectReference: {fileID: 0}
     - target: {fileID: 114880713707308164, guid: c4780f7398ae0c94682b0d3148ca575c,
         type: 2}
@@ -15519,7 +15516,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1340606514}
   - component: {fileID: 1340606516}
-  - component: {fileID: 1340606515}
   m_Layer: 0
   m_Name: Players
   m_TagString: Untagged
@@ -15540,19 +15536,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1340606515
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1340606513}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b9280c3b6cc4af4b8eecf4b40907992, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 1842498343416686, guid: 6830cdd3305ed2746862521f157f7891,
-    type: 2}
 --- !u!114 &1340606516
 MonoBehaviour:
   m_ObjectHideFlags: 0

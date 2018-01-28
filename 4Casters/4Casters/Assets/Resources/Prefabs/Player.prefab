@@ -56,8 +56,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4405869827536812}
   - component: {fileID: 212142399556017518}
-  - component: {fileID: 114974925237408668}
-  - component: {fileID: 114415107078980170}
+  - component: {fileID: 114906838432316608}
   m_Layer: 0
   m_Name: Arrow
   m_TagString: Untagged
@@ -207,35 +206,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 1
-  m_SendInterval: 0.1
+  m_SendInterval: 0.125
   m_SyncRotationAxis: 7
-  m_RotationSyncCompression: 0
+  m_RotationSyncCompression: 2
   m_SyncSpin: 1
-  m_MovementTheshold: 0.001
+  m_MovementTheshold: 0
   m_VelocityThreshold: 0.0001
   m_SnapThreshold: 5
-  m_InterpolateRotation: 1
-  m_InterpolateMovement: 1
---- !u!114 &114415107078980170
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1542146040836190}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TransformSyncMode: 1
-  m_SendInterval: 0.1
-  m_SyncRotationAxis: 7
-  m_RotationSyncCompression: 0
-  m_SyncSpin: 0
-  m_MovementTheshold: 0.001
-  m_VelocityThreshold: 0.0001
-  m_SnapThreshold: 5
-  m_InterpolateRotation: 1
+  m_InterpolateRotation: 10
   m_InterpolateMovement: 1
 --- !u!114 &114428792211535938
 MonoBehaviour:
@@ -291,12 +269,12 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1158771823693392}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c9ebbe32dbdda9a408b9b6769aef6f77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114974925237408668
+--- !u!114 &114906838432316608
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -304,30 +282,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1542146040836190}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 863c08645be03a84d8b28c766cbfb548, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 104
-    i1: 48
-    i2: 205
-    i3: 211
-    i4: 48
-    i5: 94
-    i6: 210
-    i7: 116
-    i8: 104
-    i9: 98
-    i10: 82
-    i11: 31
-    i12: 21
-    i13: 127
-    i14: 120
-    i15: 145
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 1
 --- !u!135 &135491744774278718
 SphereCollider:
   m_ObjectHideFlags: 1

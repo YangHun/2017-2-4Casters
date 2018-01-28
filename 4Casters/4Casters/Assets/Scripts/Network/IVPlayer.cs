@@ -23,7 +23,7 @@ public class IVPlayer : NetworkBehaviour
 		{ SkillType.darkness, 0 },
 	};
 
-	Transform Arrow;			//the arrow whose parent is a player object
+	IVArrow Arrow;			//the component of arrow whose parent is a player object
 	[SerializeField]
 	GameObject Bullet;
 	const float bulletspeed = 300.0f;
@@ -38,17 +38,24 @@ public class IVPlayer : NetworkBehaviour
 	}
 
 	//called on JoystickManager
+	[Command]
 	public void CmdUpdateArrow(float theta)
 	{
-		if (!isLocalPlayer) return;             //If not a local player, it halts
-		else
-			Arrow.transform.rotation = Quaternion.Euler(90, 0, theta);
+			Arrow.CmdRotateArrow(theta);
+			if (isServer)
+				RpcUpdateArrow(theta);
+	}
+
+	[ClientRpc]
+	public void RpcUpdateArrow(float theta)
+	{
+		Arrow.CmdRotateArrow(theta);
 	}
 
 	// Use this for initialization
 	void Start()
 	{
-		Arrow = transform.Find("Arrow");
+		Arrow = transform.Find("Arrow").GetComponent<IVArrow>();
 		Bullet = transform.Find("Bullet").gameObject;
 		Bullet.SetActive(false);
 		GameObject.Find("Manager").GetComponent<IVGameManager>().registerPlayer(this);
@@ -69,8 +76,8 @@ public class IVPlayer : NetworkBehaviour
 
 	public void BasicAttack()
 	{
-		Vector3 dir = Arrow.up;
-		Vector3 pos = Arrow.position;
+		Vector3 dir = Arrow.GetDir();
+		Vector3 pos = transform.position;
 
 		if (!isLocalPlayer) return;
 
