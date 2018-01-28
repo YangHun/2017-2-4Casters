@@ -82,22 +82,34 @@ public class IVPlayer : NetworkBehaviour
 
 	}
 
+	GameObject SpawnBasicAttack(Vector3 dir, Vector3 pos, IVPlayer player)
+	{
+		GameObject b = Instantiate((Object)Bullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
+		b.transform.parent = GameObject.Find("Bullets").transform;
+		b.SetActive(true);
+		b.GetComponent<IVBullet>().SetOwner(player);
+		b.GetComponent<Rigidbody>().AddForce(dir * bulletspeed);
+		return b;
+	}
+
 	public void BasicAttack()
 	{
 		Vector3 dir = Arrow.GetDir();
 		Vector3 pos = transform.position;
-
-		if (!isLocalPlayer) return;
-
-		GameObject b = Instantiate((Object)Bullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
-		b.transform.parent = transform;
-		b.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
-		b.SetActive(true);
-
-		b.GetComponent<Rigidbody>().AddForce(dir * bulletspeed);
-
+		CmdBasicAttack(dir, pos);
 	}
 
+	[Command]
+	public void CmdBasicAttack(Vector3 dir, Vector3 pos)
+	{
+		RpcBasicAttack(dir, pos);
+	}
+
+	[ClientRpc]
+	public void RpcBasicAttack(Vector3 dir, Vector3 pos)
+	{
+		SpawnBasicAttack(dir, pos, this);
+	}
 	//called when this player kills a monster on Dead() in Monster component
 	public void Loot(string keyword, SkillType type)
 	{

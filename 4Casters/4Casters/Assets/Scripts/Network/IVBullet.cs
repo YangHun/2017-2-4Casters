@@ -11,7 +11,7 @@ public class IVBullet : NetworkBehaviour {
     // Use this for initialization
     void Start()
     {
-        player = transform.parent.gameObject.GetComponent<IVPlayer>();		//An error occur
+
     }
 
     // Update is called once per frame
@@ -29,6 +29,10 @@ public class IVBullet : NetworkBehaviour {
         }
     }
 
+	public void SetOwner(IVPlayer player)
+	{
+		this.player = player;
+	}
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Monster")
