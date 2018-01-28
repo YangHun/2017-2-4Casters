@@ -11,7 +11,7 @@ public class IVBullet : NetworkBehaviour {
     // Use this for initialization
     void Start()
     {
-        player = transform.parent.gameObject.GetComponent<IVPlayer>();
+        player = transform.parent.gameObject.GetComponent<IVPlayer>();		//An error occur
     }
 
     // Update is called once per frame
