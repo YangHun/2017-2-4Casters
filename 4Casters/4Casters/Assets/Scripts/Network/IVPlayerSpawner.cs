@@ -38,16 +38,16 @@ public class IVPlayerSpawner : NetworkBehaviour
 			switch (p)
 			{
 			case 0:
-				player.InitializeTransform(this.transform, new Vector3(5, 0.76f, 0));
+				//player.InitializeTransform(this.transform, new Vector3(5, 0.76f, 0));
 				break;
 			case 1:
-				player.InitializeTransform(this.transform, new Vector3(-5, 0.76f, 0));
+				//player.InitializeTransform(this.transform, new Vector3(-5, 0.76f, 0));
 				break;
 			case 2:
-				player.InitializeTransform(this.transform, new Vector3(0, 0.76f, 5));
+				//player.InitializeTransform(this.transform, new Vector3(0, 0.76f, 5));
 				break;
 			case 3:
-				player.InitializeTransform(this.transform, new Vector3(0, 0.76f, -5));
+				//player.InitializeTransform(this.transform, new Vector3(0, 0.76f, -5));
 				break;
 			}
 			isPosOccupied[p] = true;

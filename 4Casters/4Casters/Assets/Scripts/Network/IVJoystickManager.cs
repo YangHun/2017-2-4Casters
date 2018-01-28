@@ -69,7 +69,7 @@ public class IVJoystickManager : MonoBehaviour
     {
         stick = (RectTransform)GameObject.Find("Joystick").transform;
         body = (RectTransform)GameObject.Find("JoystickBody").transform;
-        players = GameObject.Find("Manager").GetComponent<IVGameManager>().Players;
+//        players = GameObject.Find("Manager").GetComponent<IVGameManager>().Players;
     }
 
     void Update()

@@ -48,7 +48,7 @@ public class IVGameManager : NetworkBehaviour {
 
     public override void OnStartClient()
     {
-        base.OnStartClient();       
+        base.OnStartClient();
 
         _ui = GetComponent<IVUIManager>();
         _identity = GetComponent<NetworkIdentity>();

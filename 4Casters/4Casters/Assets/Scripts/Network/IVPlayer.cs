@@ -23,12 +23,13 @@ public class IVPlayer : NetworkBehaviour
 		{ SkillType.darkness, 0 },
 	};
 
-	Transform Arrow;			//the arrow whose parent is a player object
+	IVArrow Arrow;			//the arrow whose parent is a player object
 	[SerializeField]
 	GameObject Bullet;
 	const float bulletspeed = 300.0f;
 
 	//called on PlayerSpawner
+    //Abandoned.
 	public void initializeTransform(Transform Parent, Vector3 pos)		//called at start frame to initialize player's position and parent
 	{
 		transform.SetParent(Parent);
@@ -36,18 +37,25 @@ public class IVPlayer : NetworkBehaviour
 		transform.position = pos;
 	}
 
-	//called on JoystickManager
-	public void UpdateArrow(float theta)
+    //called on JoystickManager
+    [Command]
+    public void CmdUpdateArrow(float theta)
 	{
-		if (!isLocalPlayer) return;             //If not a local player, it halts
-		else
-			Arrow.transform.rotation = Quaternion.Euler(90, 0, theta);
+        Arrow.CmdRotateArrow(theta);
+        if (isServer)
+            RpcUpdateArrow(theta);
 	}
+
+    [ClientRpc]
+    public void RpcUpdateArrow(float theta)
+    {
+        Arrow.CmdRotateArrow(theta);
+    }
 
 	// Use this for initialization
 	void Start()
 	{
-		Arrow = transform.Find("Arrow");
+		Arrow = transform.Find("Arrow").GetComponent<IVArrow>();
         //	Bullet = transform.Find("Bullet").gameObject;
         Bullet = Resources.Load("Prefabs/Bullet") as GameObject;
 		Bullet.SetActive(false);
@@ -76,8 +84,8 @@ public class IVPlayer : NetworkBehaviour
 
 	public void BasicAttack()
 	{
-		Vector3 dir = Arrow.up;
-		Vector3 pos = Arrow.position;
+		Vector3 dir = Arrow.GetDir();
+		Vector3 pos = transform.position;
 
 		if (!isLocalPlayer) return;
 
