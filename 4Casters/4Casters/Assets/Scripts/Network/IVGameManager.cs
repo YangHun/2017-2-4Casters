@@ -5,6 +5,14 @@ using UnityEngine.Networking;
 
 public class IVGameManager : NetworkBehaviour {
     IVUIManager _ui;
+    NetworkIdentity _identity;
+    NetworkLobbyManager _lobby;
+
+    //Handling Player
+    [SerializeField]
+    List<IVPlayer> _players = new List<IVPlayer>();
+    [SerializeField]
+    SyncListBool _playerstatus = new SyncListBool();
 
     //Handling Game Flow FSM 
     public enum State { MonsterPhase, CastPhase, Null }
@@ -16,9 +24,7 @@ public class IVGameManager : NetworkBehaviour {
 
     float timer = 0.0f;
 
-    //Handling Player
-    [SerializeField]
-    List<IVPlayer> _players;
+
 
     //Handling Monster
     [SerializeField]
@@ -42,18 +48,61 @@ public class IVGameManager : NetworkBehaviour {
 
     public override void OnStartClient()
     {
-        base.OnStartClient();
-        IVPlayer[] players = FindObjectsOfType<IVPlayer>();
+        base.OnStartClient();       
+
         _ui = GetComponent<IVUIManager>();
+        _identity = GetComponent<NetworkIdentity>();
+        _lobby = GetComponent<NetworkLobbyManager>();
+
+        IVPlayer[] players = FindObjectsOfType<IVPlayer>();
         _players.Clear();               //stash given arguments to make the array with network behaviour
-        foreach (IVPlayer player in players)
-            _players.Add(player);
+        if (players.Length > 0)
+        {
+            foreach (IVPlayer player in players)
+            {
+                _players.Add(player);
+                _playerstatus.Add(false);
+            }
+        }
         currentState = startState;
     }
+
+    [Command]
+    public void CmdClientConnected(int i)
+    {
+        _playerstatus[i] = true;
+    }
+
     void Update()
     {
         
         timer += Time.deltaTime;
+
+        if (_playerstatus.Contains(false))
+        {
+            if (isServer)
+            {
+                for (int i = 0; i < _players.Count; i++)
+                {
+                    if (!_playerstatus[i])
+                    {
+                        _players[i].RpcClientConnected(i);
+                    }
+                }
+                if (_playerstatus.Contains(false))
+                {
+                    Debug.Log("some players are not connected yet-->waiting..");
+                    return;
+                }
+            }
+            else
+            {
+                return;
+            }
+            
+        }
+
+        
 
         //OnState function is called on each frame
         switch (currentState)
