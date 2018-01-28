@@ -82,12 +82,12 @@ public class IVPlayer : NetworkBehaviour
 
 	}
 
-	GameObject SpawnBasicAttack(Vector3 dir, Vector3 pos, IVPlayer player)
+	GameObject SpawnBasicAttack(Vector3 dir, Vector3 pos, NetworkInstanceId i)
 	{
 		GameObject b = Instantiate((Object)Bullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
 		b.transform.parent = GameObject.Find("Bullets").transform;
 		b.SetActive(true);
-		b.GetComponent<IVBullet>().SetOwner(player);
+		b.GetComponent<IVBullet>().SetOwner(ClientScene.FindLocalObject(i).GetComponent<IVPlayer>());
 		b.GetComponent<Rigidbody>().AddForce(dir * bulletspeed);
 		return b;
 	}
@@ -96,19 +96,20 @@ public class IVPlayer : NetworkBehaviour
 	{
 		Vector3 dir = Arrow.GetDir();
 		Vector3 pos = transform.position;
-		CmdBasicAttack(dir, pos);
+		NetworkInstanceId i = GetComponent<NetworkIdentity>().netId;
+		CmdBasicAttack(dir, pos, i);
 	}
 
 	[Command]
-	public void CmdBasicAttack(Vector3 dir, Vector3 pos)
+	public void CmdBasicAttack(Vector3 dir, Vector3 pos, NetworkInstanceId i)
 	{
-		RpcBasicAttack(dir, pos);
+		RpcBasicAttack(dir, pos, i);
 	}
 
 	[ClientRpc]
-	public void RpcBasicAttack(Vector3 dir, Vector3 pos)
+	public void RpcBasicAttack(Vector3 dir, Vector3 pos, NetworkInstanceId i)
 	{
-		SpawnBasicAttack(dir, pos, this);
+		SpawnBasicAttack(dir, pos, i);
 	}
 	//called when this player kills a monster on Dead() in Monster component
 	public void Loot(string keyword, SkillType type)

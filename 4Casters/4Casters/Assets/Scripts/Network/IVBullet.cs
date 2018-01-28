@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class IVBullet : NetworkBehaviour {
+
+	[SerializeField]
     IVPlayer player;
 
     float timer = 0.0f;
