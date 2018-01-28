@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class IVMonster : MonoBehaviour {
+public class IVMonster : NetworkBehaviour {
     [SerializeField]
     string Keyword = "";
     TextMesh mesh;
@@ -26,15 +27,18 @@ public class IVMonster : MonoBehaviour {
     int HP = 10;
 
     // Use this for initialization
-    void Start()
+    public override void OnStartClient()
     {
-        resetTime = Random.Range(1.0f, 5.0f);
-        SetColor();
+      
+        
     }
+    
 
     // Update is called once per frame
     void Update()
     {
+        if (!isServer)
+            return;
 
         if (timer >= resetTime || dir == Vector3.zero)
         {
@@ -45,11 +49,27 @@ public class IVMonster : MonoBehaviour {
         }
         else
         {
-            GetComponent<Rigidbody>().AddForce(dir * walkspeed);
+            //GetComponent<Rigidbody>().AddForce(dir * walkspeed);
+            CmdUpdateMonsterDirection(dir * walkspeed);
         }
 
         timer += Time.deltaTime;
 
+    }
+
+    [Command]
+    void CmdUpdateMonsterDirection(Vector3 dir)
+    {
+        RpcUpdateMonsterDirection(dir);
+
+    }
+
+    [ClientRpc]
+    void RpcUpdateMonsterDirection (Vector3 dir)
+    {
+        Rigidbody r = GetComponent<Rigidbody>();
+        r.velocity = Vector3.zero;
+        r.AddForce(dir * walkspeed);
     }
 
     public void Damaged(int damage, IVPlayer p)
@@ -73,12 +93,15 @@ public class IVMonster : MonoBehaviour {
 
     public void Initialization(string key, SkillType t)
     {
+        transform.SetParent(GameObject.Find("Monster").transform);
+
         if (Keyword == "")
             Keyword = key;
 
         if (type == SkillType.Null && t != SkillType.Null)
             type = t;
 
+        resetTime = Random.Range(1.0f, 5.0f);
         SetColor();
 
         if (mesh == null)

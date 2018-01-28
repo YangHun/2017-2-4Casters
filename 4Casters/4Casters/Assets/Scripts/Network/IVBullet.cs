@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class IVBullet : MonoBehaviour {
+public class IVBullet : NetworkBehaviour {
     IVPlayer player;
 
     float timer = 0.0f;

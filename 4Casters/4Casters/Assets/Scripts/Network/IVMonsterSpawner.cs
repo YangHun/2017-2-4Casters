@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class IVMonsterSpawner : MonoBehaviour {
+public class IVMonsterSpawner : NetworkBehaviour {
 
     [SerializeField]
-    Object Base;
+    GameObject Base;
 
     [SerializeField]
     List<int> spawnCount = new List<int>();
@@ -18,7 +19,7 @@ public class IVMonsterSpawner : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-		Base = Resources.Load ("Prefabs/Monster");
+		Base = Resources.Load ("Prefabs/Monster") as GameObject;
 //			transform.Find("Monster").GetComponent<IVMonster>();
 //        Base.gameObject.SetActive(false);
 
@@ -26,7 +27,19 @@ public class IVMonsterSpawner : MonoBehaviour {
         KeywordDictionary = _spell.KeywordDictionary;
         SkillTypeDictionary = _spell.SkillTypeDictionary;
 
+        
+    }
 
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        Base = Resources.Load("Prefabs/Monster") as GameObject;
+        if (Base != null)
+        {
+            ClientScene.RegisterPrefab(Base);
+        }
+        else
+            Debug.Log("base monster prefab is null");
     }
 
     // Update is called once per frame
@@ -35,8 +48,57 @@ public class IVMonsterSpawner : MonoBehaviour {
 
     }
 
+	[ClientRpc]
+	void RpcMonsterSpawnInit(GameObject obj, string key, int type){
+		Debug.Log ("Like this?");
+
+        IVMonster m = obj.GetComponent<IVMonster>();
+
+        if (m == null)
+        {
+            Debug.Log(obj + " does not have monster component");
+            return;
+        }
+
+        m.Initialization(key, (SkillType)type);
+        
+
+        /*
+		for (int i = 0; i < spawnCount.Count; i++)
+		{
+			for (int j = 0; j < spawnCount[i]; j++)
+			{
+
+				Vector3 pos = new Vector3(Random.Range(-1.0f, 1.0f), 0.0f, Random.Range(-1.0f, 1.0f));
+				pos.Normalize();
+				pos *= Random.Range(0.1f, 6.0f);
+				pos.y = 0.5f;
+
+                GameObject obj = Instantiate(Base, pos, Quaternion.identity) as GameObject;
+				obj.transform.SetParent(transform);
+				obj.SetActive(true);
+
+				SkillType type = (SkillType)i;
+
+				List<string> keys = SkillTypeDictionary[type];
+				string keyword = keys[Random.Range(1, keys.Count) - 1];
+
+				obj.GetComponent<IVMonster>().Initialization(keyword, type);
+                
+                NetworkServer.Spawn(obj);
+
+			}
+		}
+        */
+	}
+
     public void Spawn()
     {
+	
+        if (!isServer)
+			return;
+
+
         for (int i = 0; i < spawnCount.Count; i++)
         {
             for (int j = 0; j < spawnCount[i]; j++)
@@ -56,10 +118,15 @@ public class IVMonsterSpawner : MonoBehaviour {
                 List<string> keys = SkillTypeDictionary[type];
                 string keyword = keys[Random.Range(1, keys.Count) - 1];
 
-                obj.GetComponent<IVMonster>().Initialization(keyword, type);
+                //obj.GetComponent<IVMonster>().Initialization(keyword, type);
+
+                NetworkServer.Spawn(obj);
+
+                RpcMonsterSpawnInit(obj, keyword, (int)type);
 
             }
         }
+
     }
 
     public void Release()

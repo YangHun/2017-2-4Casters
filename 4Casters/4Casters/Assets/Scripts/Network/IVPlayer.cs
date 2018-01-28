@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 public class IVPlayer : NetworkBehaviour
 {
 	[SerializeField]
-	int id;
+	public int id;
 
 	[SerializeField]
 	int HP;
@@ -48,7 +48,8 @@ public class IVPlayer : NetworkBehaviour
 	void Start()
 	{
 		Arrow = transform.Find("Arrow");
-		Bullet = transform.Find("Bullet").gameObject;
+        //	Bullet = transform.Find("Bullet").gameObject;
+        Bullet = Resources.Load("Prefabs/Bullet") as GameObject;
 		Bullet.SetActive(false);
 	}
 
@@ -58,6 +59,14 @@ public class IVPlayer : NetworkBehaviour
 		base.OnStartLocalPlayer();
 		GetComponent<SpriteRenderer>().material.color = Color.blue;
 	}
+
+    [ClientRpc]
+    public void RpcClientConnected(int i)
+    {
+        id = i;
+        Debug.Log("Player " + id + " is Connected ("+netId+")");
+        GameObject.Find("Manager").GetComponent<IVGameManager>().CmdClientConnected(i);
+    }
 
 	// Update is called once per frame
 	void Update()

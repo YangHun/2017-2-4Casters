@@ -60,6 +60,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4497050065667016}
   - component: {fileID: 114423226474731638}
+  - component: {fileID: 114122142839112900}
   m_Layer: 0
   m_Name: Monsters
   m_TagString: Untagged
@@ -336,13 +337,45 @@ MonoBehaviour:
     i15: 5
   m_ServerOnly: 1
   m_LocalPlayerAuthority: 0
+--- !u!114 &114122142839112900
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1741048298631196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 16
+    i1: 15
+    i2: 143
+    i3: 31
+    i4: 111
+    i5: 237
+    i6: 32
+    i7: 4
+    i8: 88
+    i9: 139
+    i10: 15
+    i11: 204
+    i12: 242
+    i13: 153
+    i14: 181
+    i15: 5
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &114391505129714704
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1163610641379156}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
   m_Name: 
