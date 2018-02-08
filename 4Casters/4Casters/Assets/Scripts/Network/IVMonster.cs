@@ -72,22 +72,40 @@ public class IVMonster : NetworkBehaviour {
         r.AddForce(dir * walkspeed);
     }
 
-    public void Damaged(int damage, IVPlayer p)
+    [Command]
+    public void CmdDamaged(int damage, NetworkIdentity p)
     {
+
+        RpcDamaged(damage, p);
+    }
+
+    [ClientRpc]
+    void RpcDamaged(int damage, NetworkIdentity p)
+    {
+
         HP -= damage;
 
         if (HP <= 0)
         {
             HP = 0;
-            Dead(p);
+            CmdDead(p);
         }
     }
 
-    public void Dead(IVPlayer p)
+    [Command]
+    void CmdDead(NetworkIdentity p)
+    {
+        RpcDead(p);
+    }
+
+    [ClientRpc]
+    public void RpcDead(NetworkIdentity p)
     {
         //Debug.Log(gameObject.name + " is dead! (type,key) = (" + type + ", " + Keyword + ")");
         Debug.Log(p.gameObject.name + " killed " + gameObject.name);
-        p.Loot(Keyword, type);
+        if (p.GetComponent<IVPlayer>() == null)
+            return;
+        p.GetComponent<IVPlayer>().Loot(Keyword, type);
         gameObject.SetActive(false);
     }
 

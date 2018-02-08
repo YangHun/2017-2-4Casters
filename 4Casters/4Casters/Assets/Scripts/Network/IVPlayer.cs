@@ -7,9 +7,12 @@ public class IVPlayer : NetworkBehaviour
 {
 	[SerializeField]
 	public int id;
+    public NetworkIdentity identity;
+    public bool myPlayer= false;
 
 	[SerializeField]
 	int HP;
+
 
 	public List<string> KeywordsInventory = new List<string>();
 	public List<string> SentenceInventory = new List<string>();
@@ -27,6 +30,7 @@ public class IVPlayer : NetworkBehaviour
 	[SerializeField]
 	GameObject Bullet;
 	const float bulletspeed = 300.0f;
+    
 
 	//called on PlayerSpawner
     //Abandoned.
@@ -52,32 +56,46 @@ public class IVPlayer : NetworkBehaviour
         Arrow.CmdRotateArrow(theta);
     }
 
-	// Use this for initialization
-	void Start()
-	{
-		Arrow = transform.Find("Arrow").GetComponent<IVArrow>();
+    
+
+    // Use this for initialization
+    public override void OnStartClient()
+    {
+        Debug.Log("enter? "+gameObject.name);
+        base.OnStartClient();
+        identity = GetComponent<NetworkIdentity>();
+        Arrow = transform.Find("Arrow").GetComponent<IVArrow>();
         //	Bullet = transform.Find("Bullet").gameObject;
         Bullet = Resources.Load("Prefabs/Bullet") as GameObject;
-		Bullet.SetActive(false);
-	}
+        Bullet.SetActive(false);
+        
+    }
+    
 
-	// Use this for initialization; local player only
-	public override void OnStartLocalPlayer()
-	{
-		base.OnStartLocalPlayer();
-		GetComponent<SpriteRenderer>().material.color = Color.blue;
-	}
-
-    [ClientRpc]
-    public void RpcClientConnected(int i)
+    // Use this for initialization; local player only
+    public override void OnStartLocalPlayer()
     {
-        id = i;
-        Debug.Log("Player " + id + " is Connected ("+netId+")");
-        GameObject.Find("Manager").GetComponent<IVGameManager>().CmdClientConnected(i);
+        Debug.Log("enter? " + gameObject.name);
+
+        base.OnStartLocalPlayer();
+        if (identity == null)
+            identity = GetComponent<NetworkIdentity>();
+        GetComponent<SpriteRenderer>().material.color = Color.blue;
+        myPlayer = true;
+
     }
 
-	// Update is called once per frame
-	void Update()
+
+    [Command]
+    public void CmdClientReady(NetworkIdentity p)
+    {
+
+        GameObject.Find("Manager").GetComponent<IVGameManager>().RpcUpdatePlayerList(p);
+
+    }
+
+    // Update is called once per frame
+    void Update()
 	{
 
 	}

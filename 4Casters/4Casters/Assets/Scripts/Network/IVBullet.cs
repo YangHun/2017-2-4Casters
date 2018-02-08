@@ -35,11 +35,12 @@ public class IVBullet : NetworkBehaviour {
 	{
 		this.player = player;
 	}
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Monster")
         {
-            collision.gameObject.GetComponent<IVMonster>().Damaged(2, player);
+            collision.gameObject.GetComponent<IVMonster>().CmdDamaged(2, player.identity);
         }
 
         Destroy(this.gameObject);

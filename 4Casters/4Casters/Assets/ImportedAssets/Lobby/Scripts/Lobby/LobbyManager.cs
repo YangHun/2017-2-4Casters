@@ -67,6 +67,12 @@ namespace Prototype.NetworkLobby
             SetServerInfo("Offline", "None");
         }
 
+        private void Awake()
+        {
+            networkAddress = Network.player.ipAddress;
+        }
+
+
         public override void OnLobbyClientSceneChanged(NetworkConnection conn)
         {
             if (SceneManager.GetSceneAt(0).name == lobbyScene)

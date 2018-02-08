@@ -4,28 +4,50 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class IVGameManager : NetworkBehaviour {
-    IVUIManager _ui;
+
+    /*
+    public void OnState(State t)
+    {
+        switch (t)
+        {
+            case State.MonsterPhase:
+                //OnStateMonsterPhase();
+                break;
+            case State.CastPhase:
+                //OnStateCastPhase();
+                break;
+            case State.Null:
+
+                break;
+        }
+        
+    }
+
+*/
+
+
     NetworkIdentity _identity;
     NetworkLobbyManager _lobby;
 
     //Handling Player
     [SerializeField]
     List<IVPlayer> _players = new List<IVPlayer>();
-    [SerializeField]
-    SyncListBool _playerstatus = new SyncListBool();
+    List<bool> _playerstatus = new List<bool>();
+
+    public NetworkIdentity myPlayer = null;
+
 
     //Handling Game Flow FSM 
     public enum State { MonsterPhase, CastPhase, Null }
 
-    const State startState = State.MonsterPhase;
+ //   const State startState = State.MonsterPhase;
+    const State startState = State.Null;
     State currentState = State.Null;
     State nextState = State.Null;
     bool isFirstFrame = true;
 
     float timer = 0.0f;
-
-
-
+    
     //Handling Monster
     [SerializeField]
     IVMonsterSpawner _spawner;
@@ -46,61 +68,65 @@ public class IVGameManager : NetworkBehaviour {
         }
     }
 
-    public override void OnStartClient()
+    private void Start()
     {
-        base.OnStartClient();
-
-        _ui = GetComponent<IVUIManager>();
-        _identity = GetComponent<NetworkIdentity>();
-        _lobby = GetComponent<NetworkLobbyManager>();
-
-        IVPlayer[] players = FindObjectsOfType<IVPlayer>();
-        _players.Clear();               //stash given arguments to make the array with network behaviour
-        if (players.Length > 0)
-        {
-            foreach (IVPlayer player in players)
-            {
-                _players.Add(player);
-                _playerstatus.Add(false);
-            }
-        }
-        currentState = startState;
+        Debug.Log("enter? " + gameObject.name);
+        FindMyPlayer();
     }
 
-    [Command]
-    public void CmdClientConnected(int i)
+    public override void OnStartServer()
     {
-        _playerstatus[i] = true;
+        Debug.Log("enter? " + gameObject.name);
+        base.OnStartServer();
+    }
+
+    public override void OnStartClient()
+    {
+        Debug.Log("enter? " + gameObject.name);
+        base.OnStartClient();
+        
+        _identity = GetComponent<NetworkIdentity>();
+        _lobby = GetComponent<NetworkLobbyManager>();
+        
+        currentState = startState;
+        
+    }
+
+    public void FindMyPlayer()
+    {
+        Debug.Log("enter here?");
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (GameObject p in players)
+        {
+            if (p.GetComponent<IVPlayer>().myPlayer)
+            {
+                myPlayer = p.GetComponent<IVPlayer>().identity;
+            }
+        }
+
+        if (myPlayer == null)
+            Debug.Log("cannot find my player!");
+        else
+            myPlayer.GetComponent<IVPlayer>().CmdClientReady(myPlayer);
+        
+        
+    }
+
+   
+
+    [ClientRpc]
+    public void RpcUpdatePlayerList(NetworkIdentity p)
+    {
+        Debug.Log("enter????????");
+        Players.Add(p.GetComponent<IVPlayer>());
+        p.GetComponent<IVPlayer>().id = Players.Count - 1;
     }
 
     void Update()
     {
         
         timer += Time.deltaTime;
-
-        if (_playerstatus.Contains(false))
-        {
-            if (isServer)
-            {
-                for (int i = 0; i < _players.Count; i++)
-                {
-                    if (!_playerstatus[i])
-                    {
-                        _players[i].RpcClientConnected(i);
-                    }
-                }
-                if (_playerstatus.Contains(false))
-                {
-                    Debug.Log("some players are not connected yet-->waiting..");
-                    return;
-                }
-            }
-            else
-            {
-                return;
-            }
-            
-        }
 
         
 
@@ -143,9 +169,9 @@ public class IVGameManager : NetworkBehaviour {
         {
             foreach (IVPlayer p in Players)
                 p.ResetPlayers();
-            _ui.ChangeRightButtonText("Attack");
-            _ui.ResetPlayerKeywordText();
-            _ui.RefreshInMonsterPhase();
+            IVUIManager.I.ChangeRightButtonText("Attack");
+            IVUIManager.I.ResetPlayerKeywordText();
+            IVUIManager.I.RefreshInMonsterPhase();
             _spawner.Spawn();
             timer = 0.0f;
         }
@@ -161,8 +187,8 @@ public class IVGameManager : NetworkBehaviour {
     {
         if (isFirstFrame)
         {
-            _ui.ChangeRightButtonText("Cast");
-            _ui.RefreshInCastPhase();
+            IVUIManager.I.ChangeRightButtonText("Cast");
+            IVUIManager.I.RefreshInCastPhase();
             _spawner.Release();
             timer = 0.0f;
 
@@ -174,4 +200,5 @@ public class IVGameManager : NetworkBehaviour {
             nextState = State.MonsterPhase;
         }
     }
+  
 }

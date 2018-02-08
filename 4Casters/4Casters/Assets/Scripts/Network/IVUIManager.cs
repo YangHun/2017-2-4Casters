@@ -7,11 +7,18 @@ using Prototype.NetworkLobby;
 
 public class IVUIManager : MonoBehaviour {
 
-	LobbyManager _lobby;
+    //singleton
+    private static IVUIManager _manager = null;
+    public static IVUIManager I
+    {
+        get { return _manager; }
+    }
+
+    LobbyManager _lobby;
 	int playerCount;
 
-    IVGameManager _manager;
     IVSpellManager _spell;
+    IVGameManager _game;
 
 
     [SerializeField]
@@ -34,9 +41,24 @@ public class IVUIManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        _manager = GetComponent<IVGameManager>();
+       
+
+        //singleton
+        if (_manager != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            _manager = this;
+        }
+
+
+        //initialization
         _spell = GetComponent<IVSpellManager>();
         _lobby = GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ();
+        _game = GameObject.Find("Manager").GetComponent<IVGameManager>();
 		playerCount = _lobby.numPlayers;
 		UpdatePlayerUI ();
     }
@@ -101,7 +123,7 @@ public class IVUIManager : MonoBehaviour {
 
     public void OnClickButtonRight()
     {
-        if (_manager.CurrentState == IVGameManager.State.MonsterPhase)
+        if (_game.CurrentState == IVGameManager.State.MonsterPhase)
         {
             List<IVPlayer> plyrs = GetComponent<IVGameManager>().Players;
 
@@ -111,10 +133,10 @@ public class IVUIManager : MonoBehaviour {
             }
         }
 
-        else if (_manager.CurrentState == IVGameManager.State.CastPhase)
+        else if (_game.CurrentState == IVGameManager.State.CastPhase)
         {
-            List<string> sentence = _manager.Players[CastingWindowFilterId].SentenceInventory;
-            List<string> keyword = _manager.Players[CastingWindowFilterId].KeywordsInventory;
+            List<string> sentence = _game.Players[CastingWindowFilterId].SentenceInventory;
+            List<string> keyword = _game.Players[CastingWindowFilterId].KeywordsInventory;
             Button[] keywordButtons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
 
             string str = "";
@@ -124,7 +146,7 @@ public class IVUIManager : MonoBehaviour {
                 keyword.Remove(s);
                 //keywordButtons[keyword.IndexOf(s)].enabled = false;		//to be fixed; it does not hide keyword used.s
             }
-            //_manager.cast(str) : TODO
+            //_game.cast(str) : TODO
             if (str.Length == 0)
             {
                 Debug.Log("Pattern does not match.");
@@ -154,8 +176,8 @@ public class IVUIManager : MonoBehaviour {
 
     void UpdateCastingWindowSentence()
     {
-        List<string> sentence = _manager.Players[CastingWindowFilterId].SentenceInventory;
-        List<string> keyword = _manager.Players[CastingWindowFilterId].KeywordsInventory;
+        List<string> sentence = _game.Players[CastingWindowFilterId].SentenceInventory;
+        List<string> keyword = _game.Players[CastingWindowFilterId].KeywordsInventory;
 
         Button[] buttons = CastingSentence.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
         Button[] keywordButtons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
@@ -213,10 +235,10 @@ public class IVUIManager : MonoBehaviour {
     public void OnClickCastingWindowKeywordButton(Button b)
     {
         string text = b.GetComponentInChildren<Text>().text;
-        if (_manager.Players[CastingWindowFilterId].SentenceInventory.Contains(text))
-            _manager.Players[CastingWindowFilterId].SentenceInventory.Remove(text);
+        if (_game.Players[CastingWindowFilterId].SentenceInventory.Contains(text))
+            _game.Players[CastingWindowFilterId].SentenceInventory.Remove(text);
         else
-            _manager.Players[CastingWindowFilterId].SentenceInventory.Add(text);
+            _game.Players[CastingWindowFilterId].SentenceInventory.Add(text);
         UpdateCastingWindowSentence();
     }
 
@@ -232,7 +254,7 @@ public class IVUIManager : MonoBehaviour {
             else
                 PlayerFilter[i].GetComponent<Image>().color = Color.white;
         }
-        List<string> keys = _manager.Players[CastingWindowFilterId].KeywordsInventory;
+        List<string> keys = _game.Players[CastingWindowFilterId].KeywordsInventory;
 
         Button[] buttons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
 
