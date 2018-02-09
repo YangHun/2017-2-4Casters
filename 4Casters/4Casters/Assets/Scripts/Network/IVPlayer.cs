@@ -6,11 +6,19 @@ using UnityEngine.Networking;
 public class IVPlayer : NetworkBehaviour
 {
 	[SerializeField]
-	public int id;
+    public int id;
+    [SyncVar]
+    public string playerName;
     public NetworkIdentity identity;
     public bool myPlayer= false;
 
-	[SerializeField]
+
+    IVHostServer _hostserver;
+    float timer = 0.0f;
+    const float sendRPCrate = 0.5f;
+
+
+    [SerializeField]
 	int HP;
 
 
@@ -63,11 +71,13 @@ public class IVPlayer : NetworkBehaviour
     {
         Debug.Log("enter? "+gameObject.name);
         base.OnStartClient();
+
         identity = GetComponent<NetworkIdentity>();
         Arrow = transform.Find("Arrow").GetComponent<IVArrow>();
         //	Bullet = transform.Find("Bullet").gameObject;
         Bullet = Resources.Load("Prefabs/Bullet") as GameObject;
         Bullet.SetActive(false);
+        gameObject.name = playerName;
         
     }
     
@@ -82,25 +92,74 @@ public class IVPlayer : NetworkBehaviour
             identity = GetComponent<NetworkIdentity>();
         GetComponent<SpriteRenderer>().material.color = Color.blue;
         myPlayer = true;
-
+        
     }
 
 
-    [Command]
-    public void CmdClientReady(NetworkIdentity p)
+    private void Start()
     {
 
-        GameObject.Find("Manager").GetComponent<IVGameManager>().RpcUpdatePlayerList(p);
+       
 
     }
 
     // Update is called once per frame
     void Update()
 	{
+        timer += Time.deltaTime;
+        
+        if (_hostserver == null)
+        {
+            _hostserver = GameObject.Find("Host Server").GetComponent<IVHostServer>();
+        }
 
-	}
+        if (_hostserver.isLoading)
+        {
+            if (timer >= sendRPCrate)
+            {
+                if (_hostserver.playerLoading.Contains(false))
+                {
+                    if (isServer)
+                        RpcClientLoading();
 
-	GameObject SpawnBasicAttack(Vector3 dir, Vector3 pos, NetworkInstanceId i)
+                    return;
+                }
+                else
+                {
+                    _hostserver.isLoading = false;
+                }
+                timer -= sendRPCrate;
+            }
+        }
+    }
+
+    [ClientRpc]
+    public void RpcClientLoading()
+    {
+        if (_hostserver.playerLoading.Contains(false))
+        {
+            CmdClientLoading(id);
+        }
+
+        Debug.Log(id + " " + hasAuthority + " " + _hostserver.playerLoading.Contains(false));
+
+    }
+
+    [Command]
+    public void CmdClientLoading(int i)
+    {
+        _hostserver.playerLoading[i] = true;
+        RpcUpdateClientLoadingStatus(i);
+    }
+
+    [ClientRpc]
+    void RpcUpdateClientLoadingStatus(int i)
+    {
+        _hostserver.playerLoading[i] = true;
+        GameObject.Find("Manager").GetComponent<IVUIManager>().UpdateLoadingStatus(i, "Ready");
+    }
+
+    GameObject SpawnBasicAttack(Vector3 dir, Vector3 pos, NetworkInstanceId i)
 	{
 		GameObject b = Instantiate((Object)Bullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
 		b.transform.parent = GameObject.Find("Bullets").transform;

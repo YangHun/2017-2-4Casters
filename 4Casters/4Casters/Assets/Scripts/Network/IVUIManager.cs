@@ -7,19 +7,14 @@ using Prototype.NetworkLobby;
 
 public class IVUIManager : MonoBehaviour {
 
-    //singleton
-    private static IVUIManager _manager = null;
-    public static IVUIManager I
-    {
-        get { return _manager; }
-    }
-
     LobbyManager _lobby;
 	int playerCount;
 
     IVSpellManager _spell;
     IVGameManager _game;
 
+    [SerializeField]
+    Canvas _loading;
 
     [SerializeField]
     Button Right;
@@ -43,17 +38,6 @@ public class IVUIManager : MonoBehaviour {
     {
        
 
-        //singleton
-        if (_manager != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        else
-        {
-            _manager = this;
-        }
-
 
         //initialization
         _spell = GetComponent<IVSpellManager>();
@@ -69,7 +53,27 @@ public class IVUIManager : MonoBehaviour {
 
 	}
 
-	void UpdatePlayerUI(){
+
+    public void InitLoadingCanvas(List<string> names)
+    {
+        GameObject prefab = Resources.Load("Prefabs/UI/playerInfo") as GameObject;
+
+        for (int i = 0; i < names.Count; i++)
+        {
+            GameObject obj = Instantiate(prefab);
+            obj.transform.position = new Vector3(960f, 630f - 30 * i, 0f);
+            obj.transform.SetParent(_loading.transform.Find("PlayerInfo"));
+            obj.transform.Find("Name").GetComponent<Text>().text = names[i];
+            obj.transform.Find("Status").GetComponent<Text>().text = "loading";
+        }
+    }
+
+    public void UpdateLoadingStatus(int i, string status)
+    {
+        _loading.transform.Find("PlayerInfo").GetChild(i).Find("Status").GetComponent<Text>().text = status;
+    }
+
+    void UpdatePlayerUI(){
 		for (int i = playerCount; i < 4; i++) {
 			Players [i].gameObject.SetActive (false);
 			PlayerFilter [i].gameObject.SetActive (false);

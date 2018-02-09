@@ -5,29 +5,11 @@ using UnityEngine.Networking;
 
 public class IVGameManager : NetworkBehaviour {
 
-    /*
-    public void OnState(State t)
-    {
-        switch (t)
-        {
-            case State.MonsterPhase:
-                //OnStateMonsterPhase();
-                break;
-            case State.CastPhase:
-                //OnStateCastPhase();
-                break;
-            case State.Null:
-
-                break;
-        }
-        
-    }
-
-*/
-
-
     NetworkIdentity _identity;
     NetworkLobbyManager _lobby;
+    [SerializeField]
+    IVUIManager _ui;
+    
 
     //Handling Player
     [SerializeField]
@@ -89,8 +71,9 @@ public class IVGameManager : NetworkBehaviour {
         _lobby = GetComponent<NetworkLobbyManager>();
         
         currentState = startState;
-        
+       
     }
+
 
     public void FindMyPlayer()
     {
@@ -107,9 +90,6 @@ public class IVGameManager : NetworkBehaviour {
 
         if (myPlayer == null)
             Debug.Log("cannot find my player!");
-        else
-            myPlayer.GetComponent<IVPlayer>().CmdClientReady(myPlayer);
-        
         
     }
 
@@ -169,9 +149,9 @@ public class IVGameManager : NetworkBehaviour {
         {
             foreach (IVPlayer p in Players)
                 p.ResetPlayers();
-            IVUIManager.I.ChangeRightButtonText("Attack");
-            IVUIManager.I.ResetPlayerKeywordText();
-            IVUIManager.I.RefreshInMonsterPhase();
+            _ui.ChangeRightButtonText("Attack");
+            _ui.ResetPlayerKeywordText();
+            _ui.RefreshInMonsterPhase();
             _spawner.Spawn();
             timer = 0.0f;
         }
@@ -187,8 +167,8 @@ public class IVGameManager : NetworkBehaviour {
     {
         if (isFirstFrame)
         {
-            IVUIManager.I.ChangeRightButtonText("Cast");
-            IVUIManager.I.RefreshInCastPhase();
+            _ui.ChangeRightButtonText("Cast");
+            _ui.RefreshInCastPhase();
             _spawner.Release();
             timer = 0.0f;
 

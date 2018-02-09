@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+using Prototype.NetworkLobby;
+
 public enum State { MonsterPhase, CastPhase, Null }
 
 public class IVHostServer : NetworkBehaviour {
@@ -14,10 +16,17 @@ public class IVHostServer : NetworkBehaviour {
 
     //Handling Clients
     [SerializeField]
-    int playerNum;
+    int playerNum = 0;
     [SerializeField]
     List<NetworkIdentity> players = new List<NetworkIdentity>();
 
+    [SerializeField]
+    List<string> playerName = new List<string>();
+    [SerializeField]
+    public List<bool> playerLoading = new List<bool>();
+    public bool isLoading = true;
+    bool isLocalClientLoading = false;
+    const float sendRPCrate = 0.5f;
 
     //Game Flow FSM 
     const State startState = State.MonsterPhase;
@@ -38,9 +47,38 @@ public class IVHostServer : NetworkBehaviour {
 
         _lobby = GameObject.Find("LobbyManager").GetComponent<Prototype.NetworkLobby.LobbyManager>();
         _game = GameObject.Find("Manager").GetComponent<IVGameManager>();
-
-        playerNum = _lobby.lobbySlots.Length - 1; // +1 is server
+        _ui = GameObject.Find("Manager").GetComponent<IVUIManager>();
         
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+
+        _lobby = GameObject.Find("LobbyManager").GetComponent<Prototype.NetworkLobby.LobbyManager>();
+        _game = GameObject.Find("Manager").GetComponent<IVGameManager>();
+        _ui = GameObject.Find("Manager").GetComponent<IVUIManager>();
+
+        for (int i = 0; i < _lobby.lobbySlots.Length; i++)
+        {
+            if (_lobby.lobbySlots[i] == null)
+                break;
+            else
+            {
+                playerNum++;
+                playerName.Add(_lobby.lobbySlots[i].GetComponent<LobbyPlayer>().playerName);
+                playerLoading.Add(false);
+            }
+        }
+
+        GameObject[] Players = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (GameObject p in Players)
+        {
+            p.GetComponent<IVPlayer>().id = playerName.IndexOf(p.GetComponent<IVPlayer>().playerName);
+        }
+
+        _ui.InitLoadingCanvas(playerName);
     }
 
     private void Start()
@@ -51,6 +89,7 @@ public class IVHostServer : NetworkBehaviour {
     // Update is called once per frame
     void Update () {
         timer += Time.deltaTime;
+
 
         if (isFirstFrame)
         {
