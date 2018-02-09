@@ -30,10 +30,15 @@ public class IVHostServer : NetworkBehaviour {
 
     //Game Flow FSM 
     const State startState = State.MonsterPhase;
-    State currentState = State.Null;
+    State currentState = State.MonsterPhase;
     State nextState = State.Null;
     bool isFirstFrame = true;
     float timer = 0.0f;
+
+    public State CurrentState
+    {
+        get { return currentState; }
+    }
 
     // Use this for initialization
     public override void OnStartServer()
@@ -90,10 +95,16 @@ public class IVHostServer : NetworkBehaviour {
     void Update () {
         timer += Time.deltaTime;
 
-
-        if (isFirstFrame)
+        if (!isLoading && isServer) // Load finished, run game
         {
-            isFirstFrame = false;
+
+            _game.RpcOnState(currentState, isFirstFrame, timer);
+
+            if (isFirstFrame)
+            {
+                isFirstFrame = false;
+            }
+
         }
     }
 
@@ -109,6 +120,12 @@ public class IVHostServer : NetworkBehaviour {
         }
     }
 
+    public void SetNextState(State next)
+    {
+        if (next != currentState)
+            nextState = next;
+    }
+    
     //------------------------------------------------
     // Command
     //------------------------------------------------

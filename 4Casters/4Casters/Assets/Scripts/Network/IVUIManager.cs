@@ -10,11 +10,12 @@ public class IVUIManager : MonoBehaviour {
     LobbyManager _lobby;
 	int playerCount;
 
+    IVHostServer _hostserver;
     IVSpellManager _spell;
     IVGameManager _game;
 
     [SerializeField]
-    Canvas _loading;
+    public Canvas _loading;
 
     [SerializeField]
     Button Right;
@@ -36,10 +37,11 @@ public class IVUIManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-       
+
 
 
         //initialization
+        _hostserver = GameObject.Find("Host Server").GetComponent<IVHostServer>();
         _spell = GetComponent<IVSpellManager>();
         _lobby = GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ();
         _game = GameObject.Find("Manager").GetComponent<IVGameManager>();
@@ -127,9 +129,9 @@ public class IVUIManager : MonoBehaviour {
 
     public void OnClickButtonRight()
     {
-        if (_game.CurrentState == IVGameManager.State.MonsterPhase)
+        if (_hostserver.CurrentState == State.MonsterPhase)
         {
-            List<IVPlayer> plyrs = GetComponent<IVGameManager>().Players;
+            List<IVPlayer> plyrs = _game.Players;
 
             foreach (IVPlayer p in plyrs)
             {
@@ -137,7 +139,7 @@ public class IVUIManager : MonoBehaviour {
             }
         }
 
-        else if (_game.CurrentState == IVGameManager.State.CastPhase)
+        else if (_hostserver.CurrentState == State.CastPhase)
         {
             List<string> sentence = _game.Players[CastingWindowFilterId].SentenceInventory;
             List<string> keyword = _game.Players[CastingWindowFilterId].KeywordsInventory;

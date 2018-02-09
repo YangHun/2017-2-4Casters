@@ -51,37 +51,33 @@ public class IVMonsterSpawner : NetworkBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (!isClientSpawned)
-        {
-            
-        }
+
     }
 
 
-    public void SetClientSpawnedFalse()
-    {
-        isClientSpawned = false;
-    }
 
-    [Command]
-    void CmdReadyToSpawnMonster(NetworkIdentity p)
-    {
-        Debug.Log("Player " + p.netId + " is ready!");
-        //RpcMonsterSpawnInit();
-    }
-/*
-    [ClientRpc]
-    void RpcReadyToSpawnMonster()
-    {
-        CmdReadyToSpawnMonster();
-        isClientSpawned = true;
-    }
-*/
 	[ClientRpc]
-	void RpcMonsterSpawnInit(){
+	void RpcMonsterSpawnInit(GameObject obj, SkillType t, string k){
 		Debug.Log ("Like this?");
 
         isClientSpawned = true;
+        IVMonster m = obj.GetComponent<IVMonster>();
+
+        if (m == null)
+        {
+            Debug.Log(obj + " does not have monster component");
+            return;
+        }
+
+        m.Initialization(k, t);
+
+    }
+
+    public void Spawn()
+    {
+	
+        if (!isServer)
+			return;
 
         GameObject player = GameObject.FindGameObjectWithTag("Player").gameObject;
         if (player == null)
@@ -104,42 +100,23 @@ public class IVMonsterSpawner : NetworkBehaviour {
                 obj.transform.SetParent(transform);
                 obj.SetActive(true);
 
+                NetworkServer.SpawnWithClientAuthority(obj, player);
+
                 SkillType type = (SkillType)i;
 
                 List<string> keys = SkillTypeDictionary[type];
                 string keyword = keys[Random.Range(1, keys.Count) - 1];
 
                 //obj.GetComponent<IVMonster>().Initialization(keyword, type);
+
+
+                RpcMonsterSpawnInit(obj, type, keyword);
                 
-                NetworkServer.SpawnWithClientAuthority(obj, player);
-
-                IVMonster m = obj.GetComponent<IVMonster>();
-
-                if (m == null)
-                {
-                    Debug.Log(obj + " does not have monster component");
-                    return;
-                }
-
-                m.Initialization(keyword, type);
-
 
             }
         }
-	}
 
-    public void Spawn()
-    {
-	
-        if (!isServer)
-			return;
-        /*
-        while (!isClientSpawned)
-        {
-            Debug.Log("enter?");
-            RpcReadyToSpawnMonster();
-        }
-        */
+        
     }
 
     public void Release()

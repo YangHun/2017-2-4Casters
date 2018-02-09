@@ -132,6 +132,7 @@ public class IVPlayer : NetworkBehaviour
             }
         }
     }
+   
 
     [ClientRpc]
     public void RpcClientLoading()

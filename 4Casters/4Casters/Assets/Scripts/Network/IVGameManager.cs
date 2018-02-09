@@ -9,50 +9,25 @@ public class IVGameManager : NetworkBehaviour {
     NetworkLobbyManager _lobby;
     [SerializeField]
     IVUIManager _ui;
-    
 
-    //Handling Player
-    [SerializeField]
-    List<IVPlayer> _players = new List<IVPlayer>();
-    List<bool> _playerstatus = new List<bool>();
-
+    public List<IVPlayer> Players = new List<IVPlayer>();
     public NetworkIdentity myPlayer = null;
 
-
-    //Handling Game Flow FSM 
-    public enum State { MonsterPhase, CastPhase, Null }
-
- //   const State startState = State.MonsterPhase;
-    const State startState = State.Null;
-    State currentState = State.Null;
-    State nextState = State.Null;
-    bool isFirstFrame = true;
-
-    float timer = 0.0f;
-    
     //Handling Monster
     [SerializeField]
     IVMonsterSpawner _spawner;
-
-    public List<IVPlayer> Players
-    {
-        get
-        {
-            return _players;
-        }
-    }
-
-    public State CurrentState
-    {
-        get
-        {
-            return currentState;
-        }
-    }
+    
 
     private void Start()
     {
         Debug.Log("enter? " + gameObject.name);
+
+        GameObject[] plyrs = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject p in plyrs)
+        {
+            Players.Add(p.GetComponent<IVPlayer>());
+        }
+
         FindMyPlayer();
     }
 
@@ -70,8 +45,6 @@ public class IVGameManager : NetworkBehaviour {
         _identity = GetComponent<NetworkIdentity>();
         _lobby = GetComponent<NetworkLobbyManager>();
         
-        currentState = startState;
-       
     }
 
 
@@ -92,61 +65,36 @@ public class IVGameManager : NetworkBehaviour {
             Debug.Log("cannot find my player!");
         
     }
-
-   
+    
 
     [ClientRpc]
-    public void RpcUpdatePlayerList(NetworkIdentity p)
-    {
-        Debug.Log("enter????????");
-        Players.Add(p.GetComponent<IVPlayer>());
-        p.GetComponent<IVPlayer>().id = Players.Count - 1;
-    }
+    public void RpcOnState(State currentState, bool isFirstFrame, float timer) {
 
-    void Update()
-    {
-        
-        timer += Time.deltaTime;
-
-        
+        Debug.Log(currentState);
 
         //OnState function is called on each frame
         switch (currentState)
         {
             case State.MonsterPhase:
-                OnStateMonsterPhase();
+                OnStateMonsterPhase(isFirstFrame, timer);
                 break;
             case State.CastPhase:
-                OnStateCastPhase();
+                OnStateCastPhase(isFirstFrame, timer);
                 break;
             case State.Null:
 
                 break;
         }
-
-        if (isFirstFrame)
-        {
-            isFirstFrame = false;
-        }
+        
     }
-
-    private void FixedUpdate()
-    {
-        // if next state is set, update current.
-        if (nextState != State.Null)
-        {
-            currentState = nextState;
-            nextState = State.Null;
-            isFirstFrame = true;
-        }
-    }
-
+    
     //OnState functions definition
 
-    void OnStateMonsterPhase()
+    void OnStateMonsterPhase(bool isFirstFrame, float timer)
     {
         if (isFirstFrame)
         {
+            _ui._loading.gameObject.SetActive(false);
             foreach (IVPlayer p in Players)
                 p.ResetPlayers();
             _ui.ChangeRightButtonText("Attack");
@@ -159,11 +107,11 @@ public class IVGameManager : NetworkBehaviour {
         if (timer >= 30.0f || Input.GetKeyDown(KeyCode.Alpha1))
         {
             Debug.Log("State changed (-->Cast)");
-            nextState = State.CastPhase;
+            GameObject.Find("Host Server").GetComponent<IVHostServer>().SetNextState(State.CastPhase);
         }
     }
 
-    void OnStateCastPhase()
+    void OnStateCastPhase(bool isFirstFrame, float timer)
     {
         if (isFirstFrame)
         {
@@ -177,7 +125,7 @@ public class IVGameManager : NetworkBehaviour {
         if (timer >= 30.0f || Input.GetKeyDown(KeyCode.Alpha2))
         {
             Debug.Log("State changed (-->Monster)");
-            nextState = State.MonsterPhase;
+            GameObject.Find("Host Server").GetComponent<IVHostServer>().SetNextState(State.MonsterPhase);
         }
     }
   
