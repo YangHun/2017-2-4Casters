@@ -40,9 +40,10 @@ public class IVBullet : NetworkBehaviour {
     {
         if (collision.gameObject.tag == "Monster")
         {
-            collision.gameObject.GetComponent<IVMonster>().CmdDamaged(2, player.identity);
+            player.CmdMonsterDamaged(collision.gameObject.GetComponent<NetworkIdentity>());
         }
 
+        NetworkServer.UnSpawn(this.gameObject);
         Destroy(this.gameObject);
     }
 }

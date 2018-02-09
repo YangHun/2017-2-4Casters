@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 public class IVMonster : NetworkBehaviour {
     [SerializeField]
-    string Keyword = "";
+    public string Keyword = "";
     TextMesh mesh;
 
     [SerializeField]
@@ -72,15 +72,9 @@ public class IVMonster : NetworkBehaviour {
         r.AddForce(dir * walkspeed);
     }
 
-    [Command]
-    public void CmdDamaged(int damage, NetworkIdentity p)
-    {
 
-        RpcDamaged(damage, p);
-    }
 
-    [ClientRpc]
-    void RpcDamaged(int damage, NetworkIdentity p)
+    public bool Damaged(int damage)
     {
 
         HP -= damage;
@@ -88,8 +82,10 @@ public class IVMonster : NetworkBehaviour {
         if (HP <= 0)
         {
             HP = 0;
-            CmdDead(p);
+            return true;
         }
+
+        return false;
     }
 
     [Command]
@@ -106,6 +102,7 @@ public class IVMonster : NetworkBehaviour {
         if (p.GetComponent<IVPlayer>() == null)
             return;
         p.GetComponent<IVPlayer>().Loot(Keyword, type);
+        NetworkServer.UnSpawn(this.gameObject);
         gameObject.SetActive(false);
     }
 

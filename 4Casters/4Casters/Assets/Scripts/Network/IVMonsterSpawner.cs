@@ -100,19 +100,15 @@ public class IVMonsterSpawner : NetworkBehaviour {
                 obj.transform.SetParent(transform);
                 obj.SetActive(true);
 
-                NetworkServer.SpawnWithClientAuthority(obj, player);
+                NetworkServer.Spawn(obj);
 
                 SkillType type = (SkillType)i;
 
                 List<string> keys = SkillTypeDictionary[type];
                 string keyword = keys[Random.Range(1, keys.Count) - 1];
-
-                //obj.GetComponent<IVMonster>().Initialization(keyword, type);
-
-
+                
                 RpcMonsterSpawnInit(obj, type, keyword);
                 
-
             }
         }
 

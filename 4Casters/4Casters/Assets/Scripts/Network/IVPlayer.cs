@@ -133,11 +133,12 @@ public class IVPlayer : NetworkBehaviour
         }
     }
    
+    //------------- about loading 
 
     [ClientRpc]
     public void RpcClientLoading()
     {
-        if (_hostserver.playerLoading.Contains(false))
+        if (_hostserver.playerLoading.Contains(false) && isLocalPlayer)
         {
             CmdClientLoading(id);
         }
@@ -160,44 +161,106 @@ public class IVPlayer : NetworkBehaviour
         GameObject.Find("Manager").GetComponent<IVUIManager>().UpdateLoadingStatus(i, "Ready");
     }
 
-    GameObject SpawnBasicAttack(Vector3 dir, Vector3 pos, NetworkInstanceId i)
-	{
-		GameObject b = Instantiate((Object)Bullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
-		b.transform.parent = GameObject.Find("Bullets").transform;
-		b.SetActive(true);
-		b.GetComponent<IVBullet>().SetOwner(ClientScene.FindLocalObject(i).GetComponent<IVPlayer>());
-		b.GetComponent<Rigidbody>().AddForce(dir * bulletspeed);
-		return b;
-	}
+    //-----------Bullet Spawn------------
 
-	public void BasicAttack()
+     public void BasicAttack()
 	{
 		Vector3 dir = Arrow.GetDir();
 		Vector3 pos = transform.position;
 		NetworkInstanceId i = GetComponent<NetworkIdentity>().netId;
-		CmdBasicAttack(dir, pos, i);
+        if (isLocalPlayer)
+            CmdBasicAttack(dir, pos, i);
 	}
 
 	[Command]
 	public void CmdBasicAttack(Vector3 dir, Vector3 pos, NetworkInstanceId i)
 	{
-		RpcBasicAttack(dir, pos, i);
+        GameObject b = Instantiate((Object)Bullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
+        b.transform.parent = GameObject.Find("Bullets").transform;
+        b.SetActive(true);
+        NetworkServer.Spawn(b);
+
+        RpcBasicAttack(b, dir, pos, i);
 	}
 
 	[ClientRpc]
-	public void RpcBasicAttack(Vector3 dir, Vector3 pos, NetworkInstanceId i)
+	public void RpcBasicAttack(GameObject b, Vector3 dir, Vector3 pos, NetworkInstanceId i)
 	{
-		SpawnBasicAttack(dir, pos, i);
-	}
-	//called when this player kills a monster on Dead() in Monster component
-	public void Loot(string keyword, SkillType type)
+        //SpawnBasicAttack(dir, pos, i);
+
+        b.GetComponent<IVBullet>().SetOwner(ClientScene.FindLocalObject(i).GetComponent<IVPlayer>());
+        b.GetComponent<Rigidbody>().AddForce(dir * bulletspeed);
+
+    }
+
+    //---------Bullet Collision-------------
+    //ToDo
+
+    [Command]
+    public void CmdMonsterDamaged(NetworkIdentity m)
+    {
+        string k = m.GetComponent<IVMonster>().Keyword;
+        SkillType t = m.GetComponent<IVMonster>().Type;
+
+        RpcMonsterDamaged(m, k, t, id);
+    }
+
+    [ClientRpc]
+    void RpcMonsterDamaged(NetworkIdentity m, string keyword, SkillType type, int index)
+    {
+        if (id == index)
+        {
+            Debug.Log(gameObject.name + " damaged " + m.gameObject.name);
+            CmdLoot(keyword, type, id);
+
+            bool isdead = m.GetComponent<IVMonster>().Damaged(2);
+
+            if (isdead)
+            {
+                CmdMonsterDead(m, keyword, type, index);
+            }
+        }
+    }
+    
+    //------------Monster Kill--------------
+
+    [Command]
+    void CmdMonsterDead(NetworkIdentity m, string keyword, SkillType type, int id)
+    {
+        RpcMonsterDead(m, keyword, type, id);
+    }
+
+    [ClientRpc]
+    void RpcMonsterDead(NetworkIdentity m, string keyword, SkillType type, int id)
+    {
+        Debug.Log(gameObject.name + " killed " + m.gameObject.name);
+        CmdLoot(keyword, type, id);
+
+        NetworkServer.UnSpawn(m.gameObject);
+        Destroy(m.gameObject);
+    }
+
+    [Command]
+    void CmdLoot(string keyword, SkillType type, int id)
+    {
+        RpcLoot(keyword, type, id);
+    }
+
+    void RpcLoot(string keyword, SkillType type, int index)
+    {
+        if (id == index)
+            Loot(keyword, type);
+    }
+
+    //called when this player kills a monster on Dead() in Monster component
+    public void Loot(string keyword, SkillType type)
 	{
 		KeywordsInventory.Add(keyword);
 		SkillTypeInventory[type] += 1;
 		GameObject.Find("Manager").GetComponent<IVUIManager>().UpdatePlayerKeywordText(id, type, SkillTypeInventory[type]);
 		GameObject.Find("Manager").GetComponent<IVUIManager>().OnClickCastingWindowFilter(id);
 	}
-
+    
 	//called when phase is changed (cast --> monster)
 	public void ResetPlayers()
 	{
