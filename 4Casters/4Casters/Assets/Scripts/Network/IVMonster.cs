@@ -108,8 +108,8 @@ public class IVMonster : NetworkBehaviour {
             mesh = transform.Find("Text").GetComponent<TextMesh>();
 
         if (mesh != null)
-            mesh.text = key;
-
+            //mesh.text = key;
+            mesh.text = "";
     }
 
     void SetColor()

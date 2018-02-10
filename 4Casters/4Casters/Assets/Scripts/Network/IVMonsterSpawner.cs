@@ -5,10 +5,14 @@ using UnityEngine.Networking;
 
 public class IVMonsterSpawner : NetworkBehaviour {
 
+    IVUIManager _ui;
     IVGameManager _game;
 
     [SerializeField]
     GameObject Base;
+
+    [SerializeField]
+    List<IVMonster> monsters = new List<IVMonster>();
 
     [SerializeField]
     List<int> spawnCount = new List<int>();
@@ -30,7 +34,7 @@ public class IVMonsterSpawner : NetworkBehaviour {
         KeywordDictionary = _spell.KeywordDictionary;
         SkillTypeDictionary = _spell.SkillTypeDictionary;
         _game = GameObject.Find("Manager").GetComponent<IVGameManager>();
-
+        _ui = GameObject.Find("Manager").GetComponent<IVUIManager>();
 
     }
 
@@ -70,6 +74,8 @@ public class IVMonsterSpawner : NetworkBehaviour {
         }
 
         m.Initialization(k, t);
+
+        monsters.Add(m.GetComponent<IVMonster>());
 
     }
 
@@ -112,7 +118,13 @@ public class IVMonsterSpawner : NetworkBehaviour {
             }
         }
 
-        
+        RpcInitMonsterButton();
+    }
+
+    [ClientRpc]
+    public void RpcInitMonsterButton()
+    {
+        _ui.ReMapMonsterButton(monsters);
     }
 
     public void Release()
@@ -122,22 +134,24 @@ public class IVMonsterSpawner : NetworkBehaviour {
         if (!isServer)
             return;
 
-        IVMonster[] monsters = GameObject.Find("Monster").GetComponentsInChildren<IVMonster>();
+        IVMonster[] ms = GameObject.Find("Monster").GetComponentsInChildren<IVMonster>();
 
-        foreach (IVMonster m in monsters)
+        foreach (IVMonster m in ms)
         {
             Destroy(m.gameObject);
             NetworkServer.Destroy(m.gameObject);
-            //RpcRelease(m.gameObject);
+
         }
+
+        RpcRelease();
         
     }
 
 
-
-    void RpcRelease(GameObject m)
+    [ClientRpc]
+    void RpcRelease()
     {
-        Destroy(m);
+        monsters.Clear();
     }
 
 }

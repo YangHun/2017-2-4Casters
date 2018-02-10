@@ -110,10 +110,11 @@ public class IVPlayer : NetworkBehaviour
         
         if (_hostserver == null)
         {
+            if (GameObject.Find("Host Server") != null)
             _hostserver = GameObject.Find("Host Server").GetComponent<IVHostServer>();
         }
 
-        if (_hostserver.isLoading)
+        else if (_hostserver.isLoading)
         {
             if (timer >= sendRPCrate)
             {

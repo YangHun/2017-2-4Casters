@@ -34,12 +34,12 @@ public class IVUIManager : MonoBehaviour {
     [SerializeField]
     Text[] Players;
 
+    [SerializeField]
+    List<Button> monsters = new List<Button>();
+
     // Use this for initialization
     void Start()
     {
-
-
-
         //initialization
         _hostserver = GameObject.Find("Host Server").GetComponent<IVHostServer>();
         _spell = GetComponent<IVSpellManager>();
@@ -47,7 +47,37 @@ public class IVUIManager : MonoBehaviour {
         _game = GameObject.Find("Manager").GetComponent<IVGameManager>();
         playerCount = _hostserver.playerNum;
 
+        MonsterButton[] ms = GameObject.Find("Canvas").GetComponentsInChildren<MonsterButton>();
+
+        foreach (MonsterButton b in ms)
+        {
+            monsters.Add(b.GetComponent<Button>());
+        }
+
+
         UpdatePlayerUI ();
+    }
+
+    public void ReMapMonsterButton(List<IVMonster> m)
+    {
+        foreach (Button b in monsters)
+        {
+            b.gameObject.SetActive(true);
+        }
+
+        for (int i = 0; i < monsters.Count; i++)
+        {
+            if (i >= m.Count)
+            {
+                monsters[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                monsters[i].GetComponentInChildren<Text>().text = m[i].Keyword;
+                monsters[i].GetComponentInChildren<MonsterButton>().Monster = m[i];
+                monsters[i].GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 0.3f);
+            }
+        }
     }
 
     // Update is called once per frame
