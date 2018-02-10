@@ -16,7 +16,8 @@ public class IVHostServer : NetworkBehaviour {
 
     //Handling Clients
     [SerializeField]
-    int playerNum = 0;
+    [SyncVar]
+    public int playerNum = 0;
     [SerializeField]
     public Dictionary<int, NetworkIdentity> players = new Dictionary<int, NetworkIdentity>();
 

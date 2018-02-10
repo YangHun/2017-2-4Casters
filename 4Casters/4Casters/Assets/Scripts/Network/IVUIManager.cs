@@ -45,8 +45,9 @@ public class IVUIManager : MonoBehaviour {
         _spell = GetComponent<IVSpellManager>();
         _lobby = GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ();
         _game = GameObject.Find("Manager").GetComponent<IVGameManager>();
-		playerCount = _lobby.numPlayers;
-		UpdatePlayerUI ();
+        playerCount = _hostserver.playerNum;
+
+        UpdatePlayerUI ();
     }
 
     // Update is called once per frame
