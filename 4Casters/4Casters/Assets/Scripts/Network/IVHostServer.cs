@@ -18,7 +18,7 @@ public class IVHostServer : NetworkBehaviour {
     [SerializeField]
     int playerNum = 0;
     [SerializeField]
-    public List<NetworkIdentity> players = new List<NetworkIdentity>();
+    public Dictionary<int, NetworkIdentity> players = new Dictionary<int, NetworkIdentity>();
 
     [SerializeField]
     List<string> playerName = new List<string>();
@@ -73,6 +73,7 @@ public class IVHostServer : NetworkBehaviour {
                 playerNum++;
                 playerName.Add(_lobby.lobbySlots[i].GetComponent<LobbyPlayer>().playerName);
                 playerLoading.Add(false);
+               
             }
         }
 
@@ -81,7 +82,11 @@ public class IVHostServer : NetworkBehaviour {
         foreach (GameObject p in Players)
         {
             p.GetComponent<IVPlayer>().id = playerName.IndexOf(p.GetComponent<IVPlayer>().playerName);
+            players.Add(p.GetComponent<IVPlayer>().id, p.GetComponent<NetworkIdentity>());
+            Debug.Log(p.GetComponent<IVPlayer>().id + " / " + players[p.GetComponent<IVPlayer>().id]);
         }
+
+
 
         _ui.InitLoadingCanvas(playerName);
     }

@@ -89,23 +89,7 @@ public class IVMonster : NetworkBehaviour {
         return false;
     }
 
-    [Command]
-    void CmdDead(NetworkIdentity p)
-    {
-        RpcDead(p);
-    }
 
-    [ClientRpc]
-    public void RpcDead(NetworkIdentity p)
-    {
-        //Debug.Log(gameObject.name + " is dead! (type,key) = (" + type + ", " + Keyword + ")");
-        Debug.Log(p.gameObject.name + " killed " + gameObject.name);
-        if (p.GetComponent<IVPlayer>() == null)
-            return;
-        p.GetComponent<IVPlayer>().Loot(Keyword, type);
-        NetworkServer.UnSpawn(this.gameObject);
-        gameObject.SetActive(false);
-    }
 
     public void Initialization(string key, SkillType t)
     {

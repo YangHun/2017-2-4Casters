@@ -194,7 +194,6 @@ public class IVPlayer : NetworkBehaviour
     }
 
     //---------Bullet Collision-------------
-    //ToDo
 
     [Command]
     public void CmdAttackMonster(NetworkIdentity m, int index)
@@ -205,13 +204,11 @@ public class IVPlayer : NetworkBehaviour
             RpcAttackMonster(m.GetComponent<IVMonster>().Keyword);
             if (isdead)
             {
-
                 string keyword = m.gameObject.GetComponent<IVMonster>().Keyword;
                 SkillType type = m.gameObject.GetComponent<IVMonster>().Type;
-                RpcMonsterDead(m, id);
                 NetworkServer.Destroy(m.gameObject);
 
-                RpcLoot(keyword, type, id);
+                RpcMonsterDead(identity, keyword, type);
                 
             }
         }
@@ -222,28 +219,25 @@ public class IVPlayer : NetworkBehaviour
     {
         Debug.Log(gameObject.name + " damaged " + s);
     }
-    
+
     //------------Monster Kill--------------
+    //ToDo
 
     [ClientRpc]
-    void RpcMonsterDead(NetworkIdentity m, int id)
+    void RpcMonsterDead( NetworkIdentity p, string keyword, SkillType type)
     {
-        Debug.Log(gameObject.name + " killed " + m.gameObject.GetComponent<IVMonster>().Keyword);
+        Debug.Log(gameObject.name + " killed " + keyword);
         
+        Loot(p, keyword, type);
     }
-
-    void RpcLoot(string keyword, SkillType type, int index)
-    {
-        
-        Loot(id, keyword, type);
-    }
-
+    
     //called when this player kills a monster on Dead() in Monster component
-    public void Loot(int index, string keyword, SkillType type)
+    public void Loot(NetworkIdentity p, string keyword, SkillType type)
 	{
-        IVPlayer target = _hostserver.players[index].GetComponent<IVPlayer>();
+        Debug.Log("Looting : ID is " + id);
 
-
+        IVPlayer target = p.GetComponent<IVPlayer>();
+        
         target.KeywordsInventory.Add(keyword);
         target.SkillTypeInventory[type] += 1;
 		GameObject.Find("Manager").GetComponent<IVUIManager>().UpdatePlayerKeywordText(id, type, SkillTypeInventory[type]);
