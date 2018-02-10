@@ -67,6 +67,12 @@ namespace Prototype.NetworkLobby
             SetServerInfo("Offline", "None");
         }
 
+        private void Awake()
+        {
+            networkAddress = Network.player.ipAddress;
+        }
+
+
         public override void OnLobbyClientSceneChanged(NetworkConnection conn)
         {
             if (SceneManager.GetSceneAt(0).name == lobbyScene)
@@ -332,6 +338,11 @@ namespace Prototype.NetworkLobby
             if (_lobbyHooks)
                 _lobbyHooks.OnLobbyServerSceneLoadedForPlayer(this, lobbyPlayer, gamePlayer);
 
+            Debug.Log("enter?");
+            Debug.Log(gamePlayer.GetComponent<IVPlayer>());
+            Debug.Log(lobbyPlayer.GetComponent<LobbyPlayer>().playerName);
+            gamePlayer.GetComponent<IVPlayer>().playerName = lobbyPlayer.GetComponent<LobbyPlayer>().playerName;
+            
             return true;
         }
 

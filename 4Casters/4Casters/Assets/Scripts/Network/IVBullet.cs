@@ -35,13 +35,15 @@ public class IVBullet : NetworkBehaviour {
 	{
 		this.player = player;
 	}
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Monster")
         {
-            collision.gameObject.GetComponent<IVMonster>().Damaged(2, player);
+            Debug.Log("enter");
+            player.CmdAttackMonster(collision.gameObject.GetComponent<NetworkIdentity>(), player.id);
         }
 
-        Destroy(this.gameObject);
+        NetworkServer.Destroy(this.gameObject);
     }
 }

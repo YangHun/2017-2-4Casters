@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 public class IVMonster : NetworkBehaviour {
     [SerializeField]
-    string Keyword = "";
+    public string Keyword = "";
     TextMesh mesh;
 
     [SerializeField]
@@ -24,6 +24,7 @@ public class IVMonster : NetworkBehaviour {
     float walkspeed = 2.0f;
 
     [SerializeField]
+    [SyncVar]
     int HP = 10;
 
     // Use this for initialization
@@ -72,24 +73,23 @@ public class IVMonster : NetworkBehaviour {
         r.AddForce(dir * walkspeed);
     }
 
-    public void Damaged(int damage, IVPlayer p)
+
+
+    public bool Damaged(int damage)
     {
+
         HP -= damage;
 
         if (HP <= 0)
         {
             HP = 0;
-            Dead(p);
+            return true;
         }
+
+        return false;
     }
 
-    public void Dead(IVPlayer p)
-    {
-        //Debug.Log(gameObject.name + " is dead! (type,key) = (" + type + ", " + Keyword + ")");
-        Debug.Log(p.gameObject.name + " killed " + gameObject.name);
-        p.Loot(Keyword, type);
-        gameObject.SetActive(false);
-    }
+
 
     public void Initialization(string key, SkillType t)
     {

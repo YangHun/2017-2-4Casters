@@ -137,6 +137,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+  playerName: 
+  identity: {fileID: 0}
+  myPlayer: 0
   HP: 100
   KeywordsInventory: []
   SentenceInventory: []
