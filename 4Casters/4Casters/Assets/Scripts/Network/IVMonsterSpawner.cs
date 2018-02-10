@@ -117,12 +117,27 @@ public class IVMonsterSpawner : NetworkBehaviour {
 
     public void Release()
     {
-		IVMonster[] monsters = transform.GetComponentsInChildren<IVMonster>();
+        Debug.Log("enter?");
+
+        if (!isServer)
+            return;
+
+        IVMonster[] monsters = GameObject.Find("Monster").GetComponentsInChildren<IVMonster>();
 
         foreach (IVMonster m in monsters)
         {
             Destroy(m.gameObject);
+            NetworkServer.Destroy(m.gameObject);
+            //RpcRelease(m.gameObject);
         }
-
+        
     }
+
+
+
+    void RpcRelease(GameObject m)
+    {
+        Destroy(m);
+    }
+
 }

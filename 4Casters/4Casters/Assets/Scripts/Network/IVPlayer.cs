@@ -143,7 +143,7 @@ public class IVPlayer : NetworkBehaviour
             CmdClientLoading(id);
         }
 
-        Debug.Log(id + " " + hasAuthority + " " + _hostserver.playerLoading.Contains(false));
+ //       Debug.Log(id + " " + hasAuthority + " " + _hostserver.playerLoading.Contains(false));
 
     }
 
@@ -197,66 +197,55 @@ public class IVPlayer : NetworkBehaviour
     //ToDo
 
     [Command]
-    public void CmdMonsterDamaged(NetworkIdentity m)
+    public void CmdAttackMonster(NetworkIdentity m, int index)
     {
-        string k = m.GetComponent<IVMonster>().Keyword;
-        SkillType t = m.GetComponent<IVMonster>().Type;
+        if (index == id)
+        {
+            bool isdead = m.GetComponent<IVMonster>().Damaged(2);
+            RpcAttackMonster(m.GetComponent<IVMonster>().Keyword);
+            if (isdead)
+            {
 
-        RpcMonsterDamaged(m, k, t, id);
+                string keyword = m.gameObject.GetComponent<IVMonster>().Keyword;
+                SkillType type = m.gameObject.GetComponent<IVMonster>().Type;
+                RpcMonsterDead(m, id);
+                NetworkServer.Destroy(m.gameObject);
+
+                RpcLoot(keyword, type, id);
+                
+            }
+        }
     }
 
     [ClientRpc]
-    void RpcMonsterDamaged(NetworkIdentity m, string keyword, SkillType type, int index)
+    void RpcAttackMonster(string s)
     {
-        if (id == index)
-        {
-            Debug.Log(gameObject.name + " damaged " + m.gameObject.name);
-            CmdLoot(keyword, type, id);
-
-            bool isdead = m.GetComponent<IVMonster>().Damaged(2);
-
-            if (isdead)
-            {
-                CmdMonsterDead(m, keyword, type, index);
-            }
-        }
+        Debug.Log(gameObject.name + " damaged " + s);
     }
     
     //------------Monster Kill--------------
 
-    [Command]
-    void CmdMonsterDead(NetworkIdentity m, string keyword, SkillType type, int id)
-    {
-        RpcMonsterDead(m, keyword, type, id);
-    }
-
     [ClientRpc]
-    void RpcMonsterDead(NetworkIdentity m, string keyword, SkillType type, int id)
+    void RpcMonsterDead(NetworkIdentity m, int id)
     {
-        Debug.Log(gameObject.name + " killed " + m.gameObject.name);
-        CmdLoot(keyword, type, id);
-
-        NetworkServer.UnSpawn(m.gameObject);
-        Destroy(m.gameObject);
-    }
-
-    [Command]
-    void CmdLoot(string keyword, SkillType type, int id)
-    {
-        RpcLoot(keyword, type, id);
+        Debug.Log(gameObject.name + " killed " + m.gameObject.GetComponent<IVMonster>().Keyword);
+        
     }
 
     void RpcLoot(string keyword, SkillType type, int index)
     {
-        if (id == index)
-            Loot(keyword, type);
+        
+        Loot(id, keyword, type);
     }
 
     //called when this player kills a monster on Dead() in Monster component
-    public void Loot(string keyword, SkillType type)
+    public void Loot(int index, string keyword, SkillType type)
 	{
-		KeywordsInventory.Add(keyword);
-		SkillTypeInventory[type] += 1;
+        IVPlayer target = _hostserver.players[index].GetComponent<IVPlayer>();
+
+
+        target.KeywordsInventory.Add(keyword);
+        target.SkillTypeInventory[type] += 1;
 		GameObject.Find("Manager").GetComponent<IVUIManager>().UpdatePlayerKeywordText(id, type, SkillTypeInventory[type]);
 		GameObject.Find("Manager").GetComponent<IVUIManager>().OnClickCastingWindowFilter(id);
 	}

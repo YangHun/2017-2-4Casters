@@ -24,6 +24,7 @@ public class IVMonster : NetworkBehaviour {
     float walkspeed = 2.0f;
 
     [SerializeField]
+    [SyncVar]
     int HP = 10;
 
     // Use this for initialization

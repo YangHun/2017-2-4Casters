@@ -18,7 +18,7 @@ public class IVHostServer : NetworkBehaviour {
     [SerializeField]
     int playerNum = 0;
     [SerializeField]
-    List<NetworkIdentity> players = new List<NetworkIdentity>();
+    public List<NetworkIdentity> players = new List<NetworkIdentity>();
 
     [SerializeField]
     List<string> playerName = new List<string>();
@@ -122,47 +122,16 @@ public class IVHostServer : NetworkBehaviour {
 
     public void SetNextState(State next)
     {
+        if (isServer)
+            RpcSetNextState(next);
+    }
+
+    [ClientRpc]
+    void RpcSetNextState(State next)
+    {
         if (next != currentState)
             nextState = next;
     }
     
-    //------------------------------------------------
-    // Command
-    //------------------------------------------------
-
-    [Command]
-    public void CmdPlayerReady(NetworkIdentity p)
-    {
-        Debug.Log("Enter?");
-
-        //NetworkIdentity p = _game.myPlayer;
-
-        if (p == null)
-        {
-            Debug.Log(_game);
-            Debug.Log(_game.myPlayer);
-        }
-
-        if (players.Count < playerNum)
-        {
-            players.Add(p);
-            p.GetComponent<IVPlayer>().id = players.Count - 1;
-            Debug.Log((players.Count - 1) + " player added");
-        }
-        else
-        {
-            Debug.Log("player list is full");
-        }
-    }
-    //------------------------------------------------
-    // Rpc
-    //------------------------------------------------
-
-    [ClientRpc]
-    public void RpcPlayerReady()
-    {
-        Debug.Log("Enter?");
-        
-        CmdPlayerReady(_game.myPlayer);
-    }
+   
 }
