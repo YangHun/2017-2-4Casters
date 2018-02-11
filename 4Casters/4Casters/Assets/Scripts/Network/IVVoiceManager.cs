@@ -6,6 +6,9 @@ using FrostweepGames.Plugins.GoogleCloud.SpeechRecognition;
 public class IVVoiceManager : MonoBehaviour
 {
 
+    IVSpellManager _spell;
+
+
     [SerializeField]
     GCSpeechRecognition _speech;
 
@@ -28,6 +31,8 @@ public class IVVoiceManager : MonoBehaviour
 
         _source = GetComponentInChildren<AudioSource>();
         _source.Stop();
+
+        _spell = GameObject.Find("Manager").GetComponent<IVSpellManager>();
     }
 
     public void StartRecording()
@@ -44,12 +49,12 @@ public class IVVoiceManager : MonoBehaviour
     {
         if (obj != null && obj.results.Length > 0)
         {
-            Debug.Log(obj.results[0].alternatives[0].transcript + " 이 맞느냐?");
+            string transcript = obj.results[0].alternatives[0].transcript;
+            Debug.Log(transcript+" 이 맞느냐?");
 
-            
             AudioClip _latest = _speech.LatestVoice;
 
-            if (_latest != null)
+            if (_latest != null && IsTranscriptInSpellKeyword(transcript))
             {
                 _source.clip = _latest;
                 _source.Play();
@@ -59,6 +64,12 @@ public class IVVoiceManager : MonoBehaviour
         else {
             Debug.Log("믿음이 부족하구나!");
         }
+    }
+
+    bool IsTranscriptInSpellKeyword(string transcript)
+    {
+
+        return false;
     }
 
     private void StopRecordingEventHandler()
