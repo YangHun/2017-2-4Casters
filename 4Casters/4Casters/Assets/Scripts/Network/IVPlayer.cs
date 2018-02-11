@@ -16,7 +16,7 @@ public class IVPlayer : NetworkBehaviour
 	float timer = 0.0f;
 	const float sendRPCrate = 0.5f;
 
-	SkillType playerType = SkillType.holy;      // Temperature assignment; Synchronizing needs.
+	SkillType playerType = SkillType.Null;      // Temperature assignment; Synchronizing needs.
 
 	[SerializeField]
 	[SyncVar]
@@ -108,11 +108,12 @@ public class IVPlayer : NetworkBehaviour
 		GetComponent<SpriteRenderer>().material.color = Color.blue;
 		myPlayer = true;
 
+		CmdConfigStatus(3, (SkillType)id, 0);
 		CmdConfigStatus(0, playerType, 1);
 		CmdConfigStatus(1, playerType, 1);
 	}
 
-	void CmdConfigStatus(int code, SkillType type, int delta)   // 0 : HP, 1 : power, 2 : shield
+	public void ConfigStatus(int code, SkillType type, int delta)
 	{
 		switch (code)
 		{
@@ -127,7 +128,17 @@ public class IVPlayer : NetworkBehaviour
 				shield[type] += delta;
 				if (shield[type] < 0) shield[type] = 0;
 				break;
+			case 3:
+				playerType = type;
+				break;
+			default:
+				break;
 		}
+	}
+	[Command]
+	void CmdConfigStatus(int code, SkillType type, int delta)   // 0 : HP, 1 : power, 2 : shield, 3 : playerType
+	{
+		ConfigStatus(code, type, delta);
 	}
 
 	private void Start()
@@ -247,7 +258,6 @@ public class IVPlayer : NetworkBehaviour
 
 	void SkillAttack(Dictionary<SkillType, int> force)
 	{
-		Debug.Log("Skill attack has been casted while id of caster is " + id);
 		int[] f = new int[]			//
 		{
 			force[SkillType.neutral],
@@ -256,21 +266,23 @@ public class IVPlayer : NetworkBehaviour
 			force[SkillType.lightness],
 			force[SkillType.darkness]
 		};
-		CmdSkillAttack(f);
+		CmdSkillAttack(f, id);
 	}
 
 	[Command]
-	void CmdSkillAttack(int[] force)
+	void CmdSkillAttack(int[] force, int id)
 	{
 		//TODO
-		RpcSkillAttack(force);
+		RpcSkillAttack(force, id);
 		return;
 	}
 
 	[ClientRpc]
-	void RpcSkillAttack(int[] force)
+	void RpcSkillAttack(int[] force, int id)
 	{
 		//TODO
+		Debug.Log("Skill attack has been casted while caster's id is " + id +
+				", and its type is " + _hostserver.players[id].GetComponent<IVPlayer>().playerType.ToString());
 		return;
 	}
     //---------Bullet Collision-------------
