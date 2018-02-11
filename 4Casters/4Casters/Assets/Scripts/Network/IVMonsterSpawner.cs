@@ -62,7 +62,7 @@ public class IVMonsterSpawner : NetworkBehaviour {
 
 	[ClientRpc]
 	void RpcMonsterSpawnInit(GameObject obj, SkillType t, string k){
-		Debug.Log ("Like this?");
+		//Debug.Log ("Like this?");
 
         isClientSpawned = true;
         IVMonster m = obj.GetComponent<IVMonster>();

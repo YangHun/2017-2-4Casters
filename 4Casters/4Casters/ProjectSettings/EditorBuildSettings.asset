@@ -14,3 +14,6 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/singleplay.unity
     guid: f91f154b58f9c384e9fc52351b23261c
+  - enabled: 0
+    path: Assets/ImportedAssets/FrostweepGames/GCSpeechRecognition/Examples/Example_Def/Example.unity
+    guid: fcb1fc02d0132054d8fa9129bd540ced

@@ -13,6 +13,7 @@ public class IVUIManager : MonoBehaviour {
     IVHostServer _hostserver;
     IVSpellManager _spell;
     IVGameManager _game;
+    IVVoiceManager _voice;
 
     [SerializeField]
     public Canvas _loading;
@@ -45,6 +46,7 @@ public class IVUIManager : MonoBehaviour {
         _spell = GetComponent<IVSpellManager>();
         _lobby = GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ();
         _game = GameObject.Find("Manager").GetComponent<IVGameManager>();
+        _voice = GameObject.Find("Manager").GetComponent<IVVoiceManager>();
         playerCount = _hostserver.playerNum;
 
         MonsterButton[] ms = GameObject.Find("Canvas").GetComponentsInChildren<MonsterButton>();
@@ -56,6 +58,24 @@ public class IVUIManager : MonoBehaviour {
 
 
         UpdatePlayerUI ();
+    }
+    
+    public void OnClickVoiceButton(Button b)
+    {
+        if (_voice.isRecording)
+        {
+            _voice.StopRecording();
+            b.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+            b.transform.Find("Image").GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+            _voice.isRecording = false;
+        }
+        else
+        {
+            _voice.StartRecording();
+            b.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            b.transform.Find("Image").GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            _voice.isRecording = true;
+        }
     }
 
     public void ReMapMonsterButton(List<IVMonster> m)

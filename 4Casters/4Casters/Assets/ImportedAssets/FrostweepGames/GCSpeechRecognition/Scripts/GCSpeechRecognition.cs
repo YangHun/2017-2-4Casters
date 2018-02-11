@@ -18,7 +18,6 @@ namespace FrostweepGames.Plugins.GoogleCloud.SpeechRecognition
         public event Action BeginTalkigEvent;
         public event Action<AudioClip> EndTalkigEvent;
 
-
         private static GCSpeechRecognition _Instance;
         public static GCSpeechRecognition Instance
         {
@@ -31,6 +30,12 @@ namespace FrostweepGames.Plugins.GoogleCloud.SpeechRecognition
             }
         }
 
+        
+        public AudioClip LatestVoice
+        {
+            get { return _mediaManager.LatestVoice(); }
+        }
+        
 
         private ServiceLocator _serviceLocator;
 
