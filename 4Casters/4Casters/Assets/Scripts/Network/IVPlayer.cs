@@ -6,21 +6,39 @@ using UnityEngine.Networking;
 public class IVPlayer : NetworkBehaviour
 {
 	[SerializeField]
-    public int id;
-    [SyncVar]
-    public string playerName;
-    public NetworkIdentity identity;
-    public bool myPlayer= false;
+	public int id;
+	[SyncVar]
+	public string playerName;
+	public NetworkIdentity identity;
+	public bool myPlayer = false;
 
+	IVHostServer _hostserver;
+	float timer = 0.0f;
+	const float sendRPCrate = 0.5f;
 
-    IVHostServer _hostserver;
-    float timer = 0.0f;
-    const float sendRPCrate = 0.5f;
+	SkillType playerType = SkillType.holy;      // Temperature assignment; Synchronizing needs.
 
-
-    [SerializeField]
+	[SerializeField]
+	[SyncVar]
 	int HP;
-
+	[SerializeField]
+	Dictionary<SkillType, int> power = new Dictionary<SkillType, int>()
+	{
+		{ SkillType.neutral, 2 },
+		{ SkillType.holy, 0 },
+		{ SkillType.evil, 0 },
+		{ SkillType.lightness, 0 },
+		{ SkillType.darkness, 0 },
+	};
+	[SerializeField]
+	Dictionary<SkillType, int> shield = new Dictionary<SkillType, int>()
+	{
+		{ SkillType.neutral, 1 },
+		{ SkillType.holy, 0 },
+		{ SkillType.evil, 0 },
+		{ SkillType.lightness, 0 },
+		{ SkillType.darkness, 0 },
+	};
 
 	public List<string> KeywordsInventory = new List<string>();
 	public List<string> SentenceInventory = new List<string>();
@@ -34,165 +52,227 @@ public class IVPlayer : NetworkBehaviour
 		{ SkillType.darkness, 0 },
 	};
 
-	IVArrow Arrow;			//the arrow whose parent is a player object
+	IVArrow Arrow;          //the arrow whose parent is a player object
 	[SerializeField]
 	GameObject Bullet;
 	const float bulletspeed = 300.0f;
-    
+
 
 	//called on PlayerSpawner
-    //Abandoned.
-	public void initializeTransform(Transform Parent, Vector3 pos)		//called at start frame to initialize player's position and parent
+	//Abandoned.
+	public void initializeTransform(Transform Parent, Vector3 pos)      //called at start frame to initialize player's position and parent
 	{
 		transform.SetParent(Parent);
 		transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
 		transform.position = pos;
 	}
 
-    //called on JoystickManager
-    [Command]
-    public void CmdUpdateArrow(float theta)
+	//called on JoystickManager
+	[Command]
+	public void CmdUpdateArrow(float theta)
 	{
-        Arrow.CmdRotateArrow(theta);
-        if (isServer)
-            RpcUpdateArrow(theta);
+		Arrow.CmdRotateArrow(theta);
+		if (isServer)
+			RpcUpdateArrow(theta);
 	}
 
-    [ClientRpc]
-    public void RpcUpdateArrow(float theta)
-    {
-        Arrow.CmdRotateArrow(theta);
-    }
-
-    
-
-    // Use this for initialization
-    public override void OnStartClient()
-    {
-        Debug.Log("enter? "+gameObject.name);
-        base.OnStartClient();
-
-        identity = GetComponent<NetworkIdentity>();
-        Arrow = transform.Find("Arrow").GetComponent<IVArrow>();
-        //	Bullet = transform.Find("Bullet").gameObject;
-        Bullet = Resources.Load("Prefabs/Bullet") as GameObject;
-        Bullet.SetActive(false);
-        gameObject.name = playerName;
-        
-    }
-    
-
-    // Use this for initialization; local player only
-    public override void OnStartLocalPlayer()
-    {
-        Debug.Log("enter? " + gameObject.name);
-
-        base.OnStartLocalPlayer();
-        if (identity == null)
-            identity = GetComponent<NetworkIdentity>();
-        GetComponent<SpriteRenderer>().material.color = Color.blue;
-        myPlayer = true;
-        
-    }
-
-
-    private void Start()
-    {
-
-       
-
-    }
-
-    // Update is called once per frame
-    void Update()
+	[ClientRpc]
+	public void RpcUpdateArrow(float theta)
 	{
-        timer += Time.deltaTime;
-        
-        if (_hostserver == null)
-        {
-            _hostserver = GameObject.Find("Host Server").GetComponent<IVHostServer>();
-        }
+		Arrow.CmdRotateArrow(theta);
+	}
 
-        if (_hostserver.isLoading)
-        {
-            if (timer >= sendRPCrate)
-            {
-                if (_hostserver.playerLoading.Contains(false))
-                {
-                    if (isServer)
-                        RpcClientLoading();
+	// Use this for initialization
+	public override void OnStartClient()
+	{
+		Debug.Log("enter? " + gameObject.name);
+		base.OnStartClient();
 
-                    return;
-                }
-                else
-                {
-                    _hostserver.isLoading = false;
-                }
-                timer -= sendRPCrate;
-            }
-        }
-    }
-   
-    //------------- about loading 
+		identity = GetComponent<NetworkIdentity>();
+		Arrow = transform.Find("Arrow").GetComponent<IVArrow>();
+		//	Bullet = transform.Find("Bullet").gameObject;
+		Bullet = Resources.Load("Prefabs/Bullet") as GameObject;
+		Bullet.SetActive(false);
+		gameObject.name = playerName;
+	}
 
-    [ClientRpc]
-    public void RpcClientLoading()
-    {
-        if (_hostserver.playerLoading.Contains(false) && isLocalPlayer)
-        {
-            CmdClientLoading(id);
-        }
 
- //       Debug.Log(id + " " + hasAuthority + " " + _hostserver.playerLoading.Contains(false));
+	// Use this for initialization; local player only
+	public override void OnStartLocalPlayer()
+	{
+		Debug.Log("enter? " + gameObject.name);
 
-    }
+		base.OnStartLocalPlayer();
+		if (identity == null)
+			identity = GetComponent<NetworkIdentity>();
+		GetComponent<SpriteRenderer>().material.color = Color.blue;
+		myPlayer = true;
 
-    [Command]
-    public void CmdClientLoading(int i)
-    {
-        _hostserver.playerLoading[i] = true;
-        RpcUpdateClientLoadingStatus(i);
-    }
+		CmdConfigStatus(0, playerType, 1);
+		CmdConfigStatus(1, playerType, 1);
+	}
 
-    [ClientRpc]
-    void RpcUpdateClientLoadingStatus(int i)
-    {
-        _hostserver.playerLoading[i] = true;
-        GameObject.Find("Manager").GetComponent<IVUIManager>().UpdateLoadingStatus(i, "Ready");
-    }
+	void CmdConfigStatus(int code, SkillType type, int delta)   // 0 : HP, 1 : power, 2 : shield
+	{
+		switch (code)
+		{
+			case 0:
+				HP += delta;
+				break;
+			case 1:
+				power[type] += delta;
+				if (power[type] < 0) power[type] = 0;
+				break;
+			case 2:
+				shield[type] += delta;
+				if (shield[type] < 0) shield[type] = 0;
+				break;
+		}
+	}
 
-    //-----------Bullet Spawn------------
+	private void Start()
+	{
 
-     public void BasicAttack()
+
+
+	}
+
+	// Update is called once per frame
+	void Update()
+	{
+		timer += Time.deltaTime;
+
+		if (_hostserver == null)
+		{
+			_hostserver = GameObject.Find("Host Server").GetComponent<IVHostServer>();
+		}
+
+		if (_hostserver.isLoading)
+		{
+			if (timer >= sendRPCrate)
+			{
+				if (_hostserver.playerLoading.Contains(false))
+				{
+					if (isServer)
+						RpcClientLoading();
+
+					return;
+				}
+				else
+				{
+					_hostserver.isLoading = false;
+				}
+				timer -= sendRPCrate;
+			}
+		}
+	}
+
+	//------------- about loading 
+
+	[ClientRpc]
+	public void RpcClientLoading()
+	{
+		if (_hostserver.playerLoading.Contains(false) && isLocalPlayer)
+		{
+			CmdClientLoading(id);
+		}
+
+		//       Debug.Log(id + " " + hasAuthority + " " + _hostserver.playerLoading.Contains(false));
+
+	}
+
+	[Command]
+	public void CmdClientLoading(int i)
+	{
+		_hostserver.playerLoading[i] = true;
+		RpcUpdateClientLoadingStatus(i);
+	}
+
+	[ClientRpc]
+	void RpcUpdateClientLoadingStatus(int i)
+	{
+		_hostserver.playerLoading[i] = true;
+		GameObject.Find("Manager").GetComponent<IVUIManager>().UpdateLoadingStatus(i, "Ready");
+	}
+
+	//-----------Bullet Spawn------------
+
+	public void BasicAttack()
 	{
 		Vector3 dir = Arrow.GetDir();
 		Vector3 pos = transform.position;
 		NetworkInstanceId i = GetComponent<NetworkIdentity>().netId;
-        if (isLocalPlayer)
-            CmdBasicAttack(dir, pos, i);
+		if (isLocalPlayer)
+			CmdBasicAttack(dir, pos, i);
 	}
 
 	[Command]
 	public void CmdBasicAttack(Vector3 dir, Vector3 pos, NetworkInstanceId i)
 	{
-        GameObject b = Instantiate((Object)Bullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
-        b.transform.parent = GameObject.Find("Bullets").transform;
-        b.SetActive(true);
-        NetworkServer.Spawn(b);
+		GameObject b = Instantiate((Object)Bullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
+		b.transform.parent = GameObject.Find("Bullets").transform;
+		b.SetActive(true);
+		NetworkServer.Spawn(b);
 
-        RpcBasicAttack(b, dir, pos, i);
+		RpcBasicAttack(b, dir, pos, i);
 	}
 
 	[ClientRpc]
 	public void RpcBasicAttack(GameObject b, Vector3 dir, Vector3 pos, NetworkInstanceId i)
 	{
-        //SpawnBasicAttack(dir, pos, i);
+		//SpawnBasicAttack(dir, pos, i);
 
-        b.GetComponent<IVBullet>().SetOwner(ClientScene.FindLocalObject(i).GetComponent<IVPlayer>());
-        b.GetComponent<Rigidbody>().AddForce(dir * bulletspeed);
+		b.GetComponent<IVBullet>().SetOwner(ClientScene.FindLocalObject(i).GetComponent<IVPlayer>());
+		b.GetComponent<Rigidbody>().AddForce(dir * bulletspeed);
 
-    }
+	}
 
+	//---------Spell Checker-------------
+
+	public bool Cast(List<string> sentence)
+	{
+		if (!isLocalPlayer) return false;
+		else if (!IVSpellManager.SyntaxCheck(sentence)) return false;
+		else
+		{
+			Dictionary<SkillType, int> force = power;
+			foreach (string s in sentence)
+				force[IVSpellManager.KeywordDictionary[s]] += 1;
+			SkillAttack(force);
+			return true;
+		}
+	}
+
+	//---------Skill Attack----------------
+
+	void SkillAttack(Dictionary<SkillType, int> force)
+	{
+		Debug.Log("Skill attack has been casted while id of caster is " + id);
+		int[] f = new int[]			//
+		{
+			force[SkillType.neutral],
+			force[SkillType.holy],
+			force[SkillType.evil],
+			force[SkillType.lightness],
+			force[SkillType.darkness]
+		};
+		CmdSkillAttack(f);
+	}
+
+	[Command]
+	void CmdSkillAttack(int[] force)
+	{
+		//TODO
+		RpcSkillAttack(force);
+		return;
+	}
+
+	[ClientRpc]
+	void RpcSkillAttack(int[] force)
+	{
+		//TODO
+		return;
+	}
     //---------Bullet Collision-------------
 
     [Command]

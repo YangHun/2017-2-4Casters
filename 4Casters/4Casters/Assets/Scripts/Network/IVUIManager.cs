@@ -11,7 +11,6 @@ public class IVUIManager : MonoBehaviour {
 	int playerCount;
 
     IVHostServer _hostserver;
-    IVSpellManager _spell;
     IVGameManager _game;
 
     [SerializeField]
@@ -42,7 +41,6 @@ public class IVUIManager : MonoBehaviour {
 
         //initialization
         _hostserver = GameObject.Find("Host Server").GetComponent<IVHostServer>();
-        _spell = GetComponent<IVSpellManager>();
         _lobby = GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ();
         _game = GameObject.Find("Manager").GetComponent<IVGameManager>();
         playerCount = _hostserver.playerNum;
@@ -132,9 +130,7 @@ public class IVUIManager : MonoBehaviour {
     {
         if (_hostserver.CurrentState == State.MonsterPhase)
         {
-            List<IVPlayer> plyrs = _game.Players;
-
-            foreach (IVPlayer p in plyrs)
+            foreach (IVPlayer p in _game.Players)
             {
                 p.BasicAttack();
             }
@@ -146,24 +142,23 @@ public class IVUIManager : MonoBehaviour {
             List<string> keyword = _game.Players[CastingWindowFilterId].KeywordsInventory;
             Button[] keywordButtons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
 
-            string str = "";
-            foreach (string s in sentence)
-            {
-                str += s;
-                keyword.Remove(s);
-                //keywordButtons[keyword.IndexOf(s)].enabled = false;		//to be fixed; it does not hide keyword used.s
-            }
-            //_game.cast(str) : TODO
-            if (str.Length == 0)
-            {
-                Debug.Log("Pattern does not match.");
-                return;
-            }
-            Debug.Log(str + "attack has been casted");
+			foreach (IVPlayer p in _game.Players)
+			{
+				if(p.Cast(sentence))
+				{
+					string str = "";
+					foreach (string s in sentence)
+					{
+					    str += s;
+						keyword.Remove(s);
+					}
+					Debug.Log(str + "attack has been casted while Caster's id is " + p.id);
+					sentence.Clear();
+					OnClickCastingWindowFilter(CastingWindowFilterId);
+				}
+			}
 
-            sentence.Clear();
 
-            OnClickCastingWindowFilter(CastingWindowFilterId);
         }
     }
 
@@ -211,7 +206,7 @@ public class IVUIManager : MonoBehaviour {
                 Image img = buttons[i].GetComponent<Image>();
                 Text txt = buttons[i].GetComponentInChildren<Text>();
 
-                switch (_spell.KeywordDictionary[sentence[i]])
+                switch (IVSpellManager.KeywordDictionary[sentence[i]])
                 {
                     case SkillType.neutral:
                         img.color = new Color(144 / 255.0f, 207 / 255.0f, 238 / 255.0f);
@@ -296,7 +291,7 @@ public class IVUIManager : MonoBehaviour {
                     Image img = buttons[i].GetComponent<Image>();
                     Text txt = buttons[i].GetComponentInChildren<Text>();
 
-                    switch (_spell.KeywordDictionary[keys[i]])
+                    switch (IVSpellManager.KeywordDictionary[keys[i]])
                     {
                         case SkillType.neutral:
                             img.color = new Color(144 / 255.0f, 207 / 255.0f, 238 / 255.0f);
