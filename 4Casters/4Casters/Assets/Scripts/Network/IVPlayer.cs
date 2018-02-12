@@ -158,6 +158,11 @@ public class IVPlayer : NetworkBehaviour
     [ClientRpc]
     void RpcUpdateClientLoadingStatus(int i)
     {
+        if (_hostserver == null)
+        {
+            _hostserver = GameObject.Find("Host Server").GetComponent<IVHostServer>();
+        }
+
         _hostserver.playerLoading[i] = true;
         GameObject.Find("Manager").GetComponent<IVUIManager>().UpdateLoadingStatus(i, "Ready");
     }

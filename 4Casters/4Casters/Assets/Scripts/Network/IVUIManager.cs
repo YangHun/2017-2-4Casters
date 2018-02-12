@@ -95,6 +95,9 @@ public class IVUIManager : MonoBehaviour {
             {
                 monsters[i].GetComponentInChildren<Text>().text = m[i].Keyword;
                 monsters[i].GetComponentInChildren<MonsterButton>().Monster = m[i];
+                monsters[i].GetComponentInChildren<MonsterButton>().type = m[i].Type;
+
+                monsters[i].GetComponentInChildren<MonsterButton>().keyword = m[i].Keyword;
                 monsters[i].GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 0.3f);
             }
         }
@@ -164,6 +167,24 @@ public class IVUIManager : MonoBehaviour {
                 break;
         }
 
+    }
+
+    public void InitMonsterButtons()
+    {
+        if (_hostserver.CurrentState == State.MonsterPhase)
+        {
+            foreach(Button b in monsters)
+            {
+                b.GetComponent<MonsterButton>().InitMonsterPhase();
+            }
+        }
+        else
+        {
+            foreach (Button b in monsters)
+            {
+                b.GetComponent<MonsterButton>().InitCastPhase(_game.myPlayer.GetComponent<IVPlayer>());
+            }
+        }
     }
 
     public void ResetPlayerKeywordText()

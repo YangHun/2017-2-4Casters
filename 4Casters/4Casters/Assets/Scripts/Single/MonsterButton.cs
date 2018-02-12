@@ -9,6 +9,8 @@ public class MonsterButton : MonoBehaviour {
     Vector3 dir = Vector3.zero;
 
     public IVMonster Monster;
+    public SkillType type;
+    public string keyword;
 
     List<Vector3> dirs = new List<Vector3>();
     int index = 0;
@@ -63,6 +65,50 @@ public class MonsterButton : MonoBehaviour {
         
 	}
 
+    public void InitCastPhase(IVPlayer p)
+    {
+        Color c = Color.white;
+
+        switch (type)
+        {
+            case SkillType.neutral:
+                c = (Resources.Load("Material/Monster-neutral", typeof(Material)) as Material).color;
+                break;
+            case SkillType.darkness:
+                c = (Resources.Load("Material/Monster-darkness", typeof(Material)) as Material).color;
+                break;
+            case SkillType.evil:
+                c = (Resources.Load("Material/Monster-evil", typeof(Material)) as Material).color;
+                break;
+            case SkillType.holy:
+                c = (Resources.Load("Material/Monster-holy", typeof(Material)) as Material).color;
+                break;
+            case SkillType.lightness:
+                c = (Resources.Load("Material/Monster-lightness", typeof(Material)) as Material).color;
+                break;
+        }
+
+        GetComponent<Image>().color = c;
+
+        if (!p.KeywordsInventory.Contains(keyword))
+        {
+            gameObject.SetActive(false);
+        }
+        if (isSelected)
+        {
+            isSelected = false;
+        }
+    }
+
+    public void InitMonsterPhase()
+    {
+
+        GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 0.2f);
+
+        gameObject.SetActive(true);
+        isSelected = false;
+    }
+
     public void OnClickButton()
     {
         Debug.Log(Monster.Keyword);
@@ -71,15 +117,42 @@ public class MonsterButton : MonoBehaviour {
         {
             if (!isSelected)
             {
-                Monster.GetComponent<Renderer>().materials[0].SetFloat("_MKGlowPower", 1.5f);
+                SkillType type = Monster.Type;
+                Color c = Color.white;
 
-                GetComponent<Image>().color = Monster.GetComponent<Renderer>().materials[0].GetColor("_Color");
+                switch (type)
+                {
+                    case SkillType.neutral:
+                        c = (Resources.Load("Material/Monster-neutral", typeof(Material)) as Material).color;
+                        Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.30f);
+                        break;
+                    case SkillType.darkness:
+                        c = (Resources.Load("Material/Monster-darkness", typeof(Material)) as Material).color;
+                        Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.80f);
+                        break;
+                    case SkillType.evil:
+                        c = (Resources.Load("Material/Monster-evil", typeof(Material)) as Material).color;
+                        Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.80f);
+                        break;
+                    case SkillType.holy:
+                        c = (Resources.Load("Material/Monster-holy", typeof(Material)) as Material).color;
+                        Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.20f);
+                        break;
+                    case SkillType.lightness:
+                        c = (Resources.Load("Material/Monster-lightness", typeof(Material)) as Material).color;
+                        Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.20f);
+                        break;
+                }
+
+                GetComponent<Image>().color = c;
+
                 
+
                 isSelected = true;
             }
             else
             {
-                Monster.GetComponent<Renderer>().materials[0].SetFloat("_MKGlowPower", 0.2f);
+                Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.0f);
 
                 GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 0.2f);
 

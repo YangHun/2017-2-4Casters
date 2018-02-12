@@ -102,16 +102,44 @@ public class IVMonsterSpawner : NetworkBehaviour {
                 pos *= Random.Range(0.1f, 6.0f);
                 pos.y = 0.5f;
 
-                GameObject obj = Instantiate(Base, pos, Quaternion.identity) as GameObject;
-                obj.transform.SetParent(transform);
-                obj.SetActive(true);
-
-                NetworkServer.Spawn(obj);
 
                 SkillType type = (SkillType)i;
 
                 List<string> keys = SkillTypeDictionary[type];
                 string keyword = keys[Random.Range(1, keys.Count) - 1];
+
+                GameObject obj = null;
+                switch (type)
+                {
+                    case SkillType.neutral:
+                        obj = Instantiate(Resources.Load("Prefabs/monster-neutral") as GameObject, pos, Quaternion.identity) as GameObject;
+                        break;
+                    case SkillType.holy:
+                        obj = Instantiate(Resources.Load("Prefabs/monster-holy") as GameObject, pos, Quaternion.identity) as GameObject;
+                        break;
+                    case SkillType.evil:
+                        obj = Instantiate(Resources.Load("Prefabs/monster-evil") as GameObject, pos, Quaternion.identity) as GameObject;
+                        break;
+                    case SkillType.darkness:
+                        obj = Instantiate(Resources.Load("Prefabs/monster-darkness") as GameObject, pos, Quaternion.identity) as GameObject;
+                        break;
+                    case SkillType.lightness:
+                        obj = Instantiate(Resources.Load("Prefabs/monster-lightness") as GameObject, pos, Quaternion.identity) as GameObject;
+                        break;
+
+                }
+
+                if (obj == null)
+                {
+                    return;
+                }
+                                
+                obj.transform.SetParent(transform);
+                obj.SetActive(true);
+
+                NetworkServer.Spawn(obj);
+
+                
                 
                 RpcMonsterSpawnInit(obj, type, keyword);
                 
