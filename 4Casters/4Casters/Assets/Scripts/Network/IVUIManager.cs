@@ -36,9 +36,6 @@ public class IVUIManager : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-
-
-
         //initialization
         _hostserver = GameObject.Find("Host Server").GetComponent<IVHostServer>();
         _lobby = GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ();
@@ -135,7 +132,6 @@ public class IVUIManager : MonoBehaviour {
                 p.BasicAttack();
             }
         }
-
         else if (_hostserver.CurrentState == State.CastPhase)
         {
             List<string> sentence = _game.Players[CastingWindowFilterId].SentenceInventory;
@@ -144,8 +140,9 @@ public class IVUIManager : MonoBehaviour {
 
 			foreach (IVPlayer p in _game.Players)
 			{
-				if(p.Cast(sentence))
+				try					//try while syntax is legal.
 				{
+					p.Cast(sentence);
 					string str = "";
 					foreach (string s in sentence)
 					{
@@ -156,9 +153,11 @@ public class IVUIManager : MonoBehaviour {
 					sentence.Clear();
 					OnClickCastingWindowFilter(CastingWindowFilterId);
 				}
+				catch(BrokenSyntaxException e)			//catch exception when spell syntax is illegal.
+				{
+					Debug.Log("Spell syntax was broken on the order of " + e.Num);
+				}
 			}
-
-
         }
     }
 

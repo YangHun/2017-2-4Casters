@@ -10,11 +10,11 @@ public class IVSpellManager : MonoBehaviour {
     public static Dictionary<string, SkillType> KeywordDictionary = new Dictionary<string, SkillType>()
     {
        //Neutral Keywords
-       { "을" ,SkillType.neutral },
-       { "를" ,SkillType.neutral },
-       { "에게" ,SkillType.neutral },
-       { "가" ,SkillType.neutral },
-       { "이" ,SkillType.neutral },
+       { "을"   , SkillType.neutral },
+       { "를"   , SkillType.neutral },
+       { "에게" , SkillType.neutral },
+       { "가"   , SkillType.neutral },
+       { "이"   , SkillType.neutral },
 
        //Holy Keywords
        { "선1" , SkillType.holy },
@@ -74,7 +74,15 @@ public class IVSpellManager : MonoBehaviour {
 
 	public static int DamageCalculator(Dictionary <SkillType, int> f, Dictionary <SkillType, int> s)
 	{
-		return 0;
+		int dmg = 0;
+		int part = 0;
+		for (int i = 0; i < (int)SkillType.Null; i++)
+		{
+			part = f[(SkillType)i] - s[(SkillType)i];
+			part = part > 0 ? part : 0;
+			dmg += part;
+		}
+		return dmg;
 	}
     // Use this for initialization
     void Start()
@@ -87,4 +95,28 @@ public class IVSpellManager : MonoBehaviour {
     {
 
     }
+}
+
+// Exceptions of Spell
+public class BrokenSyntaxException : System.Exception
+{
+	private int num = 0;                //position where syntax has just been broken.
+	BrokenSyntaxException() { }
+	BrokenSyntaxException(int num)
+	{
+		this.Num = num;
+	}
+
+	public int Num
+	{
+		get
+		{
+			return num;
+		}
+
+		set
+		{
+			num = value;
+		}
+	}
 }

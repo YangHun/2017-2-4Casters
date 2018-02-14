@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 212629110178573706}
   - component: {fileID: 114616700581071538}
   - component: {fileID: 114428792211535938}
+  - component: {fileID: 135217390163698282}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -187,6 +188,18 @@ MonoBehaviour:
     i15: 145
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
+--- !u!135 &135217390163698282
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1842498343416686}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!208 &208874299430344092
 NavMeshObstacle:
   m_ObjectHideFlags: 1

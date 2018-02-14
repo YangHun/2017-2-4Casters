@@ -57,6 +57,14 @@ public class IVPlayer : NetworkBehaviour
 	GameObject Bullet;
 	const float bulletspeed = 300.0f;
 
+	public Dictionary<SkillType, int> Shield
+	{
+		get
+		{
+			return shield;
+		}
+	}
+
 
 	//called on PlayerSpawner
 	//Abandoned.
@@ -71,9 +79,16 @@ public class IVPlayer : NetworkBehaviour
 	[Command]
 	public void CmdUpdateArrow(float theta)
 	{
-		Arrow.CmdRotateArrow(theta);
-		if (isServer)
-			RpcUpdateArrow(theta);
+		if(_hostserver.CurrentState == State.MonsterPhase)
+		{
+			Arrow.CmdRotateArrow(theta);
+			if (isServer)
+				RpcUpdateArrow(theta);
+		}
+		else
+		{
+			
+		}
 	}
 
 	[ClientRpc]
@@ -136,7 +151,8 @@ public class IVPlayer : NetworkBehaviour
 		}
 	}
 	[Command]
-	void CmdConfigStatus(int code, SkillType type, int delta)   // 0 : HP, 1 : power, 2 : shield, 3 : playerType
+	// 0 : HP, 1 : power, 2 : shield, 3 : playerType
+	void CmdConfigStatus(int code, SkillType type, int delta)
 	{
 		ConfigStatus(code, type, delta);
 	}
@@ -231,8 +247,6 @@ public class IVPlayer : NetworkBehaviour
 	[ClientRpc]
 	public void RpcBasicAttack(GameObject b, Vector3 dir, Vector3 pos, NetworkInstanceId i)
 	{
-		//SpawnBasicAttack(dir, pos, i);
-
 		b.GetComponent<IVBullet>().SetOwner(ClientScene.FindLocalObject(i).GetComponent<IVPlayer>());
 		b.GetComponent<Rigidbody>().AddForce(dir * bulletspeed);
 
@@ -266,25 +280,36 @@ public class IVPlayer : NetworkBehaviour
 			force[SkillType.lightness],
 			force[SkillType.darkness]
 		};
-		CmdSkillAttack(f, id);
+		Vector3 dir = Arrow.GetDir();
+		Vector3 pos = transform.position;
+		NetworkInstanceId i = GetComponent<NetworkIdentity>().netId;
+		if (isLocalPlayer)
+			CmdSkillAttack(dir, pos, i);
 	}
 
 	[Command]
-	void CmdSkillAttack(int[] force, int id)
+	void CmdSkillAttack(Vector3 dir, Vector3 pos, NetworkInstanceId id)
 	{
-		//TODO
-		RpcSkillAttack(force, id);
+		GameObject b = Instantiate((Object)Bullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
+		b.transform.parent = GameObject.Find("Bullets").transform;
+		b.SetActive(true);
+		NetworkServer.Spawn(b);
+
+		RpcBasicAttack(b, dir, pos, id);
 		return;
 	}
 
 	[ClientRpc]
-	void RpcSkillAttack(int[] force, int id)
+	void RpcSkillAttack(GameObject b, Vector3 dir, Vector3 pos, NetworkInstanceId id)
 	{
 		//TODO
 		Debug.Log("Skill attack has been casted while caster's id is " + id +
-				", and its type is " + _hostserver.players[id].GetComponent<IVPlayer>().playerType.ToString());
+				", and its type is " + ClientScene.FindLocalObject(id).GetComponent<IVPlayer>().playerType.ToString());
+		b.GetComponent<IVBullet>().SetOwner(ClientScene.FindLocalObject(id).GetComponent<IVPlayer>());
+		b.GetComponent<Rigidbody>().AddForce(dir * bulletspeed);
 		return;
 	}
+
     //---------Bullet Collision-------------
 
     [Command]
@@ -305,6 +330,18 @@ public class IVPlayer : NetworkBehaviour
             }
         }
     }
+
+	[Command]
+	public void CmdAttackPlayer(NetworkIdentity id, int dmg)
+	{
+		IVPlayer p = id.GetComponent<IVPlayer>();
+		p.ConfigStatus(0, SkillType.Null, -dmg);
+		if (p.HP <= 0)
+		{
+			Debug.Log("Player" + id + "has killed player " + p.id);
+			Destroy(id.gameObject);
+		}
+	}
 
     [ClientRpc]
     void RpcAttackMonster(string s)
