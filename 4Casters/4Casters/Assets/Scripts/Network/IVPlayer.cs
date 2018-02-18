@@ -31,9 +31,27 @@ public class IVPlayer : NetworkBehaviour
 		{ SkillType.darkness, 0 },
 	};
 	[SerializeField]
+	Dictionary<SkillType, int> buff = new Dictionary<SkillType, int>()
+	{
+		{ SkillType.neutral, 0 },
+		{ SkillType.holy, 0 },
+		{ SkillType.evil, 0 },
+		{ SkillType.lightness, 0 },
+		{ SkillType.darkness, 0 },
+	};
+	[SerializeField]
 	Dictionary<SkillType, int> shield = new Dictionary<SkillType, int>()
 	{
 		{ SkillType.neutral, 1 },
+		{ SkillType.holy, 0 },
+		{ SkillType.evil, 0 },
+		{ SkillType.lightness, 0 },
+		{ SkillType.darkness, 0 },
+	};
+	[SerializeField]
+	Dictionary<SkillType, int> debuff = new Dictionary<SkillType, int>()
+	{
+		{ SkillType.neutral, 0 },
 		{ SkillType.holy, 0 },
 		{ SkillType.evil, 0 },
 		{ SkillType.lightness, 0 },
@@ -124,6 +142,29 @@ public class IVPlayer : NetworkBehaviour
 		CmdConfigStatus(3, (SkillType)id, 0);
 	}
 
+	Dictionary<SkillType, int> Calculate(bool isPower)
+	{
+		Dictionary<SkillType, int> ans = new Dictionary<SkillType, int>();
+		if(isPower)
+		{
+			foreach(SkillType type in new List<SkillType>(power.Keys))
+			{
+				int part = power[type] + buff[type];
+				ans[type] = part > 0 ? part : 0;
+			}
+			return ans;
+		}
+		else
+		{
+			foreach(SkillType type in new List<SkillType>(shield.Keys))
+			{
+				int part = shield[type] + debuff[type];
+				ans[type] = part > 0 ? part : 0;
+			}
+			return ans;
+		}
+	}
+	// 0 : HP, 1 : power, 2 : shield, 3 : playerType, 4 : buff, 5 : debuff
 	void ConfigStatus(int code, SkillType type, int delta)
 	{
 		switch (code)
@@ -142,13 +183,18 @@ public class IVPlayer : NetworkBehaviour
 			case 3:
 				playerType = type;
 				break;
+			case 4:
+				buff[type] += delta;
+				break;
+			case 5:
+				debuff[type] += delta;
+				break;
 			default:
 				break;
 		}
 	}
 
 	[Command]
-	// 0 : HP, 1 : power, 2 : shield, 3 : playerType
 	void CmdConfigStatus(int code, SkillType type, int delta)
 	{
 		RpcConfigStatus(code, type, delta);
@@ -158,6 +204,18 @@ public class IVPlayer : NetworkBehaviour
 	void RpcConfigStatus(int code, SkillType type, int delta)
 	{
 		ConfigStatus(code, type, delta);
+	}
+
+	public void AddBuff(Dictionary<SkillType, int> delta)
+	{
+		foreach(SkillType type in new List<SkillType>(delta.Keys))
+			CmdConfigStatus(4, type, delta[type]);
+	}
+
+	public void AddDebuff(Dictionary<SkillType, int> delta)
+	{
+		foreach(SkillType type in new List<SkillType>(delta.Keys))
+			CmdConfigStatus(5, type, delta[type]);
 	}
 
 	// Dead TODO
@@ -335,6 +393,24 @@ public class IVPlayer : NetworkBehaviour
 		return;
 	}
 
+	void CastBuff(Dictionary<SkillType, int> force)
+	{
+		NetworkInstanceId id = GetComponent<NetworkIdentity>().netId;
+
+	}
+
+	[Command]
+	void CmdCastBuff(NetworkInstanceId id)
+	{
+		
+	}
+
+	[ClientRpc]
+	void RpcCastBuff(GameObject g, NetworkInstanceId id)
+	{
+		
+	}
+
     //---------Bullet Collision-------------
 
     [Command]
@@ -395,11 +471,10 @@ public class IVPlayer : NetworkBehaviour
     void RpcMonsterDead( NetworkIdentity p, string keyword, SkillType type)
     {
         Debug.Log(gameObject.name + " killed " + keyword);
-        
         Loot(p, keyword, type);
     }
     
-    //------------Monster Kill--------------
+    //------------Player Kill--------------
     //ToDo
 
 	[ClientRpc]

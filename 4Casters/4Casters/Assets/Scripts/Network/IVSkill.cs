@@ -9,12 +9,17 @@ public class IVSkill : NetworkBehaviour {
 	IVPlayer player;
 
 	bool isEscaped = false;
-
 	float timer = 0.0f;
 
+	enum _Type { BulletAttack , LaserAttack , ReflectionAttack , Buff , Debuff};
 	[SerializeField]
-	float lifetime = 2.0f;
-	float escapetime = 0.22f;
+	_Type type;
+
+
+	[SerializeField]
+	float lifetime;
+	[SerializeField]
+	float escapetime;
 
 	Dictionary<SkillType, int> force = new Dictionary<SkillType, int>()
 	{
@@ -38,7 +43,10 @@ public class IVSkill : NetworkBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		if(type == _Type.Buff)
+		{
+			player.AddBuff(force);
+		}
 	}
 	
 	// Update is called once per frame
@@ -54,14 +62,23 @@ public class IVSkill : NetworkBehaviour {
             Destroy(gameObject);
         }
 
-		if (!isEscaped && timer >= escapetime)
+		if (type == _Type.BulletAttack && !isEscaped && timer >= escapetime)
 		{
 			GetComponent<SphereCollider>().enabled = true;
 			isEscaped = true;
 		}
+
 	}
 
-    private void OnCollisionEnter(Collision collision)
+	private void OnDestroy()
+	{
+		if (type == _Type.Buff)
+			player.AddBuff(force);
+		else if (type == _Type.Debuff)
+			player.AddDebuff(force);
+	}
+
+	private void OnCollisionEnter(Collision collision)
     {
 		if (collision.gameObject.tag == "Player")
 		{
