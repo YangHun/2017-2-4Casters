@@ -5,10 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Lobby.unity
     guid: 4d1b5221d6f31dd469f0dda81e9dc83c
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Multiplay.unity
     guid: 5771e137d416b034a93c248860af2c01
   - enabled: 0
@@ -17,3 +17,18 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/ImportedAssets/FrostweepGames/GCSpeechRecognition/Examples/Example_Def/Example.unity
     guid: fcb1fc02d0132054d8fa9129bd540ced
+  - enabled: 1
+    path: Assets/Scenes/PUN/PUNLobby.unity
+    guid: 07f0a638616f2a4478eba1e863b8115b
+  - enabled: 1
+    path: Assets/Scenes/PUN/Room for 1.unity
+    guid: 2fd9c20c086dc25458e39b8e360c37d3
+  - enabled: 1
+    path: Assets/Scenes/PUN/Room for 2.unity
+    guid: 306aff93797dec4469bb749cb5b86e1d
+  - enabled: 1
+    path: Assets/Scenes/PUN/Room for 3.unity
+    guid: 2624b43ff3444ac479002f87de01e5e6
+  - enabled: 1
+    path: Assets/Scenes/PUN/Room for 4.unity
+    guid: 372e027ecacdecc4bbc6c51e5b2b1993
