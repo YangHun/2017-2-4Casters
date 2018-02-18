@@ -27,7 +27,7 @@ GameObject:
   - component: {fileID: 195735761265214146}
   - component: {fileID: 54300314990195844}
   - component: {fileID: 114307135011447390}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Monster
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 4570655915298478}
   - component: {fileID: 23328113132890010}
   - component: {fileID: 102208479431988322}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,7 +62,7 @@ GameObject:
   - component: {fileID: 33018720138470776}
   - component: {fileID: 136504036117337252}
   - component: {fileID: 23940920413985994}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: HPbar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -324,22 +324,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 44
-    i1: 222
-    i2: 96
+    i0: 154
+    i1: 61
+    i2: 114
     i3: 132
-    i4: 152
-    i5: 116
-    i6: 232
-    i7: 68
-    i8: 91
-    i9: 23
-    i10: 181
-    i11: 77
-    i12: 220
-    i13: 24
-    i14: 56
-    i15: 42
+    i4: 228
+    i5: 2
+    i6: 166
+    i7: 52
+    i8: 25
+    i9: 169
+    i10: 11
+    i11: 146
+    i12: 25
+    i13: 198
+    i14: 179
+    i15: 85
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
 --- !u!136 &136504036117337252

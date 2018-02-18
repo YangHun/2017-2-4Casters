@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4151497860840752}
   - component: {fileID: 208874299430344092}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Barrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 4405869827536812}
   - component: {fileID: 212142399556017518}
   - component: {fileID: 114496798744194208}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 114616700581071538}
   - component: {fileID: 114428792211535938}
   - component: {fileID: 135217390163698282}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -170,22 +170,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 104
-    i1: 48
-    i2: 205
-    i3: 211
-    i4: 48
-    i5: 94
-    i6: 210
+    i0: 111
+    i1: 31
+    i2: 196
+    i3: 1
+    i4: 220
+    i5: 104
+    i6: 0
     i7: 116
-    i8: 104
-    i9: 98
-    i10: 82
-    i11: 31
-    i12: 21
-    i13: 127
-    i14: 120
-    i15: 145
+    i8: 91
+    i9: 218
+    i10: 206
+    i11: 200
+    i12: 202
+    i13: 194
+    i14: 109
+    i15: 78
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
 --- !u!135 &135217390163698282
