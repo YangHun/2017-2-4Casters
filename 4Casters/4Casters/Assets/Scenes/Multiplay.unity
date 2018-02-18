@@ -14974,11 +14974,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1045333077}
---- !u!224 &1055379537 stripped
-RectTransform:
-  m_PrefabParentObject: {fileID: 224301341019602636, guid: c4780f7398ae0c94682b0d3148ca575c,
-    type: 2}
-  m_PrefabInternal: {fileID: 1165968944}
 --- !u!1001 &1057670060
 Prefab:
   m_ObjectHideFlags: 0
@@ -17073,6 +17068,10 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1165968944}
   m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!4 &1165968946 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 1165968944}
 --- !u!1 &1170179309
 GameObject:
   m_ObjectHideFlags: 0
@@ -20105,6 +20104,34 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1356384558}
+--- !u!1 &1375261145
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1375261146}
+  m_Layer: 0
+  m_Name: Skills
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1375261146
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1375261145}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1378749555
 GameObject:
   m_ObjectHideFlags: 0
@@ -23139,7 +23166,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
-  - {fileID: 1055379537}
+  - {fileID: 1165968946}
   - {fileID: 324709608}
   - {fileID: 1411938298}
   - {fileID: 1620702118}

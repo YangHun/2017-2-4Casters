@@ -218,24 +218,26 @@ public class IVUIManager : MonoBehaviour
             List<string> keyword = _game.Players[CastingWindowFilterId].KeywordsInventory;
             Button[] keywordButtons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
 
-            string str = "";
-            foreach (string s in sentence)
-            {
-                str += s;
-                keyword.Remove(s);
-                //keywordButtons[keyword.IndexOf(s)].enabled = false;		//to be fixed; it does not hide keyword used.s
-            }
-            //_game.cast(str) : TODO
-            if (str.Length == 0)
-            {
-                Debug.Log("Pattern does not match.");
-                return;
-            }
-            Debug.Log(str + "attack has been casted");
-
-            sentence.Clear();
-
-            OnClickCastingWindowFilter(CastingWindowFilterId);
+			foreach (IVPlayer p in _game.Players)
+			{
+				try					//try while syntax is legal.
+				{
+					p.Cast(sentence);			// Casting function by client player
+					string str = "";
+					foreach (string s in sentence)
+					{
+					    str += s;
+						keyword.Remove(s);
+					}
+					Debug.Log(str + "attack has been casted on the code UIManager while Caster's id is " + p.id);
+					sentence.Clear();
+					OnClickCastingWindowFilter(CastingWindowFilterId);
+				}
+				catch(BrokenSyntaxException e)			//catch exception when spell syntax is illegal.
+				{
+					Debug.Log("Spell syntax was broken on the order of " + e.Num);
+				}
+			}
         }
     }
 
