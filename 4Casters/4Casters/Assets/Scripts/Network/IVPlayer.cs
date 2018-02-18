@@ -295,7 +295,8 @@ public class IVPlayer : NetworkBehaviour
 
 	void SkillAttack(Dictionary<SkillType, int> force)
 	{
-		int[] f = new int[]			//
+		/*
+		int[] f = new int[]
 		{
 			force[SkillType.neutral],
 			force[SkillType.holy],
@@ -303,6 +304,7 @@ public class IVPlayer : NetworkBehaviour
 			force[SkillType.lightness],
 			force[SkillType.darkness]
 		};
+		*/
 		Vector3 dir = Arrow.GetDir();
 		Vector3 pos = transform.position;
 		NetworkInstanceId i = GetComponent<NetworkIdentity>().netId;

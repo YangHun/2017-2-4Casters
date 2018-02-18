@@ -6,7 +6,6 @@ using UnityEngine.Networking;
 public class IVMonsterSpawner : NetworkBehaviour {
 
     IVUIManager _ui;
-    IVGameManager _game;
 
     [SerializeField]
     GameObject Base;
@@ -28,7 +27,6 @@ public class IVMonsterSpawner : NetworkBehaviour {
 //			transform.Find("Monster").GetComponent<IVMonster>();
 //        Base.gameObject.SetActive(false);
 
-        _game = GameObject.Find("Manager").GetComponent<IVGameManager>();
         _ui = GameObject.Find("Manager").GetComponent<IVUIManager>();
 
     }

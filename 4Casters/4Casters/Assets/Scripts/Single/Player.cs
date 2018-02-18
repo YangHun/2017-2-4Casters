@@ -26,7 +26,6 @@ public class Player : MonoBehaviour {
     Transform Arrow;
     [SerializeField]
     GameObject Bullet;
-	JoystickManager Joystick;
     const float bulletspeed = 300.0f;
 
 	public void UpdateArrow(float theta)
@@ -39,7 +38,6 @@ public class Player : MonoBehaviour {
         Arrow = transform.Find("Arrow");
         Bullet = transform.Find("Bullet").gameObject;
         Bullet.SetActive(false);
-		Joystick = GameObject.Find("JoystickSystem").GetComponent<JoystickManager>();
 	}
 	
 	// Update is called once per frame

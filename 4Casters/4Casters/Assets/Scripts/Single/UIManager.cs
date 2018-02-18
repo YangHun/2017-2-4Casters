@@ -99,7 +99,6 @@ public class UIManager : MonoBehaviour {
         {
 			List<string> sentence = _manager.Players[CastingWindowFilterId].SentenceInventory;
 			List<string> keyword = _manager.Players[CastingWindowFilterId].KeywordsInventory;
-			Button[] keywordButtons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
 
 			string str = "";
 			foreach (string s in sentence)
@@ -134,10 +133,8 @@ public class UIManager : MonoBehaviour {
     void UpdateCastingWindowSentence()
     {
         List<string> sentence = _manager.Players[CastingWindowFilterId].SentenceInventory;
-        List<string> keyword = _manager.Players[CastingWindowFilterId].KeywordsInventory;
 		
         Button[] buttons = CastingSentence.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
-        Button[] keywordButtons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
 		/*
         foreach (string key in sentence)
         {

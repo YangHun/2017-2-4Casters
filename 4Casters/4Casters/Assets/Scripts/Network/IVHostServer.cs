@@ -26,7 +26,6 @@ public class IVHostServer : NetworkBehaviour {
     [SerializeField]
     public List<bool> playerLoading = new List<bool>();
     public bool isLoading = true;
-    bool isLocalClientLoading = false;
     const float sendRPCrate = 0.5f;
 
     //Game Flow FSM 

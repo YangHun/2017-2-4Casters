@@ -216,7 +216,7 @@ public class IVUIManager : MonoBehaviour
         {
             List<string> sentence = _game.Players[CastingWindowFilterId].SentenceInventory;
             List<string> keyword = _game.Players[CastingWindowFilterId].KeywordsInventory;
-            Button[] keywordButtons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
+            //Button[] keywordButtons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
 
 			foreach (IVPlayer p in _game.Players)
 			{
@@ -258,17 +258,9 @@ public class IVUIManager : MonoBehaviour
     void UpdateCastingWindowSentence()
     {
         List<string> sentence = _game.Players[CastingWindowFilterId].SentenceInventory;
-        List<string> keyword = _game.Players[CastingWindowFilterId].KeywordsInventory;
 
         Button[] buttons = CastingSentence.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
-        Button[] keywordButtons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
-        /*
-        foreach (string key in sentence)
-        {
-            int index = keyword.IndexOf(key);
-            keywordButtons[index].enabled = false;
-        }
-		*/
+
         for (int i = 0; i < buttons.Length; i++)
         {
             if (i >= sentence.Count)

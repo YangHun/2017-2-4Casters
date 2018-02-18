@@ -12,7 +12,6 @@ public class MonsterSpawner : MonoBehaviour {
     // neutral - holy - evil - lightness - darkness
 
 
-    Dictionary<string, SkillType> KeywordDictionary;
     Dictionary<SkillType, List<string>> SkillTypeDictionary;
 
     // Use this for initialization
@@ -21,7 +20,6 @@ public class MonsterSpawner : MonoBehaviour {
         Base.gameObject.SetActive(false);
 
         SpellManager _spell = GameObject.Find("Manager").GetComponent<SpellManager>();
-        KeywordDictionary = _spell.KeywordDictionary;
         SkillTypeDictionary = _spell.SkillTypeDictionary;
 
 
