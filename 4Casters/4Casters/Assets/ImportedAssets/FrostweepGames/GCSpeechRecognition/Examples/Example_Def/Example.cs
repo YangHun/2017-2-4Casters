@@ -114,7 +114,7 @@ namespace FrostweepGames.Plugins.GoogleCloud.SpeechRecognition.Examples
         }
 
         private void RecognitionSuccessEventHandler(RecognitionResponse obj, long requestIndex)
-        {
+        {            
             if (!_isRuntimeDetectionToggle.isOn)
             {
                 _startRecordButton.interactable = true;

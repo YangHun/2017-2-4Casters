@@ -21,7 +21,7 @@ public class IVMonster : NetworkBehaviour {
 
     [SerializeField]
     Vector3 dir = Vector3.zero;
-    float walkspeed = 2.0f;
+    float walkspeed = 4.0f;
 
     [SerializeField]
     [SyncVar]
@@ -61,6 +61,12 @@ public class IVMonster : NetworkBehaviour {
     [Command]
     void CmdUpdateMonsterDirection(Vector3 dir)
     {
+        Vector3 worlddir = transform.position + dir;
+        transform.LookAt(worlddir);
+
+        Rigidbody r = GetComponent<Rigidbody>();
+        r.velocity = Vector3.zero;
+        r.AddForce(dir * walkspeed);
         RpcUpdateMonsterDirection(dir);
 
     }
@@ -68,9 +74,7 @@ public class IVMonster : NetworkBehaviour {
     [ClientRpc]
     void RpcUpdateMonsterDirection (Vector3 dir)
     {
-        Rigidbody r = GetComponent<Rigidbody>();
-        r.velocity = Vector3.zero;
-        r.AddForce(dir * walkspeed);
+        
     }
 
 
@@ -102,14 +106,14 @@ public class IVMonster : NetworkBehaviour {
             type = t;
 
         resetTime = Random.Range(1.0f, 5.0f);
-        SetColor();
+        //SetColor();
 
         if (mesh == null)
-            mesh = transform.Find("Text").GetComponent<TextMesh>();
+            //mesh = transform.Find("Text").GetComponent<TextMesh>();
 
         if (mesh != null)
-            mesh.text = key;
-
+            //mesh.text = key;
+            mesh.text = "";
     }
 
     void SetColor()

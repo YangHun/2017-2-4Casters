@@ -5,10 +5,14 @@ using UnityEngine.Networking;
 
 public class IVMonsterSpawner : NetworkBehaviour {
 
+    IVUIManager _ui;
     IVGameManager _game;
 
     [SerializeField]
     GameObject Base;
+
+    [SerializeField]
+    List<IVMonster> monsters = new List<IVMonster>();
 
     [SerializeField]
     List<int> spawnCount = new List<int>();
@@ -30,7 +34,7 @@ public class IVMonsterSpawner : NetworkBehaviour {
         KeywordDictionary = _spell.KeywordDictionary;
         SkillTypeDictionary = _spell.SkillTypeDictionary;
         _game = GameObject.Find("Manager").GetComponent<IVGameManager>();
-
+        _ui = GameObject.Find("Manager").GetComponent<IVUIManager>();
 
     }
 
@@ -58,7 +62,7 @@ public class IVMonsterSpawner : NetworkBehaviour {
 
 	[ClientRpc]
 	void RpcMonsterSpawnInit(GameObject obj, SkillType t, string k){
-		Debug.Log ("Like this?");
+		//Debug.Log ("Like this?");
 
         isClientSpawned = true;
         IVMonster m = obj.GetComponent<IVMonster>();
@@ -70,6 +74,8 @@ public class IVMonsterSpawner : NetworkBehaviour {
         }
 
         m.Initialization(k, t);
+
+        monsters.Add(m.GetComponent<IVMonster>());
 
     }
 
@@ -96,23 +102,57 @@ public class IVMonsterSpawner : NetworkBehaviour {
                 pos *= Random.Range(0.1f, 6.0f);
                 pos.y = 0.5f;
 
-                GameObject obj = Instantiate(Base, pos, Quaternion.identity) as GameObject;
-                obj.transform.SetParent(transform);
-                obj.SetActive(true);
-
-                NetworkServer.Spawn(obj);
 
                 SkillType type = (SkillType)i;
 
                 List<string> keys = SkillTypeDictionary[type];
                 string keyword = keys[Random.Range(1, keys.Count) - 1];
+
+                GameObject obj = null;
+                switch (type)
+                {
+                    case SkillType.neutral:
+                        obj = Instantiate(Resources.Load("Prefabs/monster-neutral") as GameObject, pos, Quaternion.identity) as GameObject;
+                        break;
+                    case SkillType.holy:
+                        obj = Instantiate(Resources.Load("Prefabs/monster-holy") as GameObject, pos, Quaternion.identity) as GameObject;
+                        break;
+                    case SkillType.evil:
+                        obj = Instantiate(Resources.Load("Prefabs/monster-evil") as GameObject, pos, Quaternion.identity) as GameObject;
+                        break;
+                    case SkillType.darkness:
+                        obj = Instantiate(Resources.Load("Prefabs/monster-darkness") as GameObject, pos, Quaternion.identity) as GameObject;
+                        break;
+                    case SkillType.lightness:
+                        obj = Instantiate(Resources.Load("Prefabs/monster-lightness") as GameObject, pos, Quaternion.identity) as GameObject;
+                        break;
+
+                }
+
+                if (obj == null)
+                {
+                    return;
+                }
+                                
+                obj.transform.SetParent(transform);
+                obj.SetActive(true);
+
+                NetworkServer.Spawn(obj);
+
+                
                 
                 RpcMonsterSpawnInit(obj, type, keyword);
                 
             }
         }
 
-        
+        RpcInitMonsterButton();
+    }
+
+    [ClientRpc]
+    public void RpcInitMonsterButton()
+    {
+        _ui.ReMapMonsterButton(monsters);
     }
 
     public void Release()
@@ -122,22 +162,24 @@ public class IVMonsterSpawner : NetworkBehaviour {
         if (!isServer)
             return;
 
-        IVMonster[] monsters = GameObject.Find("Monster").GetComponentsInChildren<IVMonster>();
+        IVMonster[] ms = GameObject.Find("Monster").GetComponentsInChildren<IVMonster>();
 
-        foreach (IVMonster m in monsters)
+        foreach (IVMonster m in ms)
         {
             Destroy(m.gameObject);
             NetworkServer.Destroy(m.gameObject);
-            //RpcRelease(m.gameObject);
+
         }
+
+        RpcRelease();
         
     }
 
 
-
-    void RpcRelease(GameObject m)
+    [ClientRpc]
+    void RpcRelease()
     {
-        Destroy(m);
+        monsters.Clear();
     }
 
 }

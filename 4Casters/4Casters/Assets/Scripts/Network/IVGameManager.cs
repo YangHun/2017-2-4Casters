@@ -70,7 +70,7 @@ public class IVGameManager : NetworkBehaviour {
     [ClientRpc]
     public void RpcOnState(State currentState, bool isFirstFrame, float timer) {
 
-        Debug.Log(currentState);
+        //Debug.Log(currentState);
 
         //OnState function is called on each frame
         switch (currentState)
@@ -100,6 +100,7 @@ public class IVGameManager : NetworkBehaviour {
             _ui.ChangeRightButtonText("Attack");
             _ui.ResetPlayerKeywordText();
             _ui.RefreshInMonsterPhase();
+            _ui.InitMonsterButtons();
             _spawner.Spawn();
             timer = 0.0f;
         }
@@ -117,6 +118,7 @@ public class IVGameManager : NetworkBehaviour {
         {
             _ui.ChangeRightButtonText("Cast");
             _ui.RefreshInCastPhase();
+            _ui.InitMonsterButtons();
             _spawner.Release();
             timer = 0.0f;
 

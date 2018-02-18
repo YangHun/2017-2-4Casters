@@ -18,5 +18,6 @@ namespace FrostweepGames.Plugins.GoogleCloud.SpeechRecognition
 
         void StopRecord();
         void StartRecord();
+        AudioClip LatestVoice();
     }
 }

@@ -16,6 +16,7 @@ namespace FrostweepGames.Plugins.GoogleCloud.SpeechRecognition
         private AudioClip _microphoneWorkingAudioClip;
         private AudioClip _latestVoiceAudioClip;
         private string _microphoneDevice;
+        
 
         private int _currentSamplePosition;
         private int _previousSamplePosition;
@@ -84,6 +85,11 @@ namespace FrostweepGames.Plugins.GoogleCloud.SpeechRecognition
 
             if (FinishedRecordEvent != null)
                 FinishedRecordEvent(_latestVoiceAudioClip);
+        }
+
+        public AudioClip LatestVoice()
+        {
+            return _latestVoiceAudioClip;
         }
 
         private void CheckMicrophones()
