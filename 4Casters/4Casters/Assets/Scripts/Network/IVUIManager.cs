@@ -5,13 +5,15 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using Prototype.NetworkLobby;
 
-public class IVUIManager : MonoBehaviour {
+public class IVUIManager : MonoBehaviour
+{
 
     LobbyManager _lobby;
-	int playerCount;
+    int playerCount;
 
     IVHostServer _hostserver;
     IVGameManager _game;
+    IVVoiceManager _voice;
 
     [SerializeField]
     public Canvas _loading;
@@ -33,23 +35,78 @@ public class IVUIManager : MonoBehaviour {
     [SerializeField]
     Text[] Players;
 
+    [SerializeField]
+    List<Button> monsters = new List<Button>();
+
     // Use this for initialization
     void Start()
     {
         //initialization
         _hostserver = GameObject.Find("Host Server").GetComponent<IVHostServer>();
-        _lobby = GameObject.Find ("LobbyManager").GetComponent<LobbyManager> ();
+        _lobby = GameObject.Find("LobbyManager").GetComponent<LobbyManager>();
         _game = GameObject.Find("Manager").GetComponent<IVGameManager>();
+        _voice = GameObject.Find("Manager").GetComponent<IVVoiceManager>();
         playerCount = _hostserver.playerNum;
 
-        UpdatePlayerUI ();
+        MonsterButton[] ms = GameObject.Find("Canvas").GetComponentsInChildren<MonsterButton>();
+
+        foreach (MonsterButton b in ms)
+        {
+            monsters.Add(b.GetComponent<Button>());
+        }
+
+
+        UpdatePlayerUI();
+    }
+
+    public void OnClickVoiceButton(Button b)
+    {
+        if (_voice.isRecording)
+        {
+            _voice.StopRecording();
+            b.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+            b.transform.Find("Image").GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+            _voice.isRecording = false;
+        }
+        else
+        {
+            _voice.StartRecording();
+            b.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            b.transform.Find("Image").GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            _voice.isRecording = true;
+        }
+    }
+
+    public void ReMapMonsterButton(List<IVMonster> m)
+    {
+        foreach (Button b in monsters)
+        {
+            b.gameObject.SetActive(true);
+        }
+
+        for (int i = 0; i < monsters.Count; i++)
+        {
+            if (i >= m.Count)
+            {
+                monsters[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                monsters[i].GetComponentInChildren<Text>().text = m[i].Keyword;
+                monsters[i].GetComponentInChildren<MonsterButton>().Monster = m[i];
+                monsters[i].GetComponentInChildren<MonsterButton>().type = m[i].Type;
+
+                monsters[i].GetComponentInChildren<MonsterButton>().keyword = m[i].Keyword;
+                monsters[i].GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 0.3f);
+            }
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
 
-	}
+    }
 
 
     public void InitLoadingCanvas(List<string> names)
@@ -71,13 +128,15 @@ public class IVUIManager : MonoBehaviour {
         _loading.transform.Find("PlayerInfo").GetChild(i).Find("Status").GetComponent<Text>().text = status;
     }
 
-    void UpdatePlayerUI(){
-		for (int i = playerCount; i < 4; i++) {
-			Players [i].gameObject.SetActive (false);
-			PlayerFilter [i].gameObject.SetActive (false);
+    void UpdatePlayerUI()
+    {
+        for (int i = playerCount; i < 4; i++)
+        {
+            Players[i].gameObject.SetActive(false);
+            PlayerFilter[i].gameObject.SetActive(false);
 
-		}
-	}
+        }
+    }
 
     public void ChangeRightButtonText(string t)
     {
@@ -111,6 +170,24 @@ public class IVUIManager : MonoBehaviour {
 
     }
 
+    public void InitMonsterButtons()
+    {
+        if (_hostserver.CurrentState == State.MonsterPhase)
+        {
+            foreach (Button b in monsters)
+            {
+                b.GetComponent<MonsterButton>().InitMonsterPhase();
+            }
+        }
+        else
+        {
+            foreach (Button b in monsters)
+            {
+                b.GetComponent<MonsterButton>().InitCastPhase(_game.myPlayer.GetComponent<IVPlayer>());
+            }
+        }
+    }
+
     public void ResetPlayerKeywordText()
     {
         foreach (Text t in Players)
@@ -127,37 +204,38 @@ public class IVUIManager : MonoBehaviour {
     {
         if (_hostserver.CurrentState == State.MonsterPhase)
         {
-            foreach (IVPlayer p in _game.Players)
+            List<IVPlayer> plyrs = _game.Players;
+
+            foreach (IVPlayer p in plyrs)
             {
                 p.BasicAttack();
             }
         }
+
         else if (_hostserver.CurrentState == State.CastPhase)
         {
             List<string> sentence = _game.Players[CastingWindowFilterId].SentenceInventory;
             List<string> keyword = _game.Players[CastingWindowFilterId].KeywordsInventory;
             Button[] keywordButtons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
 
-			foreach (IVPlayer p in _game.Players)
-			{
-				try					//try while syntax is legal.
-				{
-					p.Cast(sentence);
-					string str = "";
-					foreach (string s in sentence)
-					{
-					    str += s;
-						keyword.Remove(s);
-					}
-					Debug.Log(str + "attack has been casted while Caster's id is " + p.id);
-					sentence.Clear();
-					OnClickCastingWindowFilter(CastingWindowFilterId);
-				}
-				catch(BrokenSyntaxException e)			//catch exception when spell syntax is illegal.
-				{
-					Debug.Log("Spell syntax was broken on the order of " + e.Num);
-				}
-			}
+            string str = "";
+            foreach (string s in sentence)
+            {
+                str += s;
+                keyword.Remove(s);
+                //keywordButtons[keyword.IndexOf(s)].enabled = false;		//to be fixed; it does not hide keyword used.s
+            }
+            //_game.cast(str) : TODO
+            if (str.Length == 0)
+            {
+                Debug.Log("Pattern does not match.");
+                return;
+            }
+            Debug.Log(str + "attack has been casted");
+
+            sentence.Clear();
+
+            OnClickCastingWindowFilter(CastingWindowFilterId);
         }
     }
 
