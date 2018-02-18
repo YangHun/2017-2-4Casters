@@ -16,7 +16,7 @@ public class IVPlayer : NetworkBehaviour
 	float timer = 0.0f;
 	const float sendRPCrate = 0.5f;
 
-	SkillType playerType = SkillType.Null;      // Temperature assignment; Synchronizing needs.
+	SkillType playerType = SkillType.holy;      // Temperature assignment; Synchronizing needs.
 
 	[SerializeField]
 	[SyncVar]
@@ -55,6 +55,7 @@ public class IVPlayer : NetworkBehaviour
 	IVArrow Arrow;          //the arrow whose parent is a player object
 	[SerializeField]
 	GameObject Bullet;
+	GameObject SkillBullet;
 	const float bulletspeed = 300.0f;
 
 	public Dictionary<SkillType, int> Shield
@@ -79,16 +80,9 @@ public class IVPlayer : NetworkBehaviour
 	[Command]
 	public void CmdUpdateArrow(float theta)
 	{
-		if(_hostserver.CurrentState == State.MonsterPhase)
-		{
-			Arrow.CmdRotateArrow(theta);
-			if (isServer)
-				RpcUpdateArrow(theta);
-		}
-		else
-		{
-			
-		}
+		Arrow.CmdRotateArrow(theta);
+		if (isServer)
+			RpcUpdateArrow(theta);
 	}
 
 	[ClientRpc]
@@ -107,7 +101,9 @@ public class IVPlayer : NetworkBehaviour
 		Arrow = transform.Find("Arrow").GetComponent<IVArrow>();
 		//	Bullet = transform.Find("Bullet").gameObject;
 		Bullet = Resources.Load("Prefabs/Bullet") as GameObject;
+		SkillBullet = Resources.Load("Prefabs/SkillBullet") as GameObject;
 		Bullet.SetActive(false);
+		SkillBullet.SetActive(false);
 		gameObject.name = playerName;
 	}
 
@@ -123,12 +119,12 @@ public class IVPlayer : NetworkBehaviour
 		GetComponent<SpriteRenderer>().material.color = Color.blue;
 		myPlayer = true;
 
-		CmdConfigStatus(3, (SkillType)id, 0);
-		CmdConfigStatus(0, playerType, 1);
 		CmdConfigStatus(1, playerType, 1);
+		CmdConfigStatus(2, playerType, 1);
+		CmdConfigStatus(3, (SkillType)id, 0);
 	}
 
-	public void ConfigStatus(int code, SkillType type, int delta)
+	void ConfigStatus(int code, SkillType type, int delta)
 	{
 		switch (code)
 		{
@@ -150,17 +146,36 @@ public class IVPlayer : NetworkBehaviour
 				break;
 		}
 	}
+
 	[Command]
 	// 0 : HP, 1 : power, 2 : shield, 3 : playerType
 	void CmdConfigStatus(int code, SkillType type, int delta)
 	{
+		RpcConfigStatus(code, type, delta);
+	}
+
+	[ClientRpc]
+	void RpcConfigStatus(int code, SkillType type, int delta)
+	{
 		ConfigStatus(code, type, delta);
 	}
 
+	// Dead TODO
+	void Dead()
+	{
+		if(HP > 0)
+		{
+			Debug.Log("Player with id " + id + " is not dead but dead script has been executed");
+			return;
+		}
+		else
+		{
+			Debug.Log("Player with id " + id + " is dead");
+			Destroy(gameObject);
+		}
+	}
 	private void Start()
 	{
-
-
 
 	}
 
@@ -283,19 +298,19 @@ public class IVPlayer : NetworkBehaviour
 		Vector3 dir = Arrow.GetDir();
 		Vector3 pos = transform.position;
 		NetworkInstanceId i = GetComponent<NetworkIdentity>().netId;
-		if (isLocalPlayer)
-			CmdSkillAttack(dir, pos, i);
+		// It ensures this code will be executed on client
+		CmdSkillAttack(dir, pos, i);
 	}
 
 	[Command]
 	void CmdSkillAttack(Vector3 dir, Vector3 pos, NetworkInstanceId id)
 	{
-		GameObject b = Instantiate((Object)Bullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
-		b.transform.parent = GameObject.Find("Bullets").transform;
+		GameObject b = Instantiate((Object)SkillBullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
+		b.transform.parent = GameObject.Find("Skills").transform;
 		b.SetActive(true);
 		NetworkServer.Spawn(b);
 
-		RpcBasicAttack(b, dir, pos, id);
+		RpcSkillAttack(b, dir, pos, id);
 		return;
 	}
 
@@ -303,9 +318,9 @@ public class IVPlayer : NetworkBehaviour
 	void RpcSkillAttack(GameObject b, Vector3 dir, Vector3 pos, NetworkInstanceId id)
 	{
 		//TODO
-		Debug.Log("Skill attack has been casted while caster's id is " + id +
+		Debug.Log("Skill attack has been casted on the code Player while caster's id is " + id +
 				", and its type is " + ClientScene.FindLocalObject(id).GetComponent<IVPlayer>().playerType.ToString());
-		b.GetComponent<IVBullet>().SetOwner(ClientScene.FindLocalObject(id).GetComponent<IVPlayer>());
+		b.GetComponent<IVSkill>().SetOwner(ClientScene.FindLocalObject(id).GetComponent<IVPlayer>());
 		b.GetComponent<Rigidbody>().AddForce(dir * bulletspeed);
 		return;
 	}
@@ -331,15 +346,29 @@ public class IVPlayer : NetworkBehaviour
         }
     }
 
-	[Command]
-	public void CmdAttackPlayer(NetworkIdentity id, int dmg)
+	public void AttackPlayer(NetworkIdentity id, int index, Dictionary<SkillType, int> force)
 	{
-		IVPlayer p = id.GetComponent<IVPlayer>();
+		if (!isServer) return;
+		else if (index == this.id)
+		{
+			IVPlayer p = id.gameObject.GetComponent<IVPlayer>();
+			foreach (SkillType t in new List<SkillType>(force.Keys))
+				force[t] += power[t];
+			int dmg = IVSpellManager.DamageCalculator(force, p.shield);
+			RpcAttackPlayer(id, index, dmg);
+		}
+	}
+
+	[ClientRpc]
+	void RpcAttackPlayer(NetworkIdentity id, int index, int dmg)
+	{
+		IVPlayer p = id.gameObject.GetComponent<IVPlayer>();
 		p.ConfigStatus(0, SkillType.Null, -dmg);
+		Debug.Log("Player" + id + "has attacked player with id " + p.id + "; damage is " + dmg);
 		if (p.HP <= 0)
 		{
-			Debug.Log("Player" + id + "has killed player " + p.id);
-			Destroy(id.gameObject);
+			Debug.Log("Player" + id + "has killed player with id " + p.id);
+			p.Dead();
 		}
 	}
 
@@ -360,6 +389,16 @@ public class IVPlayer : NetworkBehaviour
         Loot(p, keyword, type);
     }
     
+    //------------Monster Kill--------------
+    //ToDo
+
+	[ClientRpc]
+	void RpcPlayerDead(NetworkIdentity dead, NetworkIdentity killer)
+	{
+		Debug.Log(killer.gameObject.name + " is dead by " + killer.gameObject.name);
+
+		dead.gameObject.GetComponent<IVPlayer>().Dead();
+	}
     //called when this player kills a monster on Dead() in Monster component
     public void Loot(NetworkIdentity p, string keyword, SkillType type)
 	{

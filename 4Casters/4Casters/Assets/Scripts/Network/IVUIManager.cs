@@ -142,14 +142,14 @@ public class IVUIManager : MonoBehaviour {
 			{
 				try					//try while syntax is legal.
 				{
-					p.Cast(sentence);
+					p.Cast(sentence);			// Casting function by client player
 					string str = "";
 					foreach (string s in sentence)
 					{
 					    str += s;
 						keyword.Remove(s);
 					}
-					Debug.Log(str + "attack has been casted while Caster's id is " + p.id);
+					Debug.Log(str + "attack has been casted on the code UIManager while Caster's id is " + p.id);
 					sentence.Clear();
 					OnClickCastingWindowFilter(CastingWindowFilterId);
 				}
