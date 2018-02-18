@@ -4,15 +4,17 @@ using UnityEngine;
 
 public enum SkillType { neutral, holy, evil, lightness, darkness, Null }
 
+// Singletone of managing spell
 public class IVSpellManager : MonoBehaviour {
-    public Dictionary<string, SkillType> KeywordDictionary = new Dictionary<string, SkillType>()
+
+    public static Dictionary<string, SkillType> KeywordDictionary = new Dictionary<string, SkillType>()
     {
        //Neutral Keywords
-       { "을" ,SkillType.neutral },
-       { "를" ,SkillType.neutral },
-       { "에게" ,SkillType.neutral },
-       { "가" ,SkillType.neutral },
-       { "이" ,SkillType.neutral },
+       { "을"   , SkillType.neutral },
+       { "를"   , SkillType.neutral },
+       { "에게" , SkillType.neutral },
+       { "가"   , SkillType.neutral },
+       { "이"   , SkillType.neutral },
 
        //Holy Keywords
        { "선1" , SkillType.holy },
@@ -43,7 +45,7 @@ public class IVSpellManager : MonoBehaviour {
        { "어둠5" , SkillType.darkness }
     };
 
-    public Dictionary<SkillType, List<string>> SkillTypeDictionary = new Dictionary<SkillType, List<string>>()
+    public static Dictionary<SkillType, List<string>> SkillTypeDictionary = new Dictionary<SkillType, List<string>>()
     {
         { SkillType.neutral, new List<string>() { "을", "를", "에게", "가", "이" }},
         { SkillType.holy, new List<string>() { "선1", "선2", "선3","선4", "선5" }},
@@ -52,6 +54,36 @@ public class IVSpellManager : MonoBehaviour {
         { SkillType.darkness, new List<string>() { "어둠1", "어둠2", "어둠3", "어둠4", "어둠5" }}
     };
 
+	// Type Checker. It returns true if str is noun; its type is neutral
+	public static bool IsNoun(string str)
+	{
+		if (KeywordDictionary[str] == SkillType.neutral) return false;
+		else return true;
+	}
+
+	public static bool SyntaxCheck(List<string> sentence)
+	{
+		bool isNoun = true;
+		foreach (string s in sentence)  // Syntax Checking
+		{
+			if (isNoun != IVSpellManager.IsNoun(s)) return false;
+			isNoun = !isNoun;
+		}
+		return true;
+	}
+
+	public static int DamageCalculator(Dictionary <SkillType, int> f, Dictionary <SkillType, int> s)
+	{
+		int dmg = 0;
+		int part = 0;
+		for (int i = 0; i < (int)SkillType.Null; i++)
+		{
+			part = f[(SkillType)i] - s[(SkillType)i];
+			part = part > 0 ? part : 0;
+			dmg += part;
+		}
+		return dmg;
+	}
     // Use this for initialization
     void Start()
     {
@@ -63,4 +95,28 @@ public class IVSpellManager : MonoBehaviour {
     {
 
     }
+}
+
+// Exceptions of Spell
+public class BrokenSyntaxException : System.Exception
+{
+	private int num = 0;                //position where syntax has just been broken.
+	BrokenSyntaxException() { }
+	BrokenSyntaxException(int num)
+	{
+		this.Num = num;
+	}
+
+	public int Num
+	{
+		get
+		{
+			return num;
+		}
+
+		set
+		{
+			num = value;
+		}
+	}
 }

@@ -20,8 +20,6 @@ public class IVMonsterSpawner : NetworkBehaviour {
 
     bool isClientSpawned = false;
 
-    Dictionary<string, SkillType> KeywordDictionary;
-    Dictionary<SkillType, List<string>> SkillTypeDictionary;
 
     // Use this for initialization
     void Start()
@@ -30,9 +28,6 @@ public class IVMonsterSpawner : NetworkBehaviour {
 //			transform.Find("Monster").GetComponent<IVMonster>();
 //        Base.gameObject.SetActive(false);
 
-        IVSpellManager _spell = GameObject.Find("Manager").GetComponent<IVSpellManager>();
-        KeywordDictionary = _spell.KeywordDictionary;
-        SkillTypeDictionary = _spell.SkillTypeDictionary;
         _game = GameObject.Find("Manager").GetComponent<IVGameManager>();
         _ui = GameObject.Find("Manager").GetComponent<IVUIManager>();
 
@@ -105,7 +100,7 @@ public class IVMonsterSpawner : NetworkBehaviour {
 
                 SkillType type = (SkillType)i;
 
-                List<string> keys = SkillTypeDictionary[type];
+                List<string> keys = IVSpellManager.SkillTypeDictionary[type];
                 string keyword = keys[Random.Range(1, keys.Count) - 1];
 
                 GameObject obj = null;
