@@ -36,6 +36,19 @@ public class IVSkill : NetworkBehaviour {
 		set { force = value; }
 	}
 
+	public static SortedDictionary<SkillType, int> DicToSort(Dictionary<SkillType, int> origin)
+	{
+		return new SortedDictionary<SkillType, int>(origin);
+	}
+
+	public static Dictionary<SkillType, int> ListToDic(List<SkillType> forcekey, List<int> forcevalue)
+	{
+		Dictionary<SkillType, int> force = new Dictionary<SkillType, int>();
+		for(int i =0; i<forcekey.Count; i++)
+			force[forcekey[i]] = forcevalue[i];
+		return force;
+	}
+
 	public void SetOwner(IVPlayer player)
 	{
 		this.player = player;

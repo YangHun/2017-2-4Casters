@@ -74,6 +74,7 @@ public class IVPlayer : NetworkBehaviour
 	[SerializeField]
 	GameObject Bullet;
 	GameObject SkillBullet;
+	GameObject SkillBuff;
 	const float bulletspeed = 300.0f;
 
 	public Dictionary<SkillType, int> Shield
@@ -120,8 +121,10 @@ public class IVPlayer : NetworkBehaviour
 		//	Bullet = transform.Find("Bullet").gameObject;
 		Bullet = Resources.Load("Prefabs/Bullet") as GameObject;
 		SkillBullet = Resources.Load("Prefabs/SkillBullet") as GameObject;
+		SkillBuff = Resources.Load("Prefabs/SkillBuff") as GameObject;
 		Bullet.SetActive(false);
 		SkillBullet.SetActive(false);
+		SkillBuff.SetActive(false);
 		gameObject.name = playerName;
 	}
 
@@ -142,7 +145,7 @@ public class IVPlayer : NetworkBehaviour
 		CmdConfigStatus(3, (SkillType)id, 0);
 	}
 
-	Dictionary<SkillType, int> Calculate(bool isPower)
+	Dictionary<SkillType, int> Calculate(bool isPower)				// Calculate force of shield related to buff and debuff.
 	{
 		Dictionary<SkillType, int> ans = new Dictionary<SkillType, int>();
 		if(isPower)
@@ -333,18 +336,31 @@ public class IVPlayer : NetworkBehaviour
 
 	}
 
-	//---------Spell Checker-------------
+	//---------Cast Section-------------
 
 	public bool Cast(List<string> sentence)
 	{
 		if (!isLocalPlayer) return false;
-		else if (!IVSpellManager.SyntaxCheck(sentence)) return false;
 		else
 		{
-			Dictionary<SkillType, int> force = power;
-			foreach (string s in sentence)
-				force[IVSpellManager.KeywordDictionary[s]] += 1;
-			SkillAttack(force);
+			int type = IVSpellManager.SyntaxCheck(sentence);
+			if (type == 0) return false;
+			Dictionary<SkillType, int> force;
+			switch (type)
+			{
+				case 1:
+					force = IVSpellManager.ForceCalculator(sentence, power);
+					SkillAttack(force);
+					break;
+				case 2:
+					force = IVSpellManager.ForceCalculator(sentence, new Dictionary<SkillType, int>());
+					CastBuff(force);
+					break;
+				case 3:
+					force = IVSpellManager.ForceCalculator(sentence, new Dictionary<SkillType, int>());
+					CastBuff(force);				//TBD
+					break;
+			}
 			return true;
 		}
 	}
@@ -353,27 +369,19 @@ public class IVPlayer : NetworkBehaviour
 
 	void SkillAttack(Dictionary<SkillType, int> force)
 	{
-		/*
-		int[] f = new int[]
-		{
-			force[SkillType.neutral],
-			force[SkillType.holy],
-			force[SkillType.evil],
-			force[SkillType.lightness],
-			force[SkillType.darkness]
-		};
-		*/
 		Vector3 dir = Arrow.GetDir();
 		Vector3 pos = transform.position;
 		NetworkInstanceId i = GetComponent<NetworkIdentity>().netId;
 		// It ensures this code will be executed on client
-		CmdSkillAttack(dir, pos, i);
+		SortedDictionary<SkillType, int> Sforce = IVSkill.DicToSort(force);
+		CmdSkillAttack(dir, pos, i, new List<SkillType>(Sforce.Keys), new List<int>(Sforce.Values));
 	}
 
 	[Command]
-	void CmdSkillAttack(Vector3 dir, Vector3 pos, NetworkInstanceId id)
+	void CmdSkillAttack(Vector3 dir, Vector3 pos, NetworkInstanceId id, List<SkillType> forcekey, List<int> forcevalue)
 	{
 		GameObject b = Instantiate((Object)SkillBullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
+		b.GetComponent<IVSkill>().Force = IVSkill.ListToDic(forcekey, forcevalue);
 		b.transform.parent = GameObject.Find("Skills").transform;
 		b.SetActive(true);
 		NetworkServer.Spawn(b);
@@ -396,19 +404,28 @@ public class IVPlayer : NetworkBehaviour
 	void CastBuff(Dictionary<SkillType, int> force)
 	{
 		NetworkInstanceId id = GetComponent<NetworkIdentity>().netId;
-
+		SortedDictionary<SkillType, int> Sforce = IVSkill.DicToSort(force);
+		CmdCastBuff(id, new List<SkillType>(Sforce.Keys), new List<int>(Sforce.Values));
 	}
 
 	[Command]
-	void CmdCastBuff(NetworkInstanceId id)
+	void CmdCastBuff(NetworkInstanceId id, List<SkillType> forcekey, List<int> forcevalue)
 	{
+		GameObject b = Instantiate((Object)SkillBuff, new Vector3(0,0,0), Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
+		b.GetComponent<IVSkill>().Force = IVSkill.ListToDic(forcekey, forcevalue);
+		b.transform.parent = GameObject.Find("Skills").transform;
+		b.SetActive(true);
 		
+		NetworkServer.Spawn(b);
+
+		RpcCastBuff(b, id);
 	}
 
 	[ClientRpc]
-	void RpcCastBuff(GameObject g, NetworkInstanceId id)
+	void RpcCastBuff(GameObject b, NetworkInstanceId id)
 	{
-		
+		Debug.Log(ClientScene.FindLocalObject(id).name + " has been buffed.");
+		b.GetComponent<IVSkill>().SetOwner(ClientScene.FindLocalObject(id).GetComponent<IVPlayer>());
 	}
 
     //---------Bullet Collision-------------
@@ -438,9 +455,7 @@ public class IVPlayer : NetworkBehaviour
 		else if (index == this.id)
 		{
 			IVPlayer p = id.gameObject.GetComponent<IVPlayer>();
-			foreach (SkillType t in new List<SkillType>(force.Keys))
-				force[t] += power[t];
-			int dmg = IVSpellManager.DamageCalculator(force, p.shield);
+			int dmg = IVSpellManager.DamageCalculator(Calculate(true), p.Calculate(false));
 			RpcAttackPlayer(id, index, dmg);
 		}
 	}
@@ -496,7 +511,7 @@ public class IVPlayer : NetworkBehaviour
 		GameObject.Find("Manager").GetComponent<IVUIManager>().UpdatePlayerKeywordText(id, type, SkillTypeInventory[type]);
 		GameObject.Find("Manager").GetComponent<IVUIManager>().OnClickCastingWindowFilter(id);
 	}
-    
+
 	//called when phase is changed (cast --> monster)
 	public void ResetPlayers()
 	{
@@ -508,5 +523,4 @@ public class IVPlayer : NetworkBehaviour
 		SkillTypeInventory[SkillType.lightness] = 0;
 		SkillTypeInventory[SkillType.darkness] = 0;
 	}
-
 }
