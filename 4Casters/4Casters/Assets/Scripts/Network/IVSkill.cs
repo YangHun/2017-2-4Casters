@@ -51,7 +51,14 @@ public class IVSkill : NetworkBehaviour {
 
         if (timer >= lifetime)
         {
+            foreach (ParticleSystem p in transform.GetComponentsInChildren<ParticleSystem>())
+            {
+                p.Stop();
+            }
             Destroy(gameObject);
+            
+
+            //transform.DetachChildren();
         }
 
 		if (!isEscaped && timer >= escapetime)

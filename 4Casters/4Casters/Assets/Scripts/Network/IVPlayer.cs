@@ -331,7 +331,19 @@ public class IVPlayer : NetworkBehaviour
 		Debug.Log("Skill attack has been casted on the code Player while caster's id is " + id +
 				", and its type is " + ClientScene.FindLocalObject(id).GetComponent<IVPlayer>().playerType.ToString());
 		b.GetComponent<IVSkill>().SetOwner(ClientScene.FindLocalObject(id).GetComponent<IVPlayer>());
-		b.GetComponent<Rigidbody>().AddForce(dir * bulletspeed);
+
+        b.transform.LookAt(b.transform.position + dir);
+
+        ParticleSystem[] ps = b.transform.GetChild(0).GetComponentsInChildren<ParticleSystem>();
+
+        for (int i = 1; i < ps.Length; i++)
+        {
+            ParticleSystem.EmissionModule em = ps[i].emission;
+            em.rateOverTime = b.GetComponent<IVSkill>().Force[(SkillType)i];
+
+        }
+
+		b.GetComponent<Rigidbody>().AddForce(dir * bulletspeed * 3);
 		return;
 	}
 

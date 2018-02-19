@@ -229,7 +229,7 @@ public class IVUIManager : MonoBehaviour
 					    str += s;
 						keyword.Remove(s);
 					}
-					Debug.Log(str + "attack has been casted on the code UIManager while Caster's id is " + p.id);
+                    
 					sentence.Clear();
 					OnClickCastingWindowFilter(CastingWindowFilterId);
 				}

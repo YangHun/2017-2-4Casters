@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class MonsterButton : MonoBehaviour {
 
+
+    IVHostServer _hostserver;
+    IVGameManager _game;
+
     RectTransform rect;
     Vector3 dir = Vector3.zero;
 
@@ -37,11 +41,21 @@ public class MonsterButton : MonoBehaviour {
         {
             dirs.Add(dirs[i] * (-1.0f));
         }
-
+        
     }
 	
 	// Update is called once per frame
 	void Update () {
+
+        if (_hostserver == null && GameObject.Find("Host Server") != null)
+        {
+            _hostserver = GameObject.Find("Host Server").GetComponent<IVHostServer>();
+        }
+        
+        if (_game == null && GameObject.Find("Manager") != null)
+        {
+            _game = GameObject.Find("Manager").GetComponent<IVGameManager>();
+        }
 
         timer += Time.deltaTime;
         if (timer < updatespeed)
@@ -113,49 +127,70 @@ public class MonsterButton : MonoBehaviour {
     {
         Debug.Log(Monster.Keyword);
 
-        if ( Monster != null)
+        if (_hostserver.CurrentState == State.MonsterPhase)
         {
+
+            if (Monster != null)
+            {
+                if (!isSelected)
+                {
+                    SkillType type = Monster.Type;
+                    Color c = Color.white;
+
+                    switch (type)
+                    {
+                        case SkillType.neutral:
+                            c = (Resources.Load("Material/Monster-neutral", typeof(Material)) as Material).color;
+                            Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.30f);
+                            break;
+                        case SkillType.darkness:
+                            c = (Resources.Load("Material/Monster-darkness", typeof(Material)) as Material).color;
+                            Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.80f);
+                            break;
+                        case SkillType.evil:
+                            c = (Resources.Load("Material/Monster-evil", typeof(Material)) as Material).color;
+                            Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.80f);
+                            break;
+                        case SkillType.holy:
+                            c = (Resources.Load("Material/Monster-holy", typeof(Material)) as Material).color;
+                            Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.20f);
+                            break;
+                        case SkillType.lightness:
+                            c = (Resources.Load("Material/Monster-lightness", typeof(Material)) as Material).color;
+                            Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.20f);
+                            break;
+                    }
+
+                    GetComponent<Image>().color = c;
+
+
+
+                    isSelected = true;
+                }
+                else
+                {
+                    Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.0f);
+
+                    GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 0.2f);
+
+                    isSelected = false;
+                }
+            }
+        }
+
+        if (_hostserver.CurrentState == State.CastPhase)
+        {
+            IVPlayer p = _game.myPlayer.GetComponent<IVPlayer>();
+
             if (!isSelected)
             {
-                SkillType type = Monster.Type;
-                Color c = Color.white;
-
-                switch (type)
-                {
-                    case SkillType.neutral:
-                        c = (Resources.Load("Material/Monster-neutral", typeof(Material)) as Material).color;
-                        Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.30f);
-                        break;
-                    case SkillType.darkness:
-                        c = (Resources.Load("Material/Monster-darkness", typeof(Material)) as Material).color;
-                        Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.80f);
-                        break;
-                    case SkillType.evil:
-                        c = (Resources.Load("Material/Monster-evil", typeof(Material)) as Material).color;
-                        Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.80f);
-                        break;
-                    case SkillType.holy:
-                        c = (Resources.Load("Material/Monster-holy", typeof(Material)) as Material).color;
-                        Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.20f);
-                        break;
-                    case SkillType.lightness:
-                        c = (Resources.Load("Material/Monster-lightness", typeof(Material)) as Material).color;
-                        Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.20f);
-                        break;
-                }
-
-                GetComponent<Image>().color = c;
-
-                
-
+                p.SentenceInventory.Add(keyword);
                 isSelected = true;
             }
+
             else
             {
-                Monster.GetComponentInChildren<MeshRenderer>().materials[1].SetFloat("_MKGlowPower", 0.0f);
-
-                GetComponent<Image>().color = new Color(1.0f, 1.0f, 1.0f, 0.2f);
-
+                p.SentenceInventory.Remove(keyword);
                 isSelected = false;
             }
         }
