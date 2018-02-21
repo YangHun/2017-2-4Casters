@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 public class IVArrow : MonoBehaviour {
 
-
+	public float theta;
 
 	// Use this for initialization
 	void Start () {
@@ -16,6 +16,7 @@ public class IVArrow : MonoBehaviour {
 	public void CmdRotateArrow(float theta)
 	{
 		transform.rotation = Quaternion.Euler(90, 0, theta);
+		this.theta = theta;
 	}
 
 	public Vector3 GetDir()			//need to be improved

@@ -74,6 +74,7 @@ public class IVPlayer : NetworkBehaviour
 	GameObject Bullet;
 	GameObject SkillBullet;
 	GameObject SkillBuff;
+	GameObject SkillDebuff;
 	const float bulletspeed = 300.0f;
 
 	public Dictionary<SkillType, int> Shield
@@ -144,6 +145,7 @@ public class IVPlayer : NetworkBehaviour
 		CmdConfigStatus(3, (SkillType)id, 0);
 	}
 
+
 	Dictionary<SkillType, int> Calculate(bool isPower)				// Calculate force of shield related to buff and debuff.
 	{
 		Dictionary<SkillType, int> ans = new Dictionary<SkillType, int>();
@@ -160,7 +162,7 @@ public class IVPlayer : NetworkBehaviour
 		{
 			foreach(SkillType type in new List<SkillType>(shield.Keys))
 			{
-				int part = shield[type] + debuff[type];
+				int part = shield[type] - debuff[type];
 				ans[type] = part > 0 ? part : 0;
 			}
 			return ans;
@@ -351,14 +353,14 @@ public class IVPlayer : NetworkBehaviour
 					force = IVSpellManager.ForceCalculator(sentence, power);
 					SkillAttack(force);
 					break;
-				case 0:
 				case 2:
 					force = IVSpellManager.ForceCalculator(sentence, new Dictionary<SkillType, int>());
 					CastBuff(force);
 					break;
+				case 0:
 				case 3:
 					force = IVSpellManager.ForceCalculator(sentence, new Dictionary<SkillType, int>());
-					CastBuff(force);				//TBD
+					CastDebuff(force);
 					break;
 					
 			}
@@ -402,6 +404,9 @@ public class IVPlayer : NetworkBehaviour
 		return;
 	}
 
+	//------------- Buff and Debuff ----------------
+	// On this section, Debuff is called 'CastedBuff'.
+
 	void CastBuff(Dictionary<SkillType, int> force)
 	{
 		NetworkInstanceId id = GetComponent<NetworkIdentity>().netId;
@@ -410,7 +415,20 @@ public class IVPlayer : NetworkBehaviour
 		CmdCastBuff(id, Sforce.Key, Sforce.Value);
 	}
 
-	//[Command]
+	void CastDebuff(Dictionary<SkillType, int> force)		// cast player --> casted player
+	{
+		_hostserver.GetNearestPlayer(transform.position, Arrow.theta).CastedDebuff(force);
+	}
+
+	public void CastedDebuff(Dictionary<SkillType, int> force)	// on casted player
+	{
+		NetworkInstanceId id = GetComponent<NetworkIdentity>().netId;
+		KeyValuePair<SkillType[], int[]> Sforce = IVSkill.DicToPair(force);
+
+		CmdCastedBuff(id, Sforce.Key, Sforce.Value);
+	}
+
+	[Command]
 	void CmdCastBuff(NetworkInstanceId id, SkillType[] forcekey, int[] forcevalue)
 	{
 		GameObject b = Instantiate((Object)SkillBuff, new Vector3(0,0,0), Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
@@ -423,10 +441,30 @@ public class IVPlayer : NetworkBehaviour
 		RpcCastBuff(b, id);
 	}
 
+	[Command]
+	void CmdCastedBuff(NetworkInstanceId id, SkillType[] forcekey, int[] forcevalue)
+	{
+		GameObject b = Instantiate((Object)SkillDebuff, new Vector3(0,0,0), Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
+		b.GetComponent<IVSkill>().Force = IVSkill.PairToDic(forcekey, forcevalue);
+		b.transform.parent = GameObject.Find("Skills").transform;
+		b.SetActive(true);
+		
+		NetworkServer.Spawn(b);
+
+		RpcCastedBuff(b, id);
+	}
+
 	[ClientRpc]
 	void RpcCastBuff(GameObject b, NetworkInstanceId id)
 	{
 		Debug.Log(ClientScene.FindLocalObject(id).name + " has been buffed.");
+		b.GetComponent<IVSkill>().SetOwner(ClientScene.FindLocalObject(id).GetComponent<IVPlayer>());
+	}
+
+	[ClientRpc]
+	void RpcCastedBuff(GameObject b, NetworkInstanceId id)
+	{
+		Debug.Log(ClientScene.FindLocalObject(id).name + " has been debuffed.");
 		b.GetComponent<IVSkill>().SetOwner(ClientScene.FindLocalObject(id).GetComponent<IVPlayer>());
 	}
 
@@ -501,6 +539,7 @@ public class IVPlayer : NetworkBehaviour
 
 		dead.gameObject.GetComponent<IVPlayer>().Dead();
 	}
+
     //called when this player kills a monster on Dead() in Monster component
     public void Loot(NetworkIdentity p, string keyword, SkillType type)
 	{

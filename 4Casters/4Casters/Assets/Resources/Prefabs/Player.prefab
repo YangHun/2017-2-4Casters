@@ -144,7 +144,6 @@ MonoBehaviour:
   HP: 100
   KeywordsInventory: []
   SentenceInventory: []
-  Bullet: {fileID: 0}
 --- !u!114 &114496798744194208
 MonoBehaviour:
   m_ObjectHideFlags: 1

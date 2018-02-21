@@ -167,7 +167,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  type: 0
   lifetime: 2
+  escapetime: 0.1
 --- !u!135 &135290831892900308
 SphereCollider:
   m_ObjectHideFlags: 1

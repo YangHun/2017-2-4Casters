@@ -40,6 +40,29 @@ public class IVHostServer : NetworkBehaviour {
         get { return currentState; }
     }
 
+	public IVPlayer GetNearestPlayer(Vector3 pos, float theta)
+	{
+		IVPlayer minplayer = null;
+		float min = 190f;
+		theta = Mathf.Deg2Rad * theta;
+		Vector3 dir = new Vector3(Mathf.Cos(theta), 0, Mathf.Sin(theta));
+		foreach(int num in players.Keys)
+		{
+			IVPlayer player = players[num].gameObject.GetComponent<IVPlayer>();
+			if (player.transform.position == pos) continue;
+			float deg = Vector3.Angle(dir, player.transform.position - pos);
+			if(deg < min)
+			{
+				min = deg;
+				minplayer = player;
+			}
+		}
+
+		if (minplayer == null)
+			Debug.Log("There are no nearest player");
+		return minplayer;
+	}
+
     // Use this for initialization
     public override void OnStartServer()
     {
@@ -138,5 +161,4 @@ public class IVHostServer : NetworkBehaviour {
             nextState = next;
     }
     
-   
 }

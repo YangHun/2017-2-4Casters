@@ -9,6 +9,7 @@ public class IVSkill : NetworkBehaviour {
 	IVPlayer player;
 
 	bool isEscaped = false;
+	[SerializeField]
 	float timer = 0.0f;
 
 	enum _Type { BulletAttack , LaserAttack , ReflectionAttack , Buff , Debuff};
@@ -112,6 +113,7 @@ public class IVSkill : NetworkBehaviour {
 
 	private void OnCollisionEnter(Collision collision)
     {
+		
 		if (collision.gameObject.tag == "Player")
 		{
 			if (collision.gameObject.name == player.name) return;
