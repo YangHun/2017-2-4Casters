@@ -21,7 +21,7 @@ public class IVPlayer : NetworkBehaviour
 	[SerializeField]
 	[SyncVar]
 	int HP;
-	[SerializeField]
+
 	Dictionary<SkillType, int> power = new Dictionary<SkillType, int>()
 	{
 		{ SkillType.neutral, 2 },
@@ -30,7 +30,7 @@ public class IVPlayer : NetworkBehaviour
 		{ SkillType.lightness, 0 },
 		{ SkillType.darkness, 0 },
 	};
-	[SerializeField]
+
 	Dictionary<SkillType, int> buff = new Dictionary<SkillType, int>()
 	{
 		{ SkillType.neutral, 0 },
@@ -39,7 +39,7 @@ public class IVPlayer : NetworkBehaviour
 		{ SkillType.lightness, 0 },
 		{ SkillType.darkness, 0 },
 	};
-	[SerializeField]
+
 	Dictionary<SkillType, int> shield = new Dictionary<SkillType, int>()
 	{
 		{ SkillType.neutral, 1 },
@@ -48,7 +48,7 @@ public class IVPlayer : NetworkBehaviour
 		{ SkillType.lightness, 0 },
 		{ SkillType.darkness, 0 },
 	};
-	[SerializeField]
+
 	Dictionary<SkillType, int> debuff = new Dictionary<SkillType, int>()
 	{
 		{ SkillType.neutral, 0 },
@@ -71,7 +71,6 @@ public class IVPlayer : NetworkBehaviour
 	};
 
 	IVArrow Arrow;          //the arrow whose parent is a player object
-	[SerializeField]
 	GameObject Bullet;
 	GameObject SkillBullet;
 	GameObject SkillBuff;
@@ -344,7 +343,7 @@ public class IVPlayer : NetworkBehaviour
 		else
 		{
 			int type = IVSpellManager.SyntaxCheck(sentence);
-			if (type == 0) return false;
+			//if (type == 0) return false;
 			Dictionary<SkillType, int> force;
 			switch (type)
 			{
@@ -352,6 +351,7 @@ public class IVPlayer : NetworkBehaviour
 					force = IVSpellManager.ForceCalculator(sentence, power);
 					SkillAttack(force);
 					break;
+				case 0:
 				case 2:
 					force = IVSpellManager.ForceCalculator(sentence, new Dictionary<SkillType, int>());
 					CastBuff(force);
@@ -360,6 +360,7 @@ public class IVPlayer : NetworkBehaviour
 					force = IVSpellManager.ForceCalculator(sentence, new Dictionary<SkillType, int>());
 					CastBuff(force);				//TBD
 					break;
+					
 			}
 			return true;
 		}
@@ -373,15 +374,15 @@ public class IVPlayer : NetworkBehaviour
 		Vector3 pos = transform.position;
 		NetworkInstanceId i = GetComponent<NetworkIdentity>().netId;
 		// It ensures this code will be executed on client
-		SortedDictionary<SkillType, int> Sforce = IVSkill.DicToSort(force);
-		CmdSkillAttack(dir, pos, i, new List<SkillType>(Sforce.Keys), new List<int>(Sforce.Values));
+		KeyValuePair<SkillType[], int[]> Sforce = IVSkill.DicToPair(force);
+		CmdSkillAttack(dir, pos, i, Sforce.Key, Sforce.Value);
 	}
 
 	[Command]
-	void CmdSkillAttack(Vector3 dir, Vector3 pos, NetworkInstanceId id, List<SkillType> forcekey, List<int> forcevalue)
+	void CmdSkillAttack(Vector3 dir, Vector3 pos, NetworkInstanceId id, SkillType[] key, int[] value)
 	{
 		GameObject b = Instantiate((Object)SkillBullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
-		b.GetComponent<IVSkill>().Force = IVSkill.ListToDic(forcekey, forcevalue);
+		b.GetComponent<IVSkill>().Force = IVSkill.PairToDic(key, value);
 		b.transform.parent = GameObject.Find("Skills").transform;
 		b.SetActive(true);
 		NetworkServer.Spawn(b);
@@ -404,15 +405,16 @@ public class IVPlayer : NetworkBehaviour
 	void CastBuff(Dictionary<SkillType, int> force)
 	{
 		NetworkInstanceId id = GetComponent<NetworkIdentity>().netId;
-		SortedDictionary<SkillType, int> Sforce = IVSkill.DicToSort(force);
-		CmdCastBuff(id, new List<SkillType>(Sforce.Keys), new List<int>(Sforce.Values));
+		KeyValuePair<SkillType[], int[]> Sforce = IVSkill.DicToPair(force);
+
+		CmdCastBuff(id, Sforce.Key, Sforce.Value);
 	}
 
-	[Command]
-	void CmdCastBuff(NetworkInstanceId id, List<SkillType> forcekey, List<int> forcevalue)
+	//[Command]
+	void CmdCastBuff(NetworkInstanceId id, SkillType[] forcekey, int[] forcevalue)
 	{
 		GameObject b = Instantiate((Object)SkillBuff, new Vector3(0,0,0), Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
-		b.GetComponent<IVSkill>().Force = IVSkill.ListToDic(forcekey, forcevalue);
+		b.GetComponent<IVSkill>().Force = IVSkill.PairToDic(forcekey, forcevalue);
 		b.transform.parent = GameObject.Find("Skills").transform;
 		b.SetActive(true);
 		

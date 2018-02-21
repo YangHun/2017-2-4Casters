@@ -89,12 +89,10 @@ public class IVSpellManager : MonoBehaviour {
 	public static Dictionary<SkillType, int> ForceCalculator(List<string> sentence, Dictionary<SkillType, int> basis)
 	{
 		Dictionary<SkillType, int> force = new Dictionary<SkillType, int>();
+		foreach(SkillType type in new List<SkillType>(basis.Keys))
+			force[type] = basis[type];
 		foreach(string s in sentence)
 			force[KeywordDictionary[s]] += 1;
-		foreach(SkillType type in System.Enum.GetValues(typeof(SkillType)))
-		{
-			force[type] += basis[type];
-		}
 		return force;
 	}
 

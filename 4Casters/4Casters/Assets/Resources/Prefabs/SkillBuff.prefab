@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 114642929095297086}
   - component: {fileID: 114599191883842024}
   m_Layer: 0
-  m_Name: Buff
+  m_Name: SkillBuff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

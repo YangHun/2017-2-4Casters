@@ -40,6 +40,24 @@ public class IVSkill : NetworkBehaviour {
 	{
 		return new SortedDictionary<SkillType, int>(origin);
 	}
+	public static KeyValuePair<SkillType[], int[]> DicToPair(Dictionary<SkillType, int> origin)
+	{
+		int len = (int)SkillType.Null + 1;
+		SkillType[] s = new SkillType[len];
+		int[] i = new int[len];
+		SortedDictionary<SkillType, int> sort = new SortedDictionary<SkillType, int>(origin);
+		origin.Keys.CopyTo(s, 0);
+		origin.Values.CopyTo(i, 0);
+		return new KeyValuePair<SkillType[], int[]>(s, i);
+	}
+
+	public static Dictionary<SkillType, int> PairToDic(SkillType[] key, int[] value)
+	{
+		Dictionary<SkillType, int> force = new Dictionary<SkillType, int>();
+		for (int i = 0; i < key.Length; i++) 
+			force[key[i]] = value[i];
+		return force;
+	}
 
 	public static Dictionary<SkillType, int> ListToDic(List<SkillType> forcekey, List<int> forcevalue)
 	{
@@ -56,10 +74,6 @@ public class IVSkill : NetworkBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if(type == _Type.Buff)
-		{
-			player.AddBuff(force);
-		}
 	}
 	
 	// Update is called once per frame
@@ -79,6 +93,11 @@ public class IVSkill : NetworkBehaviour {
 		{
 			GetComponent<SphereCollider>().enabled = true;
 			isEscaped = true;
+		}
+
+		if (type == _Type.Buff && !isEscaped && timer >= escapetime)
+		{
+			player.AddBuff(force);
 		}
 
 	}
