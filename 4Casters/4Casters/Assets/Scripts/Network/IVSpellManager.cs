@@ -61,15 +61,39 @@ public class IVSpellManager : MonoBehaviour {
 		else return true;
 	}
 
-	public static bool SyntaxCheck(List<string> sentence)
+	// This function checks whether syntax is legal, and the type is attack or buff.
+	// Invalid is 0, attack is 1, buff is 2, and debuff is 3.
+	public static int SyntaxCheck(List<string> sentence)
 	{
 		bool isNoun = true;
+		int count = 0;
 		foreach (string s in sentence)  // Syntax Checking
 		{
-			if (isNoun != IVSpellManager.IsNoun(s)) return false;
+			count++;
+			if (isNoun != IsNoun(s)) return 0;
 			isNoun = !isNoun;
 		}
-		return true;
+		switch(count)
+		{
+			case 0:
+				return 0;
+			case 2:
+				return 3;
+			case 3:
+				return 2;
+			default:
+				return 1;
+		}
+	}
+
+	public static Dictionary<SkillType, int> ForceCalculator(List<string> sentence, Dictionary<SkillType, int> basis)
+	{
+		Dictionary<SkillType, int> force = new Dictionary<SkillType, int>();
+		foreach(SkillType type in new List<SkillType>(basis.Keys))
+			force[type] = basis[type];
+		foreach(string s in sentence)
+			force[KeywordDictionary[s]] += 1;
+		return force;
 	}
 
 	public static int DamageCalculator(Dictionary <SkillType, int> f, Dictionary <SkillType, int> s)
@@ -104,19 +128,12 @@ public class BrokenSyntaxException : System.Exception
 	BrokenSyntaxException() { }
 	BrokenSyntaxException(int num)
 	{
-		this.Num = num;
+		Num = num;
 	}
 
 	public int Num
 	{
-		get
-		{
-			return num;
-		}
-
-		set
-		{
-			num = value;
-		}
+		get { return num; }
+		set { num = value; }
 	}
 }

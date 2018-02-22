@@ -10,7 +10,6 @@ public class Player : MonoBehaviour {
     [SerializeField]
     int HP;
     
-
     public List<string> KeywordsInventory = new List<string>();
     public List<string> SentenceInventory = new List<string>();
 

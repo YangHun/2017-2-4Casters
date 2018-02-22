@@ -8686,12 +8686,20 @@ Prefab:
     - target: {fileID: 224623528549790830, guid: 22d4d0af7b370504199294840e6dca64,
         type: 2}
       propertyPath: m_AnchoredPosition.x
+<<<<<<< HEAD
       value: 0.000012738573
+=======
+      value: -0.000038593556
+>>>>>>> spell
       objectReference: {fileID: 0}
     - target: {fileID: 224623528549790830, guid: 22d4d0af7b370504199294840e6dca64,
         type: 2}
       propertyPath: m_AnchoredPosition.y
+<<<<<<< HEAD
       value: -0.000058654652
+=======
+      value: -0.0000020907955
+>>>>>>> spell
       objectReference: {fileID: 0}
     - target: {fileID: 114628844325409522, guid: 22d4d0af7b370504199294840e6dca64,
         type: 2}

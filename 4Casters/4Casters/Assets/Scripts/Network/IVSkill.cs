@@ -9,12 +9,18 @@ public class IVSkill : NetworkBehaviour {
 	IVPlayer player;
 
 	bool isEscaped = false;
-
+	[SerializeField]
 	float timer = 0.0f;
 
+	enum _Type { BulletAttack , LaserAttack , ReflectionAttack , Buff , Debuff};
 	[SerializeField]
-	float lifetime = 2.0f;
-	float escapetime = 0.22f;
+	_Type type;
+
+
+	[SerializeField]
+	float lifetime;
+	[SerializeField]
+	float escapetime;
 
 	Dictionary<SkillType, int> force = new Dictionary<SkillType, int>()
 	{
@@ -31,6 +37,37 @@ public class IVSkill : NetworkBehaviour {
 		set { force = value; }
 	}
 
+	public static SortedDictionary<SkillType, int> DicToSort(Dictionary<SkillType, int> origin)
+	{
+		return new SortedDictionary<SkillType, int>(origin);
+	}
+	public static KeyValuePair<SkillType[], int[]> DicToPair(Dictionary<SkillType, int> origin)
+	{
+		int len = (int)SkillType.Null + 1;
+		SkillType[] s = new SkillType[len];
+		int[] i = new int[len];
+		SortedDictionary<SkillType, int> sort = new SortedDictionary<SkillType, int>(origin);
+		origin.Keys.CopyTo(s, 0);
+		origin.Values.CopyTo(i, 0);
+		return new KeyValuePair<SkillType[], int[]>(s, i);
+	}
+
+	public static Dictionary<SkillType, int> PairToDic(SkillType[] key, int[] value)
+	{
+		Dictionary<SkillType, int> force = new Dictionary<SkillType, int>();
+		for (int i = 0; i < key.Length; i++) 
+			force[key[i]] = value[i];
+		return force;
+	}
+
+	public static Dictionary<SkillType, int> ListToDic(List<SkillType> forcekey, List<int> forcevalue)
+	{
+		Dictionary<SkillType, int> force = new Dictionary<SkillType, int>();
+		for(int i =0; i<forcekey.Count; i++)
+			force[forcekey[i]] = forcevalue[i];
+		return force;
+	}
+
 	public void SetOwner(IVPlayer player)
 	{
 		this.player = player;
@@ -38,7 +75,6 @@ public class IVSkill : NetworkBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
 	}
 	
 	// Update is called once per frame
@@ -61,15 +97,30 @@ public class IVSkill : NetworkBehaviour {
             //transform.DetachChildren();
         }
 
-		if (!isEscaped && timer >= escapetime)
+		if (type == _Type.BulletAttack && !isEscaped && timer >= escapetime)
 		{
 			GetComponent<SphereCollider>().enabled = true;
 			isEscaped = true;
 		}
+
+		if (type == _Type.Buff && !isEscaped && timer >= escapetime)
+		{
+			player.AddBuff(force);
+		}
+
 	}
 
-    private void OnCollisionEnter(Collision collision)
+	private void OnDestroy()
+	{
+		if (type == _Type.Buff)
+			player.AddBuff(force);
+		else if (type == _Type.Debuff)
+			player.AddDebuff(force);
+	}
+
+	private void OnCollisionEnter(Collision collision)
     {
+		
 		if (collision.gameObject.tag == "Player")
 		{
 			if (collision.gameObject.name == player.name) return;
