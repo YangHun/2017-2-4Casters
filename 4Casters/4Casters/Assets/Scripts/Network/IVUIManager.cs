@@ -221,7 +221,7 @@ public class IVUIManager : MonoBehaviour
 			{
 				try					//try while syntax is legal.
 				{
-					p.Cast(sentence);			// Casting function by client player
+					if(!p.Cast(sentence)) continue;			// Casting function by client player
 					string str = "";
 					foreach (string s in sentence)
 					{

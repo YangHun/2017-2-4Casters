@@ -112,6 +112,7 @@ public class IVSkill : NetworkBehaviour {
 
 	private void OnDestroy()
 	{
+		if (!isServer) return;
 		if (type == _Type.Buff)
 			player.AddBuff(force);
 		else if (type == _Type.Debuff)
