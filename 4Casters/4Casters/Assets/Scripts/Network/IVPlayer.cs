@@ -12,11 +12,17 @@ public class IVPlayer : NetworkBehaviour
 	public NetworkIdentity identity;
 	public bool myPlayer = false;
 
+    [SerializeField]
+    GameObject models;
+
 	IVHostServer _hostserver;
 	float timer = 0.0f;
 	const float sendRPCrate = 0.5f;
 
+    [SerializeField]
 	SkillType playerType = SkillType.holy;      // Temperature assignment; Synchronizing needs.
+    [SyncVar]
+    public Color playerColor = Color.white;
 
 	[SerializeField]
 	[SyncVar]
@@ -110,8 +116,43 @@ public class IVPlayer : NetworkBehaviour
 		Arrow.CmdRotateArrow(theta);
 	}
 
-	// Use this for initialization
-	public override void OnStartClient()
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+
+    }
+    
+    void SetType(Color c)
+    {
+        for (int i = 0; i < models.transform.childCount; i++)
+        {
+            models.transform.GetChild(i).gameObject.SetActive(false);
+        }
+
+        if (c == Color.yellow)
+        {
+            playerType = SkillType.lightness;
+            models.transform.GetChild(1).gameObject.SetActive(true);
+        }
+        else if (c == Color.grey)
+        {
+            playerType = SkillType.darkness;
+            models.transform.GetChild(0).gameObject.SetActive(true);
+        }
+        else if (c == Color.white)
+        {
+            playerType = SkillType.holy;
+            models.transform.GetChild(3).gameObject.SetActive(true);
+        }
+        else if (c == Color.black)
+        {
+            playerType = SkillType.evil;
+            models.transform.GetChild(2).gameObject.SetActive(true);
+        }
+    }
+
+    // Use this for initialization
+    public override void OnStartClient()
 	{
 		Debug.Log("enter? " + gameObject.name);
 		base.OnStartClient();
@@ -126,7 +167,8 @@ public class IVPlayer : NetworkBehaviour
 		SkillBullet.SetActive(false);
 		SkillBuff.SetActive(false);
 		gameObject.name = playerName;
-	}
+        SetType(playerColor);
+    }
 
 
 	// Use this for initialization; local player only
@@ -143,7 +185,8 @@ public class IVPlayer : NetworkBehaviour
 		CmdConfigStatus(1, playerType, 1);
 		CmdConfigStatus(2, playerType, 1);
 		CmdConfigStatus(3, (SkillType)id, 0);
-	}
+        
+    }
 
 
 	Dictionary<SkillType, int> Calculate(bool isPower)				// Calculate force of shield related to buff and debuff.

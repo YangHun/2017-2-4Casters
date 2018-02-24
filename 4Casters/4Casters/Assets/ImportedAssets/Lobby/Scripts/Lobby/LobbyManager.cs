@@ -338,11 +338,13 @@ namespace Prototype.NetworkLobby
             if (_lobbyHooks)
                 _lobbyHooks.OnLobbyServerSceneLoadedForPlayer(this, lobbyPlayer, gamePlayer);
 
-            Debug.Log("enter?");
+            
             Debug.Log(gamePlayer.GetComponent<IVPlayer>());
             Debug.Log(lobbyPlayer.GetComponent<LobbyPlayer>().playerName);
             gamePlayer.GetComponent<IVPlayer>().playerName = lobbyPlayer.GetComponent<LobbyPlayer>().playerName;
-            
+            gamePlayer.GetComponent<IVPlayer>().playerColor = lobbyPlayer.GetComponent<LobbyPlayer>().playerColor;
+
+
             return true;
         }
 
