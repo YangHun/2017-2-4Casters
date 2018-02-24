@@ -102,6 +102,7 @@ public class IVGameManager : NetworkBehaviour {
             _ui.RefreshInMonsterPhase();
             _ui.InitMonsterButtons();
             _spawner.Spawn();
+			RefreshSkill();
             timer = 0.0f;
         }
 
@@ -120,6 +121,7 @@ public class IVGameManager : NetworkBehaviour {
             _ui.RefreshInCastPhase();
             _ui.InitMonsterButtons();
             _spawner.Release();
+			RefreshAttack();
             timer = 0.0f;
 
         }
@@ -131,4 +133,21 @@ public class IVGameManager : NetworkBehaviour {
         }
     }
   
+	void RefreshAttack()
+	{
+		if (!isServer) return;
+		GameObject g = GameObject.Find("Bullets");
+		Transform[] c = g.GetComponentsInChildren<Transform>();
+		foreach(Transform o in c)
+			NetworkServer.Destroy(o.gameObject);
+	}
+  
+	void RefreshSkill()
+	{
+		if (!isServer) return;
+		GameObject g = GameObject.Find("Skills");
+		Transform[] c = g.GetComponentsInChildren<Transform>();
+		foreach(Transform o in c)
+			NetworkServer.Destroy(o.gameObject);
+	}
 }

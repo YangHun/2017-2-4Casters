@@ -26,41 +26,41 @@ public class IVSpellManager : MonoBehaviour {
        { "이"   , SkillType.neutral },
 
        //Holy Keywords
-       { "선1" , SkillType.holy },
-       { "선2" , SkillType.holy },
-       { "선3" , SkillType.holy },
-       { "선4" , SkillType.holy },
-       { "선5" , SkillType.holy },
+       { "질서" , SkillType.holy },
+       { "임무" , SkillType.holy },
+       { "정의" , SkillType.holy },
+       { "정화" , SkillType.holy },
+       { "가호" , SkillType.holy },
 
        //Evil Keywords
-       { "악1" , SkillType.evil },
-       { "악2" , SkillType.evil },
-       { "악3" , SkillType.evil },
-       { "악4" , SkillType.evil },
-       { "악5" , SkillType.evil },
+       { "천벌" , SkillType.evil },
+       { "혼란" , SkillType.evil },
+       { "성불" , SkillType.evil },
+       { "영혼" , SkillType.evil },
+       { "타락" , SkillType.evil },
 
        //Lightness Keywords
-       { "빛1" , SkillType.lightness },
-       { "빛2" , SkillType.lightness },
-       { "빛3" , SkillType.lightness },
-       { "빛4" , SkillType.lightness },
-       { "빛5" , SkillType.lightness },
+       { "광명" , SkillType.lightness },
+       { "마력" , SkillType.lightness },
+       { "성모" , SkillType.lightness },
+       { "성령" , SkillType.lightness },
+       { "안식" , SkillType.lightness },
 
        //Darkness Keywords
-       { "어둠1" , SkillType.darkness },
-       { "어둠2" , SkillType.darkness },
-       { "어둠3" , SkillType.darkness },
-       { "어둠4" , SkillType.darkness },
-       { "어둠5" , SkillType.darkness }
+       { "무질서" , SkillType.darkness },
+       { "사령" , SkillType.darkness },
+       { "침묵" , SkillType.darkness },
+       { "암흑" , SkillType.darkness },
+       { "사망" , SkillType.darkness }
     };
 
     public static Dictionary<SkillType, List<string>> SkillTypeDictionary = new Dictionary<SkillType, List<string>>()
     {
         { SkillType.neutral, new List<string>() { "을", "를", "에게", "가", "이" }},
-        { SkillType.holy, new List<string>() { "선1", "선2", "선3","선4", "선5" }},
-        { SkillType.evil, new List<string>() { "악1", "악2", "악3","악4", "악5" }},
-        { SkillType.lightness, new List<string>() { "빛1", "빛2", "빛3","빛4", "빛5" }},
-        { SkillType.darkness, new List<string>() { "어둠1", "어둠2", "어둠3", "어둠4", "어둠5" }}
+        { SkillType.holy, new List<string>() { "질서", "임무", "정의", "정화", "가호" }},
+        { SkillType.evil, new List<string>() { "천벌", "혼란", "성불", "영혼", "타락" }},
+        { SkillType.lightness, new List<string>() { "광명", "마력", "성모", "성령", "안식" }},
+        { SkillType.darkness, new List<string>() { "무질서", "사령", "침묵", "암흑", "사망" }}
     };
 
 	// Type Checker. It returns true if str is noun; its type is neutral
