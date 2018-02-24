@@ -214,9 +214,8 @@ public class IVUIManager : MonoBehaviour
 
         else if (_hostserver.CurrentState == State.CastPhase)
         {
-            List<string> sentence = _game.Players[CastingWindowFilterId].SentenceInventory;
-            List<string> keyword = _game.Players[CastingWindowFilterId].KeywordsInventory;
-            //Button[] keywordButtons = CastingKeywords.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
+			List<string> sentence = _game.myPlayer.GetComponent<IVPlayer>().SentenceInventory;
+            List<string> keyword = _game.myPlayer.GetComponent<IVPlayer>().KeywordsInventory;
 
 			foreach (IVPlayer p in _game.Players)
 			{
@@ -257,7 +256,7 @@ public class IVUIManager : MonoBehaviour
 
     void UpdateCastingWindowSentence()
     {
-        List<string> sentence = _game.Players[CastingWindowFilterId].SentenceInventory;
+		List<string> sentence = _game.myPlayer.GetComponent<IVPlayer>().SentenceInventory;
 
         Button[] buttons = CastingSentence.transform.Find("Viewport/Content").GetComponentsInChildren<Button>();
 

@@ -53,7 +53,7 @@ public class IVJoystickManager : MonoBehaviour
     {
         delta = stick.position - body.position;
         dist = Mathf.Sqrt(delta.x * delta.x + delta.y * delta.y);
-        theta = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
+        theta = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg + 45;
         foreach (IVPlayer player in players)
 			if (player.GetComponent<NetworkIdentity>().hasAuthority)
 	            player.CmdUpdateArrow(theta - 90);

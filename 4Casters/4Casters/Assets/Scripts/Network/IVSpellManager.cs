@@ -7,6 +7,15 @@ public enum SkillType { neutral, holy, evil, lightness, darkness, Null }
 // Singletone of managing spell
 public class IVSpellManager : MonoBehaviour {
 
+	public static Dictionary<SkillType, int> emptyforce = new Dictionary<SkillType, int>()
+	{
+		{ SkillType.neutral, 0 },
+		{ SkillType.holy, 0 },
+		{ SkillType.evil, 0 },
+		{ SkillType.lightness, 0 },
+		{ SkillType.darkness, 0 }
+	};
+
     public static Dictionary<string, SkillType> KeywordDictionary = new Dictionary<string, SkillType>()
     {
        //Neutral Keywords

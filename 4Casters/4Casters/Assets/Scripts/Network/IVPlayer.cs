@@ -163,6 +163,7 @@ public class IVPlayer : NetworkBehaviour
 		Bullet = Resources.Load("Prefabs/Bullet") as GameObject;
 		SkillBullet = Resources.Load("Prefabs/SkillBullet") as GameObject;
 		SkillBuff = Resources.Load("Prefabs/SkillBuff") as GameObject;
+		SkillDebuff = Resources.Load("Prefabs/SkillDebuff") as GameObject;
 		Bullet.SetActive(false);
 		SkillBullet.SetActive(false);
 		SkillBuff.SetActive(false);
@@ -388,7 +389,7 @@ public class IVPlayer : NetworkBehaviour
 		else
 		{
 			int type = IVSpellManager.SyntaxCheck(sentence);
-			//if (type == 0) return false;
+			if (type == 0) return false;
 			Dictionary<SkillType, int> force;
 			switch (type)
 			{
@@ -397,12 +398,12 @@ public class IVPlayer : NetworkBehaviour
 					SkillAttack(force);
 					break;
 				case 2:
-					force = IVSpellManager.ForceCalculator(sentence, new Dictionary<SkillType, int>());
+					force = IVSpellManager.ForceCalculator(sentence, new Dictionary<SkillType, int>(IVSpellManager.emptyforce));
 					CastBuff(force);
 					break;
 				case 0:
 				case 3:
-					force = IVSpellManager.ForceCalculator(sentence, new Dictionary<SkillType, int>());
+					force = IVSpellManager.ForceCalculator(sentence, new Dictionary<SkillType, int>(IVSpellManager.emptyforce));
 					CastDebuff(force);
 					break;
 					
@@ -472,21 +473,16 @@ public class IVPlayer : NetworkBehaviour
 
 	void CastDebuff(Dictionary<SkillType, int> force)		// cast player --> casted player
 	{
-		_hostserver.GetNearestPlayer(transform.position, Arrow.theta).CastedDebuff(force);
-	}
-
-	public void CastedDebuff(Dictionary<SkillType, int> force)	// on casted player
-	{
-		NetworkInstanceId id = GetComponent<NetworkIdentity>().netId;
+		IVPlayer target = _hostserver.GetNearestPlayer(transform.position, Arrow.theta);
 		KeyValuePair<SkillType[], int[]> Sforce = IVSkill.DicToPair(force);
 
-		CmdCastedBuff(id, Sforce.Key, Sforce.Value);
+		CmdCastedBuff(target.GetComponent<NetworkIdentity>().netId, Sforce.Key, Sforce.Value);
 	}
 
 	[Command]
 	void CmdCastBuff(NetworkInstanceId id, SkillType[] forcekey, int[] forcevalue)
 	{
-		GameObject b = Instantiate((Object)SkillBuff, new Vector3(0,0,0), Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
+		GameObject b = Instantiate((Object)SkillDebuff, new Vector3(0,0,0), Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
 		b.GetComponent<IVSkill>().Force = IVSkill.PairToDic(forcekey, forcevalue);
 		b.transform.parent = GameObject.Find("Skills").transform;
 		b.SetActive(true);
