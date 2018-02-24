@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 using Prototype.NetworkLobby;
 
-public enum State { MonsterPhase, CastPhase, Null }
+public enum State { MonsterPhase, CastPhase, EndPhase, Null }
 
 public class IVHostServer : NetworkBehaviour {
 
@@ -153,6 +153,18 @@ public class IVHostServer : NetworkBehaviour {
         if (isServer)
             RpcSetNextState(next);
     }
+
+	public bool IsGameEnd(IVPlayer deadPlayer)
+	{
+		_game.Players.Remove(deadPlayer);
+		if(_game.Players.Count == 1)
+		{
+			currentState = State.EndPhase;
+			return true;
+		}
+		else
+			return false;
+	}
 
     [ClientRpc]
     void RpcSetNextState(State next)

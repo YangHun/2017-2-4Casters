@@ -105,9 +105,18 @@ public class IVPlayer : NetworkBehaviour
 	[Command]
 	public void CmdUpdateArrow(float theta)
 	{
-		Arrow.CmdRotateArrow(theta);
-		if (isServer)
+		if(_hostserver.CurrentState == State.MonsterPhase)
+		{
+			Arrow.CmdRotateArrow(theta);
 			RpcUpdateArrow(theta);
+		}
+		else
+		{
+			theta = ((int)(theta - 12.5f) / 45) * 45;
+			Arrow.CmdRotateArrow(theta);
+			RpcUpdateArrow(theta);
+
+		}
 	}
 
 	[ClientRpc]
@@ -277,7 +286,9 @@ public class IVPlayer : NetworkBehaviour
 		else
 		{
 			Debug.Log("Player with id " + id + " is dead");
+			_hostserver.IsGameEnd(this);
 			Destroy(gameObject);
+			
 		}
 	}
 	private void Start()

@@ -81,8 +81,11 @@ public class IVGameManager : NetworkBehaviour {
             case State.CastPhase:
                 OnStateCastPhase(isFirstFrame, timer);
                 break;
+            case State.EndPhase:
+				_ui.EndGame(Players[0].playerName);
+				currentState = State.Null;
+				break;
             case State.Null:
-
                 break;
         }
         

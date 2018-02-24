@@ -575,7 +575,9 @@ MonoBehaviour:
   identity: {fileID: 0}
   myPlayer: 0
   models: {fileID: 1685368698330792}
-  HP: 100
+  playerType: 1
+  playerColor: {r: 1, g: 1, b: 1, a: 1}
+  HP: 1
   KeywordsInventory: []
   SentenceInventory: []
 --- !u!114 &114496798744194208

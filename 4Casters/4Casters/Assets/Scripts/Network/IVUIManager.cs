@@ -17,6 +17,8 @@ public class IVUIManager : MonoBehaviour
 
     [SerializeField]
     public Canvas _loading;
+	[SerializeField]
+	public Canvas _win;
 
     [SerializeField]
     Button Right;
@@ -127,6 +129,13 @@ public class IVUIManager : MonoBehaviour
     {
         _loading.transform.Find("PlayerInfo").GetChild(i).Find("Status").GetComponent<Text>().text = status;
     }
+
+	public void EndGame(string Playername)
+	{
+		_win.gameObject.SetActive(true);
+		_win.transform.GetComponentInChildren<Text>().text = Playername + " is win!!";
+		GameObject.Find("Canvas").SetActive(false);
+	}
 
     void UpdatePlayerUI()
     {
