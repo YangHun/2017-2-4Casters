@@ -81,7 +81,8 @@ public class IVPlayer : NetworkBehaviour
 	GameObject SkillBullet;
 	GameObject SkillBuff;
 	GameObject SkillDebuff;
-	const float bulletspeed = 300.0f;
+    GameObject SkillFailed;
+    const float bulletspeed = 300.0f;
 
 	public Dictionary<SkillType, int> Shield
 	{
@@ -170,12 +171,13 @@ public class IVPlayer : NetworkBehaviour
 		Arrow = transform.Find("Arrow").GetComponent<IVArrow>();
 		//	Bullet = transform.Find("Bullet").gameObject;
 		Bullet = Resources.Load("Prefabs/Bullet") as GameObject;
-		SkillBullet = Resources.Load("Prefabs/SkillBullet") as GameObject;
+		SkillBullet = Resources.Load("Prefabs/SkillAttack") as GameObject;
 		SkillBuff = Resources.Load("Prefabs/SkillBuff") as GameObject;
 		SkillDebuff = Resources.Load("Prefabs/SkillDebuff") as GameObject;
-		Bullet.SetActive(false);
-		SkillBullet.SetActive(false);
-		SkillBuff.SetActive(false);
+        SkillFailed = Resources.Load("Prefabs/SkillFailed") as GameObject;
+        //Bullet.SetActive(false);
+		//SkillBullet.SetActive(false);
+		//SkillBuff.SetActive(false);
 		gameObject.name = playerName;
         SetType(playerColor);
     }
@@ -376,7 +378,7 @@ public class IVPlayer : NetworkBehaviour
 	[Command]
 	public void CmdBasicAttack(Vector3 dir, Vector3 pos, NetworkInstanceId i)
 	{
-		GameObject b = Instantiate((Object)Bullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
+		GameObject b = Instantiate((Object)Bullet, pos + Vector3.up, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
 		b.transform.parent = GameObject.Find("Bullets").transform;
 		b.SetActive(true);
 		NetworkServer.Spawn(b);
@@ -400,7 +402,10 @@ public class IVPlayer : NetworkBehaviour
 		else
 		{
 			int type = IVSpellManager.SyntaxCheck(sentence);
-			if (type == 0) return false;
+            if (type == 0) {
+                Debug.Log("Syntax error");
+                GameObject obj = Instantiate(SkillFailed, transform.position + Vector3.up * 1.5f, Quaternion.identity);
+                return false; }
 			Dictionary<SkillType, int> force;
 			switch (type)
 			{
@@ -438,7 +443,7 @@ public class IVPlayer : NetworkBehaviour
 	[Command]
 	void CmdSkillAttack(Vector3 dir, Vector3 pos, NetworkInstanceId id, SkillType[] key, int[] value)
 	{
-		GameObject b = Instantiate((Object)SkillBullet, pos, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
+		GameObject b = Instantiate((Object)SkillBullet, pos + Vector3.up * 3, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
 		b.GetComponent<IVSkill>().Force = IVSkill.PairToDic(key, value);
 		b.transform.parent = GameObject.Find("Skills").transform;
 		b.SetActive(true);
@@ -463,7 +468,15 @@ public class IVPlayer : NetworkBehaviour
         for (int i = 1; i < ps.Length; i++)
         {
             ParticleSystem.EmissionModule em = ps[i].emission;
-            em.rateOverTime = b.GetComponent<IVSkill>().Force[(SkillType)i];
+
+            int rate = b.GetComponent<IVSkill>().Force[(SkillType)i] * 10; 
+
+            if ((SkillType)i == playerType)
+            {
+                rate += 10;
+            }
+
+            em.rateOverTime = rate;
 
         }
 
@@ -493,7 +506,7 @@ public class IVPlayer : NetworkBehaviour
 	[Command]
 	void CmdCastBuff(NetworkInstanceId id, SkillType[] forcekey, int[] forcevalue)
 	{
-		GameObject b = Instantiate((Object)SkillDebuff, new Vector3(0,0,0), Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
+		GameObject b = Instantiate((Object)SkillDebuff, transform.position + Vector3.up * 1, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
 		b.GetComponent<IVSkill>().Force = IVSkill.PairToDic(forcekey, forcevalue);
 		b.transform.parent = GameObject.Find("Skills").transform;
 		b.SetActive(true);
@@ -506,7 +519,7 @@ public class IVPlayer : NetworkBehaviour
 	[Command]
 	void CmdCastedBuff(NetworkInstanceId id, SkillType[] forcekey, int[] forcevalue)
 	{
-		GameObject b = Instantiate((Object)SkillDebuff, new Vector3(0,0,0), Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
+		GameObject b = Instantiate((Object)SkillDebuff, transform.position +Vector3.up * 1, Quaternion.Euler(new Vector3(90.0f, 0.0f, 0.0f))) as GameObject;
 		b.GetComponent<IVSkill>().Force = IVSkill.PairToDic(forcekey, forcevalue);
 		b.transform.parent = GameObject.Find("Skills").transform;
 		b.SetActive(true);

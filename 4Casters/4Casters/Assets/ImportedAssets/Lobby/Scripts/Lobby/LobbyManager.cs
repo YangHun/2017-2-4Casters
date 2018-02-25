@@ -55,6 +55,12 @@ namespace Prototype.NetworkLobby
 
         void Start()
         {
+            if (s_Singleton != null)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
+
             s_Singleton = this;
             _lobbyHooks = GetComponent<Prototype.NetworkLobby.LobbyHook>();
             currentPanel = mainMenuPanel;

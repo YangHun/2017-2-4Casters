@@ -105,7 +105,7 @@ public class IVGameManager : NetworkBehaviour {
             _ui.RefreshInMonsterPhase();
             _ui.InitMonsterButtons();
             _spawner.Spawn();
-			RefreshSkill();
+			//RefreshSkill();
             timer = 0.0f;
         }
 
@@ -124,7 +124,7 @@ public class IVGameManager : NetworkBehaviour {
             _ui.RefreshInCastPhase();
             _ui.InitMonsterButtons();
             _spawner.Release();
-			RefreshAttack();
+			//RefreshAttack();
             timer = 0.0f;
 
         }
